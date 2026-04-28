@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soluciones Integrales – Registro de Servicios</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <style>
+    :root {
+      --navy:    #0a1628;
+      --navy2:   #102040;
+      --navy3:   #1a3560;
+      --blue:    #1e4d8c;
+      --blue2:   #2563a8;
+      --white:   #ffffff;
+      --offwhite:#f0f4fa;
+      --border:  #1e3a6e;
+      --text:    #e8edf5;
+      --muted:   #7a9cc0;
+      --green:   #22c97a;
+      --red:     #e5484d;
+      --amber:   #f5a623;
+      --purple:  #7c6cfc;
+      --row-alt: #0d1e38;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── SETUP OVERLAY ── */
+    .setup-overlay {
+      position: fixed; inset: 0;
+      background: rgba(5,10,20,0.97);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; padding: 20px;
+    }
+    .setup-overlay.hidden { display: none; }
+    .setup-box {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--blue2);
+      border-radius: 16px;
+      padding: 36px 38px;
+      max-width: 500px; width: 100%;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+    .setup-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .setup-box h2 { font-size: 18px; font-weight: 900; color: var(--white); margin-bottom: 6px; }
+    .setup-box p  { font-size: 12px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+    .setup-box .fgroup { margin-bottom: 14px; }
+    .setup-box label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 5px; }
+    .setup-box input {
+      width: 100%; padding: 10px 13px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 12px; color: var(--text); background: rgba(0,0,0,0.35);
+      font-family: 'DM Mono', monospace; outline: none;
+      transition: border-color 0.15s;
+    }
+    .setup-box input:focus { border-color: var(--blue2); }
+    .setup-box input::placeholder { color: #3a5a80; }
+    .btn-connect {
+      width: 100%; background: var(--blue2); color: white; border: none;
+      border-radius: 8px; padding: 11px; font-weight: 800; font-size: 13px;
+      cursor: pointer; font-family: inherit; margin-top: 6px;
+      transition: filter 0.15s;
+    }
+    .btn-connect:hover { filter: brightness(1.15); }
+    .setup-steps {
+      background: rgba(0,0,0,0.25); border-radius: 10px; padding: 16px 18px;
+      margin-bottom: 20px; font-size: 11px; color: var(--muted); line-height: 1.9;
+    }
+    .setup-steps strong { color: var(--text); }
+    .setup-steps a { color: var(--blue2); text-decoration: none; }
+    .setup-steps a:hover { text-decoration: underline; }
+    .setup-err { color: var(--red); font-size: 11px; margin-top: 8px; display: none; }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      position: fixed; bottom: 16px; right: 16px;
+      background: var(--navy2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 14px;
+      font-size: 11px; display: flex; align-items: center; gap: 7px;
+      z-index: 500; transition: opacity 0.3s;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .status-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .status-dot.amber { background: var(--amber); }
+    .status-dot.red   { background: var(--red); }
+    .status-label { color: var(--muted); }
+    .status-bar .btn-reconfig {
+      background: transparent; border: none; color: var(--blue2);
+      font-size: 10px; cursor: pointer; font-family: inherit; font-weight: 700;
+      padding: 0; margin-left: 4px;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%);
+      border-bottom: 2px solid var(--border);
+      padding: 0 32px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.45);
+    }
+    .header-inner { max-width: 1150px; margin: 0 auto; }
+
+    .logo-bar {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .logo-mark { width: 48px; height: 48px; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; }
+    .logo-text .brand  { font-size: 16px; font-weight: 900; letter-spacing: 3px; color: var(--white); text-transform: uppercase; }
+    .logo-text .brand2 { font-size: 16px; font-weight: 900; letter-spacing: 3px; color: var(--white); text-transform: uppercase; line-height: 1.1; }
+    .logo-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.15); margin: 0 10px; }
+    .logo-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+    .header-row {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 14px; padding: 14px 0;
+    }
+    .page-title { font-size: 17px; font-weight: 800; color: var(--white); }
+    .page-sub { font-size: 11px; color: var(--muted); margin-top: 3px; letter-spacing: 0.5px; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-prog {
+      background: transparent; color: var(--muted);
+      border: 1.5px solid var(--border); border-radius: 8px;
+      padding: 9px 16px; font-weight: 700; font-size: 12px;
+      cursor: pointer; font-family: inherit; letter-spacing: 0.5px;
+      transition: all 0.18s;
+    }
+    .btn-prog:hover { border-color: var(--blue2); color: var(--white); background: rgba(37,99,168,0.15); }
+    .btn-new {
+      background: var(--blue2); color: var(--white); border: none;
+      border-radius: 8px; padding: 9px 18px; font-weight: 800;
+      font-size: 12px; cursor: pointer; font-family: inherit; letter-spacing: 0.5px;
+      box-shadow: 0 2px 14px rgba(37,99,168,0.45); transition: filter 0.15s;
+    }
+    .btn-new:hover { filter: brightness(1.15); }
+
+    .stats { display: flex; gap: 8px; padding: 14px 0 18px; flex-wrap: wrap; }
+    .stat {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 18px; text-align: center; min-width: 80px;
+    }
+    .stat-n { font-size: 22px; font-weight: 900; }
+    .stat-l { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.4px; text-transform: uppercase; }
+
+    /* MAIN */
+    .main { max-width: 1150px; margin: 0 auto; padding: 26px 16px; }
+
+    /* FORM */
+    .form-card {
+      background: var(--navy2); border: 1px solid var(--border);
+      border-radius: 14px; box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      padding: 26px 28px; margin-bottom: 22px;
+      border-top: 3px solid var(--blue2); display: none;
+    }
+    .form-card.show { display: block; animation: slideDown 0.22s ease; }
+    .form-card.prog-mode { border-top-color: var(--purple); }
+    @keyframes slideDown { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform: translateY(0); } }
+
+    .tabs { display: flex; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 3px; width: fit-content; margin-bottom: 20px; gap: 2px; }
+    .tab { padding: 7px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 12px; background: transparent; color: var(--muted); font-family: inherit; transition: all 0.15s; letter-spacing: 0.3px; }
+    .tab.on-s { background: var(--blue); color: white; }
+    .tab.on-p { background: var(--purple); color: white; }
+
+    .form-h { font-size: 14px; font-weight: 800; color: var(--white); margin-bottom: 18px; }
+    .form-h.prog { color: var(--purple); }
+
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .full { grid-column: 1 / -1; }
+    .fgroup { display: flex; flex-direction: column; gap: 5px; }
+    .fgroup label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; }
+    .fgroup input, .fgroup select, .fgroup textarea {
+      padding: 9px 12px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 13px; color: var(--text);
+      background: rgba(0,0,0,0.3); font-family: inherit; outline: none;
+      transition: border-color 0.15s;
+    }
+    .fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { border-color: var(--blue2); background: rgba(0,0,0,0.5); }
+    .fgroup select option { background: var(--navy2); color: var(--text); }
+    .fgroup textarea { resize: vertical; }
+    .check-row { display: flex; align-items: center; gap: 7px; margin-top: 6px; cursor: pointer; font-size: 12px; color: var(--muted); }
+    .check-row input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--blue2); cursor: pointer; }
+    .prefix-wrap { position: relative; }
+    .prefix-wrap .prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 700; pointer-events: none; }
+    .prefix-wrap input { padding-left: 24px; }
+
+    .form-footer { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .btn-cancel { background: transparent; color: var(--muted); border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 20px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
+    .btn-submit { background: var(--blue2); color: white; border: none; border-radius: 8px; padding: 9px 20px; font-weight: 800; font-size: 12px; cursor: pointer; font-family: inherit; transition: filter 0.15s; }
+    .btn-submit:hover { filter: brightness(1.15); }
+    .btn-submit.prog { background: var(--purple); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* FILTROS */
+    .filtros {
+      background: var(--navy2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px; margin-bottom: 12px;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    }
+    .filtros input { flex: 1 1 180px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--text); background: rgba(0,0,0,0.3); outline: none; }
+    .filtros input:focus { border-color: var(--blue2); }
+    .filtros input::placeholder { color: var(--muted); }
+    .f-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .f-btn { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); font-weight: 700; font-size: 11px; cursor: pointer; background: transparent; color: var(--muted); font-family: inherit; letter-spacing: 0.3px; transition: all 0.15s; }
+    .f-btn.on { background: var(--blue); color: white; border-color: var(--blue); }
+
+    /* TABLE */
+    .tcard { background: var(--navy2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .tscroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; }
+    thead tr { background: rgba(0,0,0,0.4); border-bottom: 1.5px solid var(--border); }
+    th { padding: 12px 14px; text-align: left; font-size: 10px; font-weight: 800; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; cursor: pointer; user-select: none; white-space: nowrap; }
+    th:hover { color: var(--white); }
+    tbody tr { border-bottom: 1px solid rgba(30,58,110,0.4); transition: background 0.1s; }
+    tbody tr:nth-child(even) { background: var(--row-alt); }
+    tbody tr:hover { background: rgba(37,99,168,0.12) !important; }
+    td { padding: 12px 14px; font-size: 13px; vertical-align: middle; }
+    .td-fecha { color: var(--muted); white-space: nowrap; font-size: 11px; font-family: 'DM Mono', monospace; }
+    .td-cliente { font-weight: 700; font-size: 13px; color: var(--white); }
+    .td-notas { color: var(--muted); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .tag { display: inline-block; border-radius: 5px; padding: 3px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+    .tag-tipo { background: rgba(37,99,168,0.25); color: #7eb8f5; border: 1px solid rgba(37,99,168,0.4); }
+    .tag-indef { background: rgba(124,108,252,0.2); color: #b5aeff; border: 1px solid rgba(124,108,252,0.3); }
+
+    .badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 20px; padding: 4px 11px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .b-Completado { background: rgba(34,201,122,0.15); color: #22c97a; border: 1px solid rgba(34,201,122,0.3); } .b-Completado .dot { background: #22c97a; }
+    .b-Pendiente  { background: rgba(245,166,35,0.15);  color: #f5a623; border: 1px solid rgba(245,166,35,0.3);  } .b-Pendiente  .dot { background: #f5a623; }
+    .b-Cancelado  { background: rgba(229,72,77,0.15);   color: #e5484d; border: 1px solid rgba(229,72,77,0.3);   } .b-Cancelado  .dot { background: #e5484d; }
+    .b-Programado { background: rgba(124,108,252,0.15); color: #a89dfd; border: 1px solid rgba(124,108,252,0.3); } .b-Programado .dot { background: #a89dfd; }
+
+    .costo-btn { border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; font-family: inherit; transition: filter 0.1s; }
+    .costo-btn:hover { filter: brightness(1.1); }
+    .costo-vacio { border: 1px dashed var(--border); background: transparent; color: var(--muted); font-weight: 400; }
+    .costo-lleno { border: 1px solid rgba(34,201,122,0.35); background: rgba(34,201,122,0.1); color: #22c97a; font-weight: 700; }
+    .costo-dash { color: var(--border); }
+    .costo-edit-wrap { display: flex; gap: 4px; align-items: center; }
+    .costo-edit-wrap input { width: 82px; padding: 3px 7px; border: 1.5px solid var(--blue2); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; background: var(--navy); color: var(--text); }
+    .costo-ok { background: var(--green); color: white; border: none; border-radius: 5px; padding: 3px 7px; cursor: pointer; font-size: 12px; }
+    .costo-no { background: transparent; border: 1px solid var(--border); border-radius: 5px; padding: 3px 7px; cursor: pointer; font-size: 12px; color: var(--muted); }
+
+    .act-btns { display: flex; gap: 6px; }
+    .btn-edit-row { background: rgba(37,99,168,0.15); border: 1px solid rgba(37,99,168,0.3); border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 13px; transition: background 0.1s; }
+    .btn-edit-row:hover { background: rgba(37,99,168,0.35); }
+    .btn-del-row  { background: rgba(229,72,77,0.1); border: 1px solid rgba(229,72,77,0.2); border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 13px; transition: background 0.1s; }
+    .btn-del-row:hover { background: rgba(229,72,77,0.25); }\
+
+    .tfooter { padding: 10px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .total { font-weight: 700; color: var(--green); }
+
+    /* EMPTY */
+    .empty { background: var(--navy2); border: 1px solid var(--border); border-radius: 14px; padding: 64px 20px; text-align: center; color: var(--muted); }
+    .empty .eicon { font-size: 46px; margin-bottom: 12px; }
+    .empty .etitle { font-size: 16px; font-weight: 700; color: var(--text); }
+    .empty .esub { font-size: 13px; margin-top: 5px; }
+
+    /* LOADING */
+    .loading { text-align: center; padding: 50px; color: var(--muted); font-size: 13px; }
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--blue2); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* MODAL */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 200; }
+    .overlay.show { display: flex; }
+    .modal { background: var(--navy2); border: 1px solid var(--border); border-radius: 16px; padding: 32px 34px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); text-align: center; max-width: 320px; width: 90%; }
+    .modal .micon { font-size: 38px; margin-bottom: 12px; }
+    .modal h3 { font-size: 17px; font-weight: 800; margin-bottom: 7px; color: var(--white); }
+    .modal p { color: var(--muted); font-size: 13px; margin-bottom: 22px; line-height: 1.5; }
+    .modal-btns { display: flex; gap: 10px; justify-content: center; }
+    .btn-del-confirm { background: var(--red); color: white; border: none; border-radius: 8px; padding: 9px 20px; font-weight: 800; font-size: 13px; cursor: pointer; font-family: inherit; }
+
+    .footer { text-align: center; padding: 24px 16px; color: var(--muted); font-size: 11px; letter-spacing: 0.5px; border-top: 1px solid var(--border); margin-top: 10px; }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--navy3); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 20px; font-size: 12px; font-weight: 700; color: var(--text);
+      opacity: 0; transition: all 0.3s; z-index: 600; white-space: nowrap;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(34,201,122,0.4); color: var(--green); }
+    .toast.error   { border-color: rgba(229,72,77,0.4);   color: var(--red); }
+
+    @media (max-width: 580px) {
+      .grid2 { grid-template-columns: 1fr; }
+      .full { grid-column: 1; }
+      .header { padding: 0 16px; }
+      .main { padding: 16px 10px; }
+      .form-card { padding: 18px 14px; }
+      .logo-text .brand, .logo-text .brand2 { font-size: 13px; letter-spacing: 2px; }
+      .setup-box { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ SETUP OVERLAY ════════════ -->
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-box">
+    <div class="setup-logo">
+      <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,3 43,14 43,34 24,45 5,34 5,14" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+        <polygon points="24,3 43,14 24,25 5,14" fill="none" stroke="#7eb8f5" stroke-width="1.2"/>
+        <polyline points="14,20 24,14 34,20 34,28 24,34 14,28 14,20" fill="none" stroke="#7eb8f5" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <div style="font-size:13px;font-weight:900;letter-spacing:2px;color:#fff">SOLUCIONES INTEGRALES</div>
+        <div style="font-size:10px;color:#7a9cc0;letter-spacing:1px">REGISTRO DE SERVICIOS</div>
+      </div>
+    </div>
+
+    <h2>🔌 Conectar a Supabase</h2>
+    <p>Ingresa tus credenciales de Supabase para sincronizar los datos en todos los dispositivos.</p>
+
+    <div class="setup-steps">
+      <strong>¿Cómo obtener tus credenciales?</strong><br>
+      1. Ve a <a href="https://supabase.com" target="_blank">supabase.com</a> y crea un proyecto gratuito<br>
+      2. En tu proyecto → <strong>Settings → API</strong><br>
+      3. Copia la <strong>Project URL</strong> y la <strong>anon public key</strong><br>
+      4. Ve a <strong>SQL Editor</strong> y ejecuta el script de abajo ↓<br><br>
+      <strong>Script SQL (ejecutar una sola vez):</strong><br>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a89dfd">
+        CREATE TABLE servicios (<br>
+        &nbsp;&nbsp;id BIGSERIAL PRIMARY KEY,<br>
+        &nbsp;&nbsp;cliente TEXT NOT NULL,<br>
+        &nbsp;&nbsp;tipo TEXT NOT NULL,<br>
+        &nbsp;&nbsp;fecha TIMESTAMPTZ,<br>
+        &nbsp;&nbsp;descripcion TEXT,<br>
+        &nbsp;&nbsp;estado TEXT DEFAULT 'Pendiente',<br>
+        &nbsp;&nbsp;costo NUMERIC,<br>
+        &nbsp;&nbsp;created_at TIMESTAMPTZ DEFAULT NOW()<br>
+        );<br>
+        ALTER TABLE servicios ENABLE ROW LEVEL SECURITY;<br>
+        CREATE POLICY "public_access" ON servicios FOR ALL USING (true) WITH CHECK (true);
+      </span>
+    </div>
+
+    <div class="fgroup">
+      <label>Project URL</label>
+      <input type="text" id="cfgUrl" placeholder="https://xxxxxxxxxxxx.supabase.co" />
+    </div>
+    <div class="fgroup">
+      <label>Anon Public Key</label>
+      <input type="text" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
+    </div>
+    <div class="setup-err" id="setupErr">❌ No se pudo conectar. Verifica la URL y la key.</div>
+    <button class="btn-connect" id="btnConnect" onclick="conectar()">⚡ Conectar y Continuar</button>
+  </div>
+</div>
+
+<!-- ════════════ HEADER ════════════ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-bar">
+      <svg class="logo-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="24,3 43,14 43,34 24,45 5,34 5,14" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+        <polygon points="24,3 43,14 24,25 5,14" fill="none" stroke="#7eb8f5" stroke-width="1.2"/>
+        <polygon points="24,25 43,14 43,34 24,45" fill="rgba(126,184,245,0.08)" stroke="#7eb8f5" stroke-width="1.2"/>
+        <polygon points="24,25 5,14 5,34 24,45"  fill="rgba(255,255,255,0.04)" stroke="#ffffff" stroke-width="1.2"/>
+        <polyline points="14,20 24,14 34,20 34,28 24,34 14,28 14,20" fill="none" stroke="#7eb8f5" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="logo-text">
+        <span class="brand">SOLUCIONES</span>
+        <span class="brand2">INTEGRALES</span>
+      </div>
+      <div class="logo-divider"></div>
+      <span class="logo-title">Registro de Servicios</span>
+    </div>
+
+    <div class="header-row">
+      <div>
+        <div class="page-title">📋 Control de Visitas y Servicios</div>
+        <div class="page-sub">Gestión de clientes y seguimiento operativo</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-prog" onclick="abrirForm('programado')">📅 Programar</button>
+        <button class="btn-new"  onclick="abrirForm('servicio')">＋ Nuevo Servicio</button>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="sTotal" style="color:#7eb8f5">0</div><div class="stat-l">Total</div></div>
+      <div class="stat"><div class="stat-n" id="sProg"  style="color:#a89dfd">0</div><div class="stat-l">Programados</div></div>
+      <div class="stat"><div class="stat-n" id="sComp"  style="color:#22c97a">0</div><div class="stat-l">Completados</div></div>
+      <div class="stat"><div class="stat-n" id="sPend"  style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
+      <div class="stat"><div class="stat-n" id="sCanc"  style="color:#e5484d">0</div><div class="stat-l">Cancelados</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ MAIN ════════════ -->
+<div class="main">
+
+  <!-- FORMULARIO -->
+  <div class="form-card" id="formCard">
+    <div class="tabs">
+      <button class="tab" id="tabS" onclick="setModo('servicio')">⚡ Servicio realizado</button>
+      <button class="tab" id="tabP" onclick="setModo('programado')">📅 Programar servicio</button>
+    </div>
+    <div class="form-h" id="formH">➕ Registrar Servicio</div>
+    <div class="grid2">
+      <div class="fgroup" id="grupoFecha">
+        <label id="lblFecha">Fecha y Hora *</label>
+        <input type="datetime-local" id="inFecha" />
+        <label class="check-row">
+          <input type="checkbox" id="chkIndef" onchange="toggleIndef()" /> Fecha por definir
+        </label>
+      </div>
+      <div class="fgroup">
+        <label>Cliente *</label>
+        <input type="text" id="inCliente" placeholder="Nombre del cliente" />
+      </div>
+      <div class="fgroup">
+        <label>Tipo de Servicio *</label>
+        <select id="inTipo">
+          <option value="">Seleccionar...</option>
+          <option>Mantenimiento</option><option>Instalación</option><option>Reparación</option>
+          <option>Inspección</option><option>Soporte técnico</option>
+          <option>Entrega de equipo</option><option>Entrega y/o cambio de consumibles</option>
+          <option>Entrega de mercancía</option><option>Recolección de equipo</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="fgroup" id="grupoEstado">
+        <label>Estado</label>
+        <select id="inEstado" onchange="toggleCosto()">
+          <option>Pendiente</option><option>Completado</option><option>Cancelado</option>
+        </select>
+      </div>
+      <div class="fgroup" id="grupoCosto" style="display:none">
+        <label>Costo cobrado ($)</label>
+        <div class="prefix-wrap">
+          <span class="prefix">$</span>
+          <input type="number" id="inCosto" placeholder="0.00" min="0" step="0.01" />
+        </div>
+      </div>
+      <div class="fgroup full">
+        <label>Descripción / Notas</label>
+        <textarea id="inDesc" rows="3" placeholder="Detalles del servicio..."></textarea>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="cerrarForm()">Cancelar</button>
+      <button class="btn-submit" id="btnSubmit" onclick="guardar()">✅ Registrar</button>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <input type="text" id="busqueda" placeholder="🔍 Buscar cliente, tipo, notas..." oninput="render()" />
+    <div class="f-btns">
+      <button class="f-btn on" onclick="filtrar('Todos',this)">Todos</button>
+      <button class="f-btn" onclick="filtrar('Programado',this)">Programado</button>
+      <button class="f-btn" onclick="filtrar('Completado',this)">Completado</button>
+      <button class="f-btn" onclick="filtrar('Pendiente',this)">Pendiente</button>
+      <button class="f-btn" onclick="filtrar('Cancelado',this)">Cancelado</button>
+    </div>
+  </div>
+
+  <!-- TABLA -->
+  <div id="tabla"></div>
+
+</div>
+
+<div class="footer">© 2025 Soluciones Integrales · Todos los derechos reservados</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar" id="statusBar">
+  <span class="status-dot amber" id="statusDot"></span>
+  <span class="status-label" id="statusLabel">Sin conexión</span>
+  <button class="btn-reconfig" onclick="reconfigurar()">⚙️ Config</button>
+</div>
+
+<!-- MODAL ELIMINAR -->
+<div class="overlay" id="modalDel">
+  <div class="modal">
+    <div class="micon">⚠️</div>
+    <h3>¿Eliminar registro?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-del-confirm" onclick="confirmarEliminar()">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════ STATE ══════════
+let supabase = null;
+let registros = [];
+let editId = null, modo = "servicio", filtro = "Todos";
+let sortF = "created_at", sortD = "desc", delId = null;
+
+// ══════════ SETUP / CONEXIÓN ══════════
+function cargarConfig() {
+  return {
+    url: localStorage.getItem("sb_url") || "",
+    key: localStorage.getItem("sb_key") || ""
+  };
+}
+
+async function conectar() {
+  const url = document.getElementById("cfgUrl").value.trim();
+  const key = document.getElementById("cfgKey").value.trim();
+  const err = document.getElementById("setupErr");
+  const btn = document.getElementById("btnConnect");
+
+  if (!url || !key) { err.textContent = "❌ Completa ambos campos."; err.style.display="block"; return; }
+
+  btn.textContent = "Conectando..."; btn.disabled = true; err.style.display="none";
+
+  try {
+    const client = supabaseJs.createClient(url, key);
+    // Test connection
+    const { error } = await client.from("servicios").select("id").limit(1);
+    if (error) throw error;
+
+    supabase = client;
+    localStorage.setItem("sb_url", url);
+    localStorage.setItem("sb_key", key);
+
+    document.getElementById("setupOverlay").classList.add("hidden");
+    setStatus("green", "Conectado a Supabase");
+    await cargarDatos();
+    iniciarRealtime();
+  } catch(e) {
+    console.error("Supabase error:", e);
+    err.textContent = "❌ " + (e.message || "No se pudo conectar. Verifica URL y key, y que la tabla 'servicios' exista.");
+    err.style.display = "block";
+  } finally {
+    btn.textContent = "⚡ Conectar y Continuar"; btn.disabled = false;
+  }
+}
+
+function reconfigurar() {
+  const cfg = cargarConfig();
+  document.getElementById("cfgUrl").value = cfg.url;
+  document.getElementById("cfgKey").value = cfg.key;
+  document.getElementById("setupOverlay").classList.remove("hidden");
+}
+
+// Auto-connect si ya hay credenciales guardadas
+(async () => {
+  const cfg = cargarConfig();
+  if (cfg.url && cfg.key) {
+    document.getElementById("cfgUrl").value = cfg.url;
+    document.getElementById("cfgKey").value = cfg.key;
+    try {
+      const client = supabaseJs.createClient(cfg.url, cfg.key);
+      const { error } = await client.from("servicios").select("id").limit(1);
+      if (error) throw error;
+      supabase = client;
+      document.getElementById("setupOverlay").classList.add("hidden");
+      setStatus("green", "Conectado");
+      await cargarDatos();
+      iniciarRealtime();
+    } catch(e) {
+      setStatus("red", "Error de conexión");
+    }
+  }
+})();
+
+// ══════════ SUPABASE CRUD ══════════
+async function cargarDatos() {
+  if (!supabase) return;
+  setStatus("amber", "Cargando...");
+  document.getElementById("tabla").innerHTML = `<div class="loading"><div class="spinner"></div>Cargando registros...</div>`;
+
+  const { data, error } = await supabase
+    .from("servicios")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    setStatus("red", "Error al cargar");
+    toast("Error al cargar datos", "error");
+    return;
+  }
+  registros = data || [];
+  setStatus("green", `Conectado · ${registros.length} registros`);
+  render();
+}
+
+async function guardar() {
+  const cliente = document.getElementById("inCliente").value.trim();
+  const tipo    = document.getElementById("inTipo").value;
+  const indef   = document.getElementById("chkIndef").checked;
+  const fecha   = indef ? null : document.getElementById("inFecha").value;
+  if (!cliente || !tipo || (!indef && !fecha)) {
+    alert("Por favor llena los campos obligatorios marcados con *");
+    return;
+  }
+  const estado = modo === "programado" ? "Programado" : document.getElementById("inEstado").value;
+  const costo  = (modo === "servicio" && estado === "Completado")
+    ? parseFloat(document.getElementById("inCosto").value) || null
+    : null;
+  const descripcion = document.getElementById("inDesc").value;
+
+  const btn = document.getElementById("btnSubmit");
+  btn.disabled = true; btn.textContent = "Guardando...";
+
+  if (editId !== null) {
+    const { error } = await supabase
+      .from("servicios")
+      .update({ cliente, tipo, fecha, descripcion, estado, costo })
+      .eq("id", editId);
+    if (error) { toast("Error al actualizar", "error"); }
+    else { toast("✅ Registro actualizado"); }
+    editId = null;
+  } else {
+    const { error } = await supabase
+      .from("servicios")
+      .insert([{ cliente, tipo, fecha, descripcion, estado, costo }]);
+    if (error) { toast("Error al guardar", "error"); }
+    else { toast("✅ Servicio registrado"); }
+  }
+
+  btn.disabled = false;
+  cerrarForm();
+  await cargarDatos();
+}
+
+async function saveCosto(id) {
+  const val = parseFloat(document.getElementById("ci-" + id)?.value) || null;
+  const { error } = await supabase.from("servicios").update({ costo: val }).eq("id", id);
+  if (error) { toast("Error al guardar costo", "error"); }
+  else { toast("💰 Costo actualizado"); await cargarDatos(); }
+}
+
+async function confirmarEliminar() {
+  const { error } = await supabase.from("servicios").delete().eq("id", delId);
+  if (error) { toast("Error al eliminar", "error"); }
+  else { toast("🗑️ Registro eliminado"); }
+  cerrarModal();
+  await cargarDatos();
+}
+
+// ══════════ REALTIME ══════════
+function iniciarRealtime() {
+  if (!supabase) return;
+  supabase
+    .channel("servicios-changes")
+    .on("postgres_changes", { event: "*", schema: "public", table: "servicios" }, async (payload) => {
+      await cargarDatos();
+    })
+    .subscribe();
+}
+
+// ══════════ STATUS ══════════
+function setStatus(color, label) {
+  const dot = document.getElementById("statusDot");
+  const lbl = document.getElementById("statusLabel");
+  dot.className = "status-dot " + color;
+  lbl.textContent = label;
+}
+
+// ══════════ TOAST ══════════
+let toastTimer;
+function toast(msg, type = "success") {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.className = "toast show " + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = "toast"; }, 2800);
+}
+
+// ══════════ FORM ══════════
+function abrirForm(m) {
+  editId = null; resetForm(); setModo(m);
+  document.getElementById("formCard").classList.add("show");
+  document.getElementById("formCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function cerrarForm() { document.getElementById("formCard").classList.remove("show"); editId = null; }
+
+function resetForm() {
+  document.getElementById("inFecha").value   = new Date().toISOString().slice(0,16);
+  document.getElementById("inCliente").value = "";
+  document.getElementById("inTipo").value    = "";
+  document.getElementById("inEstado").value  = "Pendiente";
+  document.getElementById("inCosto").value   = "";
+  document.getElementById("inDesc").value    = "";
+  document.getElementById("chkIndef").checked = false;
+  document.getElementById("inFecha").style.display = "";
+  toggleCosto();
+}
+
+function setModo(m) {
+  modo = m;
+  const card = document.getElementById("formCard");
+  const tabS = document.getElementById("tabS"), tabP = document.getElementById("tabP");
+  const formH = document.getElementById("formH"), btnSub = document.getElementById("btnSubmit");
+  const gEst = document.getElementById("grupoEstado"), lblF = document.getElementById("lblFecha");
+
+  tabS.className = "tab" + (m === "servicio" ? " on-s" : "");
+  tabP.className = "tab" + (m === "programado" ? " on-p" : "");
+
+  if (m === "programado") {
+    card.classList.add("prog-mode");
+    formH.className = "form-h prog";
+    formH.textContent = editId ? "✏️ Editar Registro" : "📅 Programar Servicio";
+    btnSub.className = "btn-submit prog";
+    btnSub.textContent = editId ? "💾 Guardar Cambios" : "📅 Programar";
+    gEst.style.display = "none";
+    document.getElementById("grupoCosto").style.display = "none";
+    lblF.textContent = "Fecha programada";
+  } else {
+    card.classList.remove("prog-mode");
+    formH.className = "form-h";
+    formH.textContent = editId ? "✏️ Editar Registro" : "➕ Registrar Servicio";
+    btnSub.className = "btn-submit";
+    btnSub.textContent = editId ? "💾 Guardar Cambios" : "✅ Registrar";
+    gEst.style.display = "";
+    lblF.textContent = "Fecha y Hora *";
+    toggleCosto();
+  }
+}
+
+function toggleIndef() {
+  document.getElementById("inFecha").style.display = document.getElementById("chkIndef").checked ? "none" : "";
+}
+function toggleCosto() {
+  document.getElementById("grupoCosto").style.display =
+    (modo === "servicio" && document.getElementById("inEstado").value === "Completado") ? "" : "none";
+}
+
+function editar(id) {
+  const r = registros.find(r => r.id === id); if (!r) return;
+  editId = id;
+  document.getElementById("inFecha").value   = r.fecha ? r.fecha.slice(0,16) : new Date().toISOString().slice(0,16);
+  document.getElementById("inCliente").value = r.cliente || "";
+  document.getElementById("inTipo").value    = r.tipo || "";
+  document.getElementById("inEstado").value  = r.estado || "Pendiente";
+  document.getElementById("inCosto").value   = r.costo || "";
+  document.getElementById("inDesc").value    = r.descripcion || "";
+  document.getElementById("chkIndef").checked = !r.fecha;
+  document.getElementById("inFecha").style.display = r.fecha ? "" : "none";
+  setModo(r.estado === "Programado" ? "programado" : "servicio");
+  document.getElementById("formCard").classList.add("show");
+  document.getElementById("formCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function editCosto(id) {
+  const r = registros.find(r => r.id === id); if (!r) return;
+  const td = document.getElementById("costo-" + id);
+  td.innerHTML = `<div class="costo-edit-wrap">
+    <span style="font-size:12px;color:#7a9cc0">$</span>
+    <input type="number" id="ci-${id}" value="${r.costo||""}" min="0" step="0.01" onkeydown="ciKey(event,${id})" />
+    <button class="costo-ok" onclick="saveCosto(${id})">✓</button>
+    <button class="costo-no" onclick="render()">✕</button>
+  </div>`;
+  document.getElementById("ci-" + id)?.focus();
+}
+function ciKey(e, id) { if (e.key==="Enter") saveCosto(id); if (e.key==="Escape") render(); }
+
+function pedir(id) { delId = id; document.getElementById("modalDel").classList.add("show"); }
+function cerrarModal() { delId = null; document.getElementById("modalDel").classList.remove("show"); }
+
+// ══════════ FILTROS / RENDER ══════════
+function filtrar(val, btn) {
+  filtro = val;
+  document.querySelectorAll(".f-btn").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on"); render();
+}
+function ordenar(f) {
+  if (sortF === f) sortD = sortD === "asc" ? "desc" : "asc"; else { sortF = f; sortD = "asc"; } render();
+}
+function getFiltrados() {
+  const q = document.getElementById("busqueda").value.toLowerCase();
+  return registros
+    .filter(r => (filtro === "Todos" || r.estado === filtro) &&
+      ((r.cliente||"").toLowerCase().includes(q) || (r.tipo||"").toLowerCase().includes(q) || (r.descripcion||"").toLowerCase().includes(q)))
+    .sort((a,b) => {
+      let va = a[sortF]||"", vb = b[sortF]||"";
+      return sortD==="asc" ? (va>vb?1:-1) : (va<vb?1:-1);
+    });
+}
+function si(f) {
+  if (sortF !== f) return '<span style="opacity:0.25;font-size:10px"> ▲</span>';
+  return `<span style="font-size:10px"> ${sortD==="desc"?"▼":"▲"}</span>`;
+}
+
+function render() {
+  document.getElementById("sTotal").textContent = registros.length;
+  document.getElementById("sProg").textContent  = registros.filter(r=>r.estado==="Programado").length;
+  document.getElementById("sComp").textContent  = registros.filter(r=>r.estado==="Completado").length;
+  document.getElementById("sPend").textContent  = registros.filter(r=>r.estado==="Pendiente").length;
+  document.getElementById("sCanc").textContent  = registros.filter(r=>r.estado==="Cancelado").length;
+
+  const lista = getFiltrados();
+  const el = document.getElementById("tabla");
+
+  if (lista.length === 0) {
+    el.innerHTML = `<div class="empty">
+      <div class="eicon">📭</div>
+      <div class="etitle">No hay registros</div>
+      <div class="esub">${registros.length===0?"Usa los botones de arriba para agregar tu primer registro.":"No hay resultados para tu búsqueda."}</div>
+    </div>`;
+    return;
+  }
+
+  const total = lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
+
+  let rows = lista.map(r => {
+    const fechaStr = r.fecha
+      ? new Date(r.fecha).toLocaleString("es-MX",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})
+      : '<span class="tag tag-indef">Por definir</span>';
+    const costoCell = r.estado !== "Completado"
+      ? '<span class="costo-dash">—</span>'
+      : `<div id="costo-${r.id}">
+          <button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id})">
+            ${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"}
+            <span style="font-size:10px;opacity:0.5">✏️</span>
+          </button>
+        </div>`;
+    return `<tr>
+      <td class="td-fecha">${fechaStr}</td>
+      <td class="td-cliente">${r.cliente}</td>
+      <td><span class="tag tag-tipo">${r.tipo}</span></td>
+      <td class="td-notas" title="${r.descripcion||""}">${r.descripcion||'<span style="opacity:0.25">—</span>'}</td>
+      <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
+      <td>${costoCell}</td>
+      <td><div class="act-btns">
+        <button class="btn-edit-row" onclick="editar(${r.id})" title="Editar">✏️</button>
+        <button class="btn-del-row"  onclick="pedir(${r.id})"  title="Eliminar">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join("");
+
+  el.innerHTML = `<div class="tcard"><div class="tscroll"><table>
+    <thead><tr>
+      <th onclick="ordenar('fecha')">Fecha${si("fecha")}</th>
+      <th onclick="ordenar('cliente')">Cliente${si("cliente")}</th>
+      <th onclick="ordenar('tipo')">Tipo${si("tipo")}</th>
+      <th onclick="ordenar('descripcion')">Notas${si("descripcion")}</th>
+      <th onclick="ordenar('estado')">Estado${si("estado")}</th>
+      <th>Costo</th>
+      <th>Acciones</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>
+  <div class="tfooter">
+    <span>Mostrando ${lista.length} de ${registros.length} registro(s)</span>
+    ${total>0?`<span class="total">💰 Total cobrado: $${total.toLocaleString("es-MX")}</span>`:""}
+  </div></div>`;
+}
+
+render();
+</script>
+</body>
+</html>
