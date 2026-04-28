@@ -6,6 +6,10 @@
   <title>Soluciones Integrales – Registro de Servicios</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    // Normalize global
+    window.supabase_lib = window.supabase || window.Supabase || {};
+  </script>
   <style>
     :root {
       --navy:    #0a1628;
@@ -306,60 +310,6 @@
 </head>
 <body>
 
-<!-- ════════════ SETUP OVERLAY ════════════ -->
-<div class="setup-overlay" id="setupOverlay">
-  <div class="setup-box">
-    <div class="setup-logo">
-      <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="24,3 43,14 43,34 24,45 5,34 5,14" fill="none" stroke="#ffffff" stroke-width="1.6"/>
-        <polygon points="24,3 43,14 24,25 5,14" fill="none" stroke="#7eb8f5" stroke-width="1.2"/>
-        <polyline points="14,20 24,14 34,20 34,28 24,34 14,28 14,20" fill="none" stroke="#7eb8f5" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div>
-        <div style="font-size:13px;font-weight:900;letter-spacing:2px;color:#fff">SOLUCIONES INTEGRALES</div>
-        <div style="font-size:10px;color:#7a9cc0;letter-spacing:1px">REGISTRO DE SERVICIOS</div>
-      </div>
-    </div>
-
-    <h2>🔌 Conectar a Supabase</h2>
-    <p>Ingresa tus credenciales de Supabase para sincronizar los datos en todos los dispositivos.</p>
-
-    <div class="setup-steps">
-      <strong>¿Cómo obtener tus credenciales?</strong><br>
-      1. Ve a <a href="https://supabase.com" target="_blank">supabase.com</a> y crea un proyecto gratuito<br>
-      2. En tu proyecto → <strong>Settings → API</strong><br>
-      3. Copia la <strong>Project URL</strong> y la <strong>anon public key</strong><br>
-      4. Ve a <strong>SQL Editor</strong> y ejecuta el script de abajo ↓<br><br>
-      <strong>Script SQL (ejecutar una sola vez):</strong><br>
-      <span style="font-family:'DM Mono',monospace;font-size:10px;color:#a89dfd">
-        CREATE TABLE servicios (<br>
-        &nbsp;&nbsp;id BIGSERIAL PRIMARY KEY,<br>
-        &nbsp;&nbsp;cliente TEXT NOT NULL,<br>
-        &nbsp;&nbsp;tipo TEXT NOT NULL,<br>
-        &nbsp;&nbsp;fecha TIMESTAMPTZ,<br>
-        &nbsp;&nbsp;descripcion TEXT,<br>
-        &nbsp;&nbsp;estado TEXT DEFAULT 'Pendiente',<br>
-        &nbsp;&nbsp;costo NUMERIC,<br>
-        &nbsp;&nbsp;created_at TIMESTAMPTZ DEFAULT NOW()<br>
-        );<br>
-        ALTER TABLE servicios ENABLE ROW LEVEL SECURITY;<br>
-        CREATE POLICY "public_access" ON servicios FOR ALL USING (true) WITH CHECK (true);
-      </span>
-    </div>
-
-    <div class="fgroup">
-      <label>Project URL</label>
-      <input type="text" id="cfgUrl" placeholder="https://xxxxxxxxxxxx.supabase.co" />
-    </div>
-    <div class="fgroup">
-      <label>Anon Public Key</label>
-      <input type="text" id="cfgKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." />
-    </div>
-    <div class="setup-err" id="setupErr">❌ No se pudo conectar. Verifica la URL y la key.</div>
-    <button class="btn-connect" id="btnConnect" onclick="conectar()">⚡ Conectar y Continuar</button>
-  </div>
-</div>
-
 <!-- ════════════ HEADER ════════════ -->
 <div class="header">
   <div class="header-inner">
@@ -480,7 +430,7 @@
 <div class="status-bar" id="statusBar">
   <span class="status-dot amber" id="statusDot"></span>
   <span class="status-label" id="statusLabel">Sin conexión</span>
-  <button class="btn-reconfig" onclick="reconfigurar()">⚙️ Config</button>
+  
 </div>
 
 <!-- MODAL ELIMINAR -->
@@ -501,87 +451,43 @@
 
 <script>
 // ══════════ STATE ══════════
-let supabase = null;
+const SB_URL = "https://hkngtxwjwvbfkxbvrlwn.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhrbmd0eHdqd3ZiZmt4YnZybHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjgzNzQsImV4cCI6MjA5MjkwNDM3NH0.rBIzZxz_e1Nz16tS-QhFx4nIbzyqt-EGKFuZu1sLsfs";
+
+let db = null;
 let registros = [];
 let editId = null, modo = "servicio", filtro = "Todos";
 let sortF = "created_at", sortD = "desc", delId = null;
 
-// ══════════ SETUP / CONEXIÓN ══════════
-function cargarConfig() {
-  return {
-    url: localStorage.getItem("sb_url") || "",
-    key: localStorage.getItem("sb_key") || ""
-  };
+function getClient() {
+  const lib = window.supabase || window.Supabase || window.supabase_lib;
+  if (lib && lib.createClient) return lib.createClient(SB_URL, SB_KEY);
+  throw new Error("Libreria Supabase no cargada");
 }
 
-async function conectar() {
-  const url = document.getElementById("cfgUrl").value.trim();
-  const key = document.getElementById("cfgKey").value.trim();
-  const err = document.getElementById("setupErr");
-  const btn = document.getElementById("btnConnect");
-
-  if (!url || !key) { err.textContent = "❌ Completa ambos campos."; err.style.display="block"; return; }
-
-  btn.textContent = "Conectando..."; btn.disabled = true; err.style.display="none";
-
+// ══════════ INIT ══════════
+window.addEventListener("load", async () => {
+  setStatus("amber", "Conectando...");
   try {
-    const client = supabaseJs.createClient(url, key);
-    // Test connection
-    const { error } = await client.from("servicios").select("id").limit(1);
+    db = getClient();
+    const { error } = await db.from("servicios").select("id").limit(1);
     if (error) throw error;
-
-    supabase = client;
-    localStorage.setItem("sb_url", url);
-    localStorage.setItem("sb_key", key);
-
-    document.getElementById("setupOverlay").classList.add("hidden");
-    setStatus("green", "Conectado a Supabase");
+    setStatus("green", "Conectado");
     await cargarDatos();
     iniciarRealtime();
   } catch(e) {
-    console.error("Supabase error:", e);
-    err.textContent = "❌ " + (e.message || "No se pudo conectar. Verifica URL y key, y que la tabla 'servicios' exista.");
-    err.style.display = "block";
-  } finally {
-    btn.textContent = "⚡ Conectar y Continuar"; btn.disabled = false;
+    console.error("Supabase init error:", e);
+    setStatus("red", "Error: " + (e.message || "Sin conexion"));
   }
-}
-
-function reconfigurar() {
-  const cfg = cargarConfig();
-  document.getElementById("cfgUrl").value = cfg.url;
-  document.getElementById("cfgKey").value = cfg.key;
-  document.getElementById("setupOverlay").classList.remove("hidden");
-}
-
-// Auto-connect si ya hay credenciales guardadas
-(async () => {
-  const cfg = cargarConfig();
-  if (cfg.url && cfg.key) {
-    document.getElementById("cfgUrl").value = cfg.url;
-    document.getElementById("cfgKey").value = cfg.key;
-    try {
-      const client = supabaseJs.createClient(cfg.url, cfg.key);
-      const { error } = await client.from("servicios").select("id").limit(1);
-      if (error) throw error;
-      supabase = client;
-      document.getElementById("setupOverlay").classList.add("hidden");
-      setStatus("green", "Conectado");
-      await cargarDatos();
-      iniciarRealtime();
-    } catch(e) {
-      setStatus("red", "Error de conexión");
-    }
-  }
-})();
+});
 
 // ══════════ SUPABASE CRUD ══════════
 async function cargarDatos() {
-  if (!supabase) return;
+  if (!db) return;
   setStatus("amber", "Cargando...");
   document.getElementById("tabla").innerHTML = `<div class="loading"><div class="spinner"></div>Cargando registros...</div>`;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("servicios")
     .select("*")
     .order("created_at", { ascending: false });
@@ -615,17 +521,12 @@ async function guardar() {
   btn.disabled = true; btn.textContent = "Guardando...";
 
   if (editId !== null) {
-    const { error } = await supabase
-      .from("servicios")
-      .update({ cliente, tipo, fecha, descripcion, estado, costo })
-      .eq("id", editId);
+    const { error } = await db.from("servicios").update({ cliente, tipo, fecha, descripcion, estado, costo }).eq("id", editId);
     if (error) { toast("Error al actualizar", "error"); }
     else { toast("✅ Registro actualizado"); }
     editId = null;
   } else {
-    const { error } = await supabase
-      .from("servicios")
-      .insert([{ cliente, tipo, fecha, descripcion, estado, costo }]);
+    const { error } = await db.from("servicios").insert([{ cliente, tipo, fecha, descripcion, estado, costo }]);
     if (error) { toast("Error al guardar", "error"); }
     else { toast("✅ Servicio registrado"); }
   }
@@ -637,13 +538,13 @@ async function guardar() {
 
 async function saveCosto(id) {
   const val = parseFloat(document.getElementById("ci-" + id)?.value) || null;
-  const { error } = await supabase.from("servicios").update({ costo: val }).eq("id", id);
+  const { error } = await db.from("servicios").update({ costo: val }).eq("id", id);
   if (error) { toast("Error al guardar costo", "error"); }
   else { toast("💰 Costo actualizado"); await cargarDatos(); }
 }
 
 async function confirmarEliminar() {
-  const { error } = await supabase.from("servicios").delete().eq("id", delId);
+  const { error } = await db.from("servicios").delete().eq("id", delId);
   if (error) { toast("Error al eliminar", "error"); }
   else { toast("🗑️ Registro eliminado"); }
   cerrarModal();
@@ -652,8 +553,8 @@ async function confirmarEliminar() {
 
 // ══════════ REALTIME ══════════
 function iniciarRealtime() {
-  if (!supabase) return;
-  supabase
+  if (!db) return;
+  db
     .channel("servicios-changes")
     .on("postgres_changes", { event: "*", schema: "public", table: "servicios" }, async (payload) => {
       await cargarDatos();
