@@ -641,7 +641,9 @@ async function guardar() {
   const cliente = document.getElementById("inCliente").value.trim();
   const tipo    = document.getElementById("inTipo").value;
   const indef   = document.getElementById("chkIndef").checked;
-  const fecha   = indef ? null : document.getElementById("inFecha").value;
+  const fechaRaw = document.getElementById("inFecha").value;
+  // Guardar como UTC literal para que no haya desfase de zona horaria
+  const fecha = indef ? null : (fechaRaw ? fechaRaw + ":00+00:00" : null);
   if (!cliente || !tipo || (!indef && !fecha)) { alert("Por favor llena los campos obligatorios *"); return; }
 
   const estado = modo==="programado" ? "Programado" : document.getElementById("inEstado").value;
@@ -764,8 +766,20 @@ function renderActivos() {
   </div></div>`;
 }
 
+
+// ══════════ HELPER FECHA ══════════
+function mostrarFecha(fechaStr) {
+  if (!fechaStr) return null;
+  // Tomar los primeros 16 caracteres "YYYY-MM-DDTHH:MM" directamente
+  const s = fechaStr.slice(0, 16);
+  const [fecha, hora] = s.split("T");
+  const [y, mo, d] = fecha.split("-");
+  const meses = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  return `${parseInt(d)} ${meses[parseInt(mo)-1]} ${y}, ${hora}`;
+}
+
 function rowActivo(r) {
-  const fechaStr = r.fecha ? new Date(r.fecha).toLocaleString("es-MX",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : '<span class="tag tag-indef">Por definir</span>';
+  const fechaStr = r.fecha ? mostrarFecha(r.fecha) : '<span class="tag tag-indef">Por definir</span>';
   const costoCell = r.estado!=="Completado" ? '<span class="costo-dash">—</span>'
     : `<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id})">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
   let nFotos=0; try{nFotos=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
@@ -857,7 +871,7 @@ function renderArchivo() {
 }
 
 function rowArchivo(r) {
-  const fechaStr = r.fecha ? new Date(r.fecha).toLocaleString("es-MX",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
+  const fechaStr = r.fecha ? mostrarFecha(r.fecha) : "—";
   let nFotos=0; try{nFotos=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
   const costoTxt = r.costo ? `<span style="color:var(--green);font-weight:700">$${Number(r.costo).toLocaleString("es-MX")}</span>` : '<span class="costo-dash">—</span>';
   return `<tr>
@@ -929,7 +943,7 @@ function exportarExcelArchivo() {
 }
 function _excelDesde(lista, nombre) {
   const datos = lista.map(r=>({
-    "Fecha": r.fecha ? new Date(r.fecha).toLocaleString("es-MX") : "Por definir",
+    "Fecha": r.fecha ? mostrarFecha(r.fecha) : "Por definir",
     "Cliente": r.cliente, "Tipo": r.tipo, "Estado": r.estado,
     "Costo": r.costo||"", "Descripción": r.descripcion||"",
     "Fotos": r.fotos ? JSON.parse(r.fotos).length+" foto(s)" : "0"
@@ -1062,7 +1076,7 @@ function toggleCosto() { document.getElementById("grupoCosto").style.display=(mo
 function editar(id) {
   const r=registros.find(r=>r.id===id); if(!r) return;
   editId=id;
-  document.getElementById("inFecha").value=r.fecha?r.fecha.slice(0,16):new Date().toISOString().slice(0,16);
+  document.getElementById("inFecha").value=r.fecha?r.fecha.slice(0,16):new Date().toISOString().slice(0,16).replace('T',' ').slice(0,16).replace(' ','T');
   document.getElementById("inCliente").value=r.cliente||""; document.getElementById("inTipo").value=r.tipo||"";
   document.getElementById("inEstado").value=r.estado||"Pendiente"; document.getElementById("inCosto").value=r.costo||"";
   document.getElementById("inDesc").value=r.descripcion||""; document.getElementById("chkIndef").checked=!r.fecha;
