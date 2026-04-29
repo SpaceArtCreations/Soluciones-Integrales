@@ -188,7 +188,23 @@
     .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue2);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* MODALS */
+    /* MODAL EXCEL */
+    .modal-excel{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:28px 30px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:420px;width:93%;text-align:left;}
+    .modal-excel h3{font-size:16px;font-weight:800;margin-bottom:6px;color:var(--white);}
+    .modal-excel p{color:var(--muted);font-size:12px;margin-bottom:18px;}
+    .excel-meses{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;margin-bottom:18px;}
+    .excel-mes-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .15s;background:transparent;}
+    .excel-mes-opt:hover{border-color:var(--green);background:rgba(34,201,122,.07);}
+    .excel-mes-opt.sel{border-color:var(--green);background:rgba(34,201,122,.12);}
+    .excel-mes-opt .em-name{font-size:13px;font-weight:700;color:var(--text);}
+    .excel-mes-opt .em-info{font-size:11px;color:var(--muted);}
+    .excel-mes-opt .em-check{color:var(--green);font-size:16px;opacity:0;}
+    .excel-mes-opt.sel .em-check{opacity:1;}
+    .btn-excel-dl{background:var(--green);color:#0a1628;border:none;border-radius:8px;padding:10px 22px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:filter .15s;}
+    .btn-excel-dl:hover{filter:brightness(1.1);}
+    .btn-excel-dl:disabled{opacity:.4;cursor:not-allowed;}
+
+    /* MODAL EXCEL */
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:200;}
     .overlay.show{display:flex;}
     .modal{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 34px;box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;max-width:360px;width:90%;}
@@ -223,23 +239,11 @@
 
     .footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:10px;}
 
-    @media print{
-      .header,.filtros,.form-card,.btn-row,.act-btns,.status-bar,.toast,.footer,.arch-filtros,.nav-tabs,.btn-archive,.btn-unarch{display:none!important;}
-      body{background:white;color:black;}
-      .tcard{border:1px solid #ccc;}
-      table{min-width:unset;}
-      th,td{color:black!important;border-color:#ccc!important;}
-      .print-header{display:block!important;}
-    }
-    .print-header{display:none;text-align:center;padding:16px 0 8px;}
-    .print-header h2{font-size:18px;font-weight:800;}
-    .print-header p{font-size:12px;color:#666;}
-
     @media(max-width:600px){
       .grid2{grid-template-columns:1fr;} .full{grid-column:1;}
       .header{padding:0 14px;} .main{padding:14px 10px;} .form-card{padding:16px 12px;}
       .logo-text .brand,.logo-text .brand2{font-size:12px;letter-spacing:2px;}
-      .btn-row{gap:6px;} .btn-prog,.btn-excel,.btn-pdf,.btn-archive{padding:8px 10px;font-size:11px;} .btn-new{padding:8px 12px;font-size:11px;}
+      .btn-row{gap:6px;} .btn-prog,.btn-excel,.btn-archive{padding:8px 10px;font-size:11px;} .btn-new{padding:8px 12px;font-size:11px;}
       .stat{padding:8px 12px;min-width:60px;} .stat-n{font-size:18px;}
       .nav-tab{padding:9px 12px;font-size:11px;}
     }
@@ -270,14 +274,12 @@
       </div>
       <div class="btn-row" id="btnRowActivos">
         <button class="btn-excel"   onclick="exportarExcel()">📊 Excel</button>
-        <button class="btn-pdf"     onclick="exportarPDF()">🖨️ PDF</button>
         <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar mes</button>
         <button class="btn-prog"    onclick="abrirForm('programado')">📅 Programar</button>
         <button class="btn-new"     onclick="abrirForm('servicio')">＋ Nuevo</button>
       </div>
       <div class="btn-row" id="btnRowArchivos" style="display:none">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-        <button class="btn-pdf"   onclick="exportarPDF()">🖨️ PDF</button>
       </div>
     </div>
 
@@ -328,7 +330,8 @@
         </div>
         <div class="fgroup">
           <label>Cliente *</label>
-          <input type="text" id="inCliente" placeholder="Nombre del cliente" />
+          <input type="text" id="inCliente" placeholder="Nombre del cliente" list="clientesList" autocomplete="off" />
+          <datalist id="clientesList"></datalist>
         </div>
         <div class="fgroup">
           <label>Tipo de Servicio *</label>
@@ -389,7 +392,6 @@
       </div>
     </div>
 
-    <div class="print-header"><h2>Soluciones Integrales – Registro de Servicios</h2><p id="printFecha"></p></div>
     <div id="tablaActivos"></div>
   </div>
 
@@ -452,6 +454,19 @@
     <div class="modal-btns">
       <button class="btn-cancel" onclick="cerrarModal('modalUnarch')">Cancelar</button>
       <button class="btn-arch-confirm" onclick="confirmarDesarchivar()">↩️ Desarchivar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXCEL POR MES -->
+<div class="overlay" id="modalExcel" onclick="if(event.target===this)cerrarModal('modalExcel')">
+  <div class="modal-excel">
+    <h3>📊 Exportar a Excel</h3>
+    <p>Selecciona el mes que quieres exportar</p>
+    <div class="excel-meses" id="excelMesesList"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-cancel" onclick="cerrarModal('modalExcel')">Cancelar</button>
+      <button class="btn-excel-dl" id="btnExcelDl" onclick="confirmarExcelMes()" disabled>📥 Descargar</button>
     </div>
   </div>
 </div>
@@ -532,6 +547,7 @@ async function cargarDatos() {
   setStatus("green",`Conectado · ${registros.length} activos`);
   renderActivos();
   renderMeses();
+  actualizarClientesList();
   if (mesArchivo) renderArchivo();
 
   // Badge archivos
@@ -794,7 +810,6 @@ function renderArchivo() {
       </div>
       <div class="arch-actions">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-        <button class="btn-pdf"   onclick="exportarPDF()">🖨️ PDF</button>
       </div>
     </div>
     <div class="tcard"><div class="tscroll"><table>
@@ -830,19 +845,82 @@ function rowArchivo(r) {
   </tr>`;
 }
 
-// ══════════ EXPORT ══════════
-function exportarExcel() {
-  const lista = getActivosFiltrados();
-  if (!lista.length) { toast("Sin registros para exportar","error"); return; }
-  _excelDesde(lista, `Servicios_Activos_${new Date().toISOString().slice(0,10)}.xlsx`);
+// ══════════ AUTOCOMPLETADO CLIENTES ══════════
+function actualizarClientesList() {
+  const todos = [...registros, ...archivados];
+  const unicos = [...new Set(todos.map(r => r.cliente).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
+  const dl = document.getElementById("clientesList");
+  if (dl) dl.innerHTML = unicos.map(c=>`<option value="${c}"></option>`).join("");
 }
+
+// ══════════ EXPORT ══════════
+let excelMesSel = null;
+
+function exportarExcel() {
+  excelMesSel = null;
+  const todos = [...registros, ...archivados];
+
+  // Agrupar meses únicos de todos los registros
+  const mesesMap = {};
+  todos.forEach(r => {
+    const m = r.fecha ? r.fecha.slice(0,7) : null;
+    if (!m) return;
+    if (!mesesMap[m]) mesesMap[m] = { activos: 0, archivados: 0, total: 0 };
+    if (r.archivado) mesesMap[m].archivados++;
+    else mesesMap[m].activos++;
+    mesesMap[m].total++;
+  });
+
+  const meses = Object.keys(mesesMap).sort().reverse();
+  if (meses.length === 0) { toast("Sin registros para exportar","error"); return; }
+
+  const lista = document.getElementById("excelMesesList");
+  lista.innerHTML = meses.map(m => {
+    const [y, mo] = m.split("-");
+    const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
+    const info = mesesMap[m];
+    const detalle = [
+      info.activos   ? `${info.activos} activo(s)` : "",
+      info.archivados ? `${info.archivados} archivado(s)` : ""
+    ].filter(Boolean).join(" · ");
+    return `<div class="excel-mes-opt" data-mes="${m}" onclick="selExcelMes('${m}',this)">
+      <div>
+        <div class="em-name">${nombre}</div>
+        <div class="em-info">${info.total} registro(s) · ${detalle}</div>
+      </div>
+      <span class="em-check">✓</span>
+    </div>`;
+  }).join("");
+
+  document.getElementById("btnExcelDl").disabled = true;
+  document.getElementById("modalExcel").classList.add("show");
+}
+
+function selExcelMes(m, el) {
+  excelMesSel = m;
+  document.querySelectorAll(".excel-mes-opt").forEach(e => e.classList.remove("sel"));
+  el.classList.add("sel");
+  document.getElementById("btnExcelDl").disabled = false;
+}
+
+function confirmarExcelMes() {
+  if (!excelMesSel) return;
+  cerrarModal("modalExcel");
+  const [y, mo] = excelMesSel.split("-");
+  const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
+  const lista = [...registros, ...archivados].filter(r => r.fecha && r.fecha.slice(0,7) === excelMesSel);
+  _excelDesde(lista, `Servicios_${nombre.replace(" ","_")}.xlsx`, nombre);
+}
+
 function exportarExcelArchivo() {
   if (!mesArchivo) return;
   const [y,mo] = mesArchivo.split("-");
+  const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
   const lista = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesArchivo);
-  _excelDesde(lista, `Servicios_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`);
+  _excelDesde(lista, `Servicios_${nombre.replace(" ","_")}.xlsx`, nombre);
 }
-function _excelDesde(lista, nombre) {
+
+function _excelDesde(lista, nombre, etiquetaMes) {
   const datos = lista.map(r=>({
     "Fecha": r.fecha ? new Date(r.fecha).toLocaleString("es-MX") : "Por definir",
     "Cliente": r.cliente, "Tipo": r.tipo, "Estado": r.estado,
@@ -852,15 +930,10 @@ function _excelDesde(lista, nombre) {
   const ws = XLSX.utils.json_to_sheet(datos);
   ws["!cols"] = [{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Servicios");
+  XLSX.utils.book_append_sheet(wb, ws, etiquetaMes || "Servicios");
   XLSX.writeFile(wb, nombre);
   toast("📊 Excel descargado");
 }
-function exportarPDF() {
-  document.getElementById("printFecha").textContent = "Generado el "+new Date().toLocaleString("es-MX");
-  window.print();
-}
-
 // ══════════ FOTOS ══════════
 function previsualizarFotos(files) {
   for (const f of files) {
