@@ -59,8 +59,6 @@
     .btn-new:hover{filter:brightness(1.15);}
     .btn-excel{background:rgba(34,201,122,.15);color:var(--green);border:1.5px solid rgba(34,201,122,.35);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
     .btn-excel:hover{background:rgba(34,201,122,.25);}
-    .btn-pdf{background:rgba(229,72,77,.12);color:#f08080;border:1.5px solid rgba(229,72,77,.3);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
-    .btn-pdf:hover{background:rgba(229,72,77,.22);}
     .btn-archive{background:rgba(245,166,35,.12);color:var(--amber);border:1.5px solid rgba(245,166,35,.3);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
     .btn-archive:hover{background:rgba(245,166,35,.22);}
 
@@ -188,23 +186,7 @@
     .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue2);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* MODAL EXCEL */
-    .modal-excel{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:28px 30px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-width:420px;width:93%;text-align:left;}
-    .modal-excel h3{font-size:16px;font-weight:800;margin-bottom:6px;color:var(--white);}
-    .modal-excel p{color:var(--muted);font-size:12px;margin-bottom:18px;}
-    .excel-meses{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;margin-bottom:18px;}
-    .excel-mes-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .15s;background:transparent;}
-    .excel-mes-opt:hover{border-color:var(--green);background:rgba(34,201,122,.07);}
-    .excel-mes-opt.sel{border-color:var(--green);background:rgba(34,201,122,.12);}
-    .excel-mes-opt .em-name{font-size:13px;font-weight:700;color:var(--text);}
-    .excel-mes-opt .em-info{font-size:11px;color:var(--muted);}
-    .excel-mes-opt .em-check{color:var(--green);font-size:16px;opacity:0;}
-    .excel-mes-opt.sel .em-check{opacity:1;}
-    .btn-excel-dl{background:var(--green);color:#0a1628;border:none;border-radius:8px;padding:10px 22px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;transition:filter .15s;}
-    .btn-excel-dl:hover{filter:brightness(1.1);}
-    .btn-excel-dl:disabled{opacity:.4;cursor:not-allowed;}
-
-    /* MODAL EXCEL */
+    /* MODALS */
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:200;}
     .overlay.show{display:flex;}
     .modal{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 34px;box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;max-width:360px;width:90%;}
@@ -223,6 +205,16 @@
     .banner-mes .btxt span{font-size:12px;color:var(--muted);}
     .banner-close{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;}
 
+
+    /* AUTOCOMPLETE */
+    .autocomplete-wrap{position:relative;}
+    .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--navy2);border:1.5px solid var(--blue2);border-top:none;border-radius:0 0 8px 8px;max-height:180px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.4);}
+    .autocomplete-item{padding:9px 13px;font-size:13px;cursor:pointer;color:var(--text);transition:background .1s;display:flex;align-items:center;gap:8px;}
+    .autocomplete-item:hover,.autocomplete-item.selected{background:rgba(37,99,168,.25);}
+    .autocomplete-item .ac-icon{font-size:11px;color:var(--muted);}
+    .autocomplete-item .ac-name{flex:1;}
+    .autocomplete-item .ac-count{font-size:10px;color:var(--muted);background:rgba(255,255,255,.06);border-radius:10px;padding:1px 7px;}
+
     /* FOTO VIEWER */
     .foto-viewer{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:560px;width:95%;max-height:90vh;overflow-y:auto;}
     .foto-viewer h3{font-size:15px;font-weight:800;margin-bottom:16px;color:var(--white);}
@@ -238,6 +230,18 @@
     .toast.error{border-color:rgba(229,72,77,.4);color:var(--red);}
 
     .footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:10px;}
+
+    @media print{
+      .header,.filtros,.form-card,.btn-row,.act-btns,.status-bar,.toast,.footer,.arch-filtros,.nav-tabs,.btn-archive,.btn-unarch,.print-header~.view{display:none!important;}
+      body{background:white;color:black;}
+      .tcard{border:1px solid #ccc;}
+      table{min-width:unset;}
+      th,td{color:black!important;border-color:#ccc!important;}
+      .print-header{display:block!important;}
+    }
+    .print-header{display:none;text-align:center;padding:16px 0 8px;}
+    .print-header h2{font-size:18px;font-weight:800;}
+    .print-header p{font-size:12px;color:#666;}
 
     @media(max-width:600px){
       .grid2{grid-template-columns:1fr;} .full{grid-column:1;}
@@ -273,14 +277,20 @@
         <div class="page-sub">Gestión de clientes y seguimiento operativo</div>
       </div>
       <div class="btn-row" id="btnRowActivos">
-        <button class="btn-excel"   onclick="exportarExcel()">📊 Excel</button>
+        <div style="position:relative;display:inline-block" id="excelMenuWrap">
+          <button class="btn-excel" onclick="toggleExcelMenu()">📊 Excel ▾</button>
+          <div id="excelMenu" style="display:none;position:absolute;top:110%;right:0;background:var(--navy2);border:1px solid var(--border);border-radius:10px;min-width:190px;box-shadow:0 8px 32px rgba(0,0,0,.5);z-index:100;overflow:hidden;">
+            <div style="padding:8px 14px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--border)">Exportar Excel</div>
+            <div id="excelMesesMenu"></div>
+          </div>
+        </div>
         <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar mes</button>
         <button class="btn-prog"    onclick="abrirForm('programado')">📅 Programar</button>
         <button class="btn-new"     onclick="abrirForm('servicio')">＋ Nuevo</button>
       </div>
       <div class="btn-row" id="btnRowArchivos" style="display:none">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-      </div>
+        </div>
     </div>
 
     <div class="nav-tabs">
@@ -330,8 +340,11 @@
         </div>
         <div class="fgroup">
           <label>Cliente *</label>
-          <input type="text" id="inCliente" placeholder="Nombre del cliente" list="clientesList" autocomplete="off" />
-          <datalist id="clientesList"></datalist>
+          <div class="autocomplete-wrap">
+            <input type="text" id="inCliente" placeholder="Nombre del cliente" autocomplete="off"
+              oninput="acFiltrar()" onkeydown="acKeydown(event)" onfocus="acFiltrar()" onblur="setTimeout(acCerrar,180)" />
+            <div class="autocomplete-list" id="acList" style="display:none"></div>
+          </div>
         </div>
         <div class="fgroup">
           <label>Tipo de Servicio *</label>
@@ -392,6 +405,7 @@
       </div>
     </div>
 
+    <div class="print-header"><h2>Soluciones Integrales – Registro de Servicios</h2><p id="printFecha"></p></div>
     <div id="tablaActivos"></div>
   </div>
 
@@ -458,19 +472,6 @@
   </div>
 </div>
 
-<!-- MODAL EXCEL POR MES -->
-<div class="overlay" id="modalExcel" onclick="if(event.target===this)cerrarModal('modalExcel')">
-  <div class="modal-excel">
-    <h3>📊 Exportar a Excel</h3>
-    <p>Selecciona el mes que quieres exportar</p>
-    <div class="excel-meses" id="excelMesesList"></div>
-    <div style="display:flex;gap:10px;justify-content:flex-end">
-      <button class="btn-cancel" onclick="cerrarModal('modalExcel')">Cancelar</button>
-      <button class="btn-excel-dl" id="btnExcelDl" onclick="confirmarExcelMes()" disabled>📥 Descargar</button>
-    </div>
-  </div>
-</div>
-
 <!-- MODAL FOTOS -->
 <div class="overlay" id="modalFotos" onclick="if(event.target===this)cerrarFotos()">
   <div class="foto-viewer">
@@ -502,6 +503,7 @@ let delId = null, unarchId = null;
 let vistaActual = "activos";
 let mesArchivo = null;     // mes seleccionado en vista archivos "2025-04"
 let fotosNuevas = [], fotosExistentes = [];
+let columnaArchivadoExiste = true; // se detecta en cargarDatos
 
 const MESES_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
@@ -535,10 +537,15 @@ async function cargarDatos() {
   ]);
 
   // Si la columna no existe aún, traemos todo como activos
-  if (resActivos.error?.code === "42703") {
+  if (resActivos.error?.code === "42703" || resActivos.error?.code === "PGRST116") {
     const { data } = await db.from("servicios").select("*").order("created_at",{ascending:false});
     registros = data || [];
     archivados = [];
+  } else if (resActivos.error) {
+    console.error("Error cargando activos:", resActivos.error);
+    columnaArchivadoExiste = false;
+    const { data } = await db.from("servicios").select("*").order("created_at",{ascending:false});
+    registros = data || []; archivados = [];
   } else {
     registros  = resActivos.data || [];
     archivados = resArch.data   || [];
@@ -547,7 +554,6 @@ async function cargarDatos() {
   setStatus("green",`Conectado · ${registros.length} activos`);
   renderActivos();
   renderMeses();
-  actualizarClientesList();
   if (mesArchivo) renderArchivo();
 
   // Badge archivos
@@ -652,16 +658,37 @@ async function guardar() {
     document.getElementById("fotoStatus").textContent = "";
   }
 
-  const payload = { cliente, tipo, fecha, descripcion, estado, costo, archivado: false,
+  // Intentar con archivado, si falla lo quitamos
+  const payload = { cliente, tipo, fecha, descripcion, estado, costo,
     fotos: urlsFotos.length > 0 ? JSON.stringify(urlsFotos) : null };
+  // Solo incluir archivado si la columna ya existe (detectado en cargarDatos)
+  if (columnaArchivadoExiste) payload.archivado = false;
 
   if (editId !== null) {
     const { error } = await db.from("servicios").update(payload).eq("id", editId);
-    if (error) toast("Error al actualizar","error"); else toast("✅ Registro actualizado");
+    if (error) {
+      console.error("Update error:", error);
+      // Si falla por columna archivado, intentar sin ella
+      if (error.code === "42703") {
+        const {archivado, ...payloadSin} = payload;
+        const { error: e2 } = await db.from("servicios").update(payloadSin).eq("id", editId);
+        if (e2) { toast("Error al actualizar: "+e2.message,"error"); }
+        else { toast("✅ Registro actualizado"); }
+      } else { toast("Error: "+error.message,"error"); }
+    } else toast("✅ Registro actualizado");
     editId = null;
   } else {
     const { error } = await db.from("servicios").insert([payload]);
-    if (error) toast("Error al guardar","error"); else toast("✅ Servicio registrado");
+    if (error) {
+      console.error("Insert error:", error);
+      if (error.code === "42703") {
+        // Columna archivado no existe, insertar sin ella
+        const {archivado, ...payloadSin} = payload;
+        const { error: e2 } = await db.from("servicios").insert([payloadSin]);
+        if (e2) { toast("Error al guardar: "+e2.message,"error"); }
+        else { toast("✅ Servicio registrado"); }
+      } else { toast("Error: "+error.message,"error"); }
+    } else toast("✅ Servicio registrado");
   }
   btn.disabled = false; cerrarForm(); await cargarDatos();
 }
@@ -810,7 +837,7 @@ function renderArchivo() {
       </div>
       <div class="arch-actions">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-      </div>
+        </div>
     </div>
     <div class="tcard"><div class="tscroll"><table>
       <thead><tr>
@@ -845,82 +872,62 @@ function rowArchivo(r) {
   </tr>`;
 }
 
-// ══════════ AUTOCOMPLETADO CLIENTES ══════════
-function actualizarClientesList() {
-  const todos = [...registros, ...archivados];
-  const unicos = [...new Set(todos.map(r => r.cliente).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"es"));
-  const dl = document.getElementById("clientesList");
-  if (dl) dl.innerHTML = unicos.map(c=>`<option value="${c}"></option>`).join("");
-}
-
 // ══════════ EXPORT ══════════
-let excelMesSel = null;
-
-function exportarExcel() {
-  excelMesSel = null;
-  const todos = [...registros, ...archivados];
-
-  // Agrupar meses únicos de todos los registros
-  const mesesMap = {};
-  todos.forEach(r => {
-    const m = r.fecha ? r.fecha.slice(0,7) : null;
-    if (!m) return;
-    if (!mesesMap[m]) mesesMap[m] = { activos: 0, archivados: 0, total: 0 };
-    if (r.archivado) mesesMap[m].archivados++;
-    else mesesMap[m].activos++;
-    mesesMap[m].total++;
-  });
-
-  const meses = Object.keys(mesesMap).sort().reverse();
-  if (meses.length === 0) { toast("Sin registros para exportar","error"); return; }
-
-  const lista = document.getElementById("excelMesesList");
-  lista.innerHTML = meses.map(m => {
-    const [y, mo] = m.split("-");
-    const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
-    const info = mesesMap[m];
-    const detalle = [
-      info.activos   ? `${info.activos} activo(s)` : "",
-      info.archivados ? `${info.archivados} archivado(s)` : ""
-    ].filter(Boolean).join(" · ");
-    return `<div class="excel-mes-opt" data-mes="${m}" onclick="selExcelMes('${m}',this)">
-      <div>
-        <div class="em-name">${nombre}</div>
-        <div class="em-info">${info.total} registro(s) · ${detalle}</div>
-      </div>
-      <span class="em-check">✓</span>
-    </div>`;
-  }).join("");
-
-  document.getElementById("btnExcelDl").disabled = true;
-  document.getElementById("modalExcel").classList.add("show");
+function toggleExcelMenu() {
+  const menuEl = document.getElementById("excelMenu");
+  const isOpen = menuEl.style.display !== "none";
+  if (!isOpen) {
+    const mesesActivos = [...new Set(registros.filter(r=>r.fecha).map(r=>r.fecha.slice(0,7)))].sort().reverse();
+    const archMeses = getMesesUnicos();
+    let html = "";
+    if (mesesActivos.length > 0) {
+      html += `<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px">ACTIVOS POR MES</div>`;
+      mesesActivos.forEach(mes => {
+        const [y,mo] = mes.split("-");
+        const n = registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;
+        html += `<button onclick="exportarExcelMes('activo','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;justify-content:space-between;align-items:center;" onmouseover="this.style.background='rgba(37,99,168,.2)'" onmouseout="this.style.background='transparent'"><span>${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;
+      });
+    }
+    if (archMeses.length > 0) {
+      html += `<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;border-top:1px solid var(--border);margin-top:4px">ARCHIVADOS</div>`;
+      archMeses.forEach(mes => {
+        const [y,mo] = mes.split("-");
+        const n = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;
+        html += `<button onclick="exportarExcelMes('archivado','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;" onmouseover="this.style.background='rgba(245,166,35,.15)'" onmouseout="this.style.background='transparent'"><span style="color:var(--amber)">📦 ${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;
+      });
+    }
+    document.getElementById("excelMesesMenu").innerHTML = html || `<div style="padding:10px 14px;font-size:12px;color:var(--muted)">Sin registros</div>`;
+  }
+  menuEl.style.display = isOpen ? "none" : "block";
 }
+// Cerrar menú excel al click fuera
+document.addEventListener("click", e => {
+  const wrap = document.getElementById("excelMenuWrap");
+  if (wrap && !wrap.contains(e.target)) document.getElementById("excelMenu").style.display="none";
+});
 
-function selExcelMes(m, el) {
-  excelMesSel = m;
-  document.querySelectorAll(".excel-mes-opt").forEach(e => e.classList.remove("sel"));
-  el.classList.add("sel");
-  document.getElementById("btnExcelDl").disabled = false;
+function exportarExcelMes(fuente, mes) {
+  let lista, nombre;
+  if (fuente === "activo" && mes) {
+    lista = registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);
+    const [y,mo] = mes.split("-");
+    nombre = `Activos_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;
+  } else if (fuente === "activo") {
+    lista = getActivosFiltrados();
+    nombre = `Servicios_Activos_${new Date().toISOString().slice(0,10)}.xlsx`;
+  } else {
+    lista = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);
+    const [y,mo] = mes.split("-");
+    nombre = `Archivado_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;
+  }
+  if (!lista.length) { toast("Sin registros para exportar","error"); return; }
+  _excelDesde(lista, nombre);
 }
-
-function confirmarExcelMes() {
-  if (!excelMesSel) return;
-  cerrarModal("modalExcel");
-  const [y, mo] = excelMesSel.split("-");
-  const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
-  const lista = [...registros, ...archivados].filter(r => r.fecha && r.fecha.slice(0,7) === excelMesSel);
-  _excelDesde(lista, `Servicios_${nombre.replace(" ","_")}.xlsx`, nombre);
-}
-
 function exportarExcelArchivo() {
   if (!mesArchivo) return;
-  const [y,mo] = mesArchivo.split("-");
-  const nombre = `${MESES_ES[parseInt(mo)-1]} ${y}`;
-  const lista = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesArchivo);
-  _excelDesde(lista, `Servicios_${nombre.replace(" ","_")}.xlsx`, nombre);
+  exportarExcelMes("archivado", mesArchivo);
 }
-
-function _excelDesde(lista, nombre, etiquetaMes) {
+function _excelDesde(lista, nombre) {
   const datos = lista.map(r=>({
     "Fecha": r.fecha ? new Date(r.fecha).toLocaleString("es-MX") : "Por definir",
     "Cliente": r.cliente, "Tipo": r.tipo, "Estado": r.estado,
@@ -930,10 +937,55 @@ function _excelDesde(lista, nombre, etiquetaMes) {
   const ws = XLSX.utils.json_to_sheet(datos);
   ws["!cols"] = [{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, etiquetaMes || "Servicios");
+  XLSX.utils.book_append_sheet(wb, ws, "Servicios");
   XLSX.writeFile(wb, nombre);
   toast("📊 Excel descargado");
 }
+
+// ══════════ AUTOCOMPLETE CLIENTES ══════════
+let acIdx = -1;
+function getClientesUnicos() {
+  const todos = [...registros, ...archivados];
+  const mapa = {};
+  todos.forEach(r => {
+    if (r.cliente) mapa[r.cliente] = (mapa[r.cliente]||0) + 1;
+  });
+  return Object.entries(mapa).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));
+}
+function acFiltrar() {
+  const q = document.getElementById("inCliente").value.trim().toLowerCase();
+  const clientes = getClientesUnicos();
+  const filtrados = q ? clientes.filter(c=>c.nombre.toLowerCase().includes(q)) : clientes;
+  const list = document.getElementById("acList");
+  if (!filtrados.length) { list.style.display="none"; return; }
+  acIdx = -1;
+  list.innerHTML = filtrados.slice(0,8).map((c,i)=>
+    `<div class="autocomplete-item" data-idx="${i}" onmousedown="acSeleccionar('${c.nombre.replace(/'/g,"\'")}')">
+      <span class="ac-icon">👤</span>
+      <span class="ac-name">${c.nombre}</span>
+      <span class="ac-count">${c.count} servicio${c.count>1?"s":""}</span>
+    </div>`
+  ).join("");
+  list.style.display = "block";
+}
+function acSeleccionar(nombre) {
+  document.getElementById("inCliente").value = nombre;
+  document.getElementById("acList").style.display = "none";
+}
+function acCerrar() { document.getElementById("acList").style.display="none"; }
+function acKeydown(e) {
+  const items = document.querySelectorAll(".autocomplete-item");
+  if (!items.length) return;
+  if (e.key==="ArrowDown") { e.preventDefault(); acIdx=Math.min(acIdx+1,items.length-1); acHighlight(items); }
+  else if (e.key==="ArrowUp") { e.preventDefault(); acIdx=Math.max(acIdx-1,0); acHighlight(items); }
+  else if (e.key==="Enter" && acIdx>=0) { e.preventDefault(); acSeleccionar(items[acIdx].querySelector(".ac-name").textContent); }
+  else if (e.key==="Escape") acCerrar();
+}
+function acHighlight(items) {
+  items.forEach((el,i)=>el.classList.toggle("selected",i===acIdx));
+  if (acIdx>=0) items[acIdx].scrollIntoView({block:"nearest"});
+}
+
 // ══════════ FOTOS ══════════
 function previsualizarFotos(files) {
   for (const f of files) {
