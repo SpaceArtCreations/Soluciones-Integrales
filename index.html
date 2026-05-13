@@ -46,6 +46,18 @@
     .nav-tab:hover{color:var(--white);}
     .nav-tab.active{color:var(--white);border-bottom-color:var(--blue2);}
     .nav-tab.active.arch{border-bottom-color:var(--amber);color:var(--amber);}
+    .nav-tab.active.prov{border-bottom-color:var(--green);color:var(--green);}
+    .prov-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+    .prov-titulo{font-size:16px;font-weight:800;color:var(--white);}
+    .prov-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+    .btn-prov-new{background:var(--green);color:#0a1628;border:none;border-radius:8px;padding:9px 16px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:filter .15s;}
+    .btn-prov-new:hover{filter:brightness(1.1);}
+    .prov-form{background:var(--navy2);border:1px solid var(--border);border-top:3px solid var(--green);border-radius:14px;padding:24px 28px;margin-bottom:20px;display:none;}
+    .prov-form.show{display:block;animation:slideDown .22s ease;}
+    .prov-form .form-h{color:var(--green);}
+    .btn-submit-prov{background:var(--green);color:#0a1628;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:filter .15s;}
+    .btn-submit-prov:hover{filter:brightness(1.1);}
+    .btn-submit-prov:disabled{opacity:.5;cursor:not-allowed;}
 
     .stats{display:flex;gap:8px;padding:14px 0 18px;flex-wrap:wrap;}
     .stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 18px;text-align:center;min-width:80px;}
@@ -309,6 +321,7 @@
           </div>
         </div>
         <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar mes</button>
+        <button class="btn-prov-new" onclick="abrirFormProv()">🏭 Proveedor</button>
         <button class="btn-prog"    onclick="abrirForm('programado')">📅 Programar</button>
         <button class="btn-new"     onclick="abrirForm('servicio')">＋ Nuevo</button>
       </div>
@@ -435,6 +448,34 @@
     </div>
 
     <!-- Filtros activos -->
+
+  <!-- ── FORMULARIO PROVEEDORES ── -->
+  <div class="prov-form" id="provFormCard">
+    <div class="form-h" id="provFormH">🏭 Registrar Visita a Proveedor</div>
+    <div class="grid2">
+      <div class="fgroup">
+        <label>Proveedor *</label>
+        <div class="autocomplete-wrap">
+          <input type="text" id="provNombre" placeholder="Nombre del proveedor" autocomplete="off"
+            oninput="acProvFiltrar()" onkeydown="acProvKeydown(event)" onfocus="acProvFiltrar()" onblur="setTimeout(acProvCerrar,180)" />
+          <div class="autocomplete-list" id="acProvList" style="display:none"></div>
+        </div>
+      </div>
+      <div class="fgroup">
+        <label>Fecha y Hora *</label>
+        <input type="datetime-local" id="provFecha" />
+      </div>
+      <div class="fgroup full">
+        <label>Mercancía / Descripción *</label>
+        <textarea id="provDesc" rows="3" placeholder="¿Qué se recogió? Describe artículos, materiales o productos..."></textarea>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-cancel" onclick="cerrarFormProv()">Cancelar</button>
+      <button class="btn-submit" id="btnSubmitProv" onclick="guardarProv()" style="background:#22c97a;color:#0a1628;">✅ Registrar visita</button>
+    </div>
+  </div>
+
     <div class="filtros">
       <input type="text" id="busqueda" placeholder="🔍 Buscar cliente, tipo, notas..." oninput="renderActivos()" />
       <div class="f-btns">
@@ -448,6 +489,21 @@
 
     <div class="print-header"><h2>Soluciones Integrales – Registro de Servicios</h2><p id="printFecha"></p></div>
     <div id="tablaActivos"></div>
+
+    <!-- Tabla proveedores (separada) -->
+    <div id="seccionProveedores" style="display:none;margin-top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#22c97a;">🏭 Visitas a Proveedores</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Historial de recolección de mercancía</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="busquedaProv" placeholder="🔍 Buscar..." oninput="renderProveedores()"
+            style="padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;color:var(--text);background:rgba(0,0,0,.3);outline:none;font-family:inherit;width:180px;" />
+        </div>
+      </div>
+      <div id="tablaProveedores"></div>
+    </div>
   </div>
 
   <!-- ── VISTA ARCHIVOS ── -->
@@ -514,6 +570,18 @@
 </div>
 
 <!-- MODAL FOTOS -->
+  </div>
+</div>
+<div class="overlay" id="modalDelProv">
+  <div class="modal">
+    <div class="micon">⚠️</div><h3>¿Eliminar visita?</h3>
+    <p>Esta acción no se puede deshacer.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModal('modalDelProv')">Cancelar</button>
+      <button class="btn-del-confirm" onclick="confirmarEliminarProv()">Sí, eliminar</button>
+    </div>
+  </div>
+</div>
 <div class="overlay" id="modalFotos" onclick="if(event.target===this)cerrarFotos()">
   <div class="foto-viewer">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -555,10 +623,8 @@ window.addEventListener("load", async () => {
     const lib = window.supabase || window.Supabase;
     if (!lib?.createClient) throw new Error("Librería no cargada");
     db = lib.createClient(SB_URL, SB_KEY);
-    const { error } = await db.from("servicios").select("id").limit(1);
-    if (error) throw error;
-    setStatus("green","Conectado");
-    await cargarDatos();
+    // Cargar datos en paralelo sin query de prueba extra
+    await Promise.all([cargarDatos(), cargarProveedores()]);
     iniciarRealtime();
     revisarCambioDeMes();
   } catch(e) {
@@ -762,7 +828,10 @@ async function confirmarEliminar() {
 
 // ══════════ REALTIME ══════════
 function iniciarRealtime() {
-  db.channel("sv-rt").on("postgres_changes",{ event:"*", schema:"public", table:"servicios" }, async () => await cargarDatos()).subscribe();
+  db.channel("sv-rt")
+    .on("postgres_changes",{ event:"*", schema:"public", table:"servicios" }, async () => await cargarDatos())
+    .on("postgres_changes",{ event:"*", schema:"public", table:"proveedores" }, async () => await cargarProveedores())
+    .subscribe();
 }
 
 // ══════════ VISTAS ══════════
@@ -1119,9 +1188,6 @@ function verFotos(id, fuente) {
 function cerrarFotos() { document.getElementById("modalFotos").classList.remove("show"); }
 
 // ══════════ REALTIME ══════════
-function iniciarRealtime() {
-  db.channel("sv-rt").on("postgres_changes",{event:"*",schema:"public",table:"servicios"},async()=>await cargarDatos()).subscribe();
-}
 
 // ══════════ STATUS / TOAST ══════════
 function setStatus(c,l) { document.getElementById("statusDot").className="status-dot "+c; document.getElementById("statusLabel").textContent=l; }
@@ -1208,6 +1274,125 @@ function si(sf,sd,f) {
   if(sf!==f) return '<span style="opacity:.25;font-size:10px"> ▲</span>';
   return `<span style="font-size:10px"> ${sd==="desc"?"▼":"▲"}</span>`;
 }
+
+  else if(e.key==="ArrowUp"){e.preventDefault();acProvIdx=Math.max(acProvIdx-1,0);items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));}
+  else if(e.key==="Enter"&&acProvIdx>=0){e.preventDefault();acProvSeleccionar(items[acProvIdx].querySelector(".ac-name").textContent);}
+  else if(e.key==="Escape") acProvCerrar();
+}
+
+
+// ══════════ PROVEEDORES ══════════
+let proveedores = [];
+let provEditId = null;
+let sortFP = "fecha", sortDP = "desc";
+
+async function cargarProveedores() {
+  if (!db) return;
+  const { data, error } = await db.from("proveedores").select("*").order("fecha", { ascending: false });
+  if (error) { console.warn("Tabla proveedores:", error.message); return; }
+  proveedores = data || [];
+  renderProveedores();
+}
+
+function abrirFormProv() {
+  provEditId = null;
+  document.getElementById("provNombre").value = "";
+  document.getElementById("provFecha").value = new Date().toISOString().slice(0,16);
+  document.getElementById("provDesc").value = "";
+  document.getElementById("provFormH").textContent = "🏭 Registrar Visita a Proveedor";
+  // Cerrar form servicios si está abierto
+  document.getElementById("formCard").classList.remove("show");
+  document.getElementById("provFormCard").classList.add("show");
+  document.getElementById("provFormCard").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+function cerrarFormProv() {
+  document.getElementById("provFormCard").classList.remove("show");
+  provEditId = null;
+}
+
+async function guardarProv() {
+  const proveedor  = document.getElementById("provNombre").value.trim();
+  const fechaRaw   = document.getElementById("provFecha").value;
+  const descripcion = document.getElementById("provDesc").value.trim();
+  if (!proveedor || !fechaRaw || !descripcion) { alert("Por favor llena todos los campos *"); return; }
+  const fecha = fechaRaw + ":00+00:00";
+  const btn = document.getElementById("btnSubmitProv");
+  btn.disabled = true; btn.textContent = "Guardando...";
+  const payload = { proveedor, fecha, descripcion };
+  let error;
+  if (provEditId !== null) {
+    ({ error } = await db.from("proveedores").update(payload).eq("id", provEditId));
+  } else {
+    ({ error } = await db.from("proveedores").insert([payload]));
+  }
+  if (error) toast("Error: "+error.message, "error");
+  else toast(provEditId ? "✅ Visita actualizada" : "✅ Visita a proveedor registrada");
+  btn.disabled = false; btn.textContent = "✅ Registrar visita";
+  cerrarFormProv(); await cargarProveedores();
+}
+
+function editarProv(id) {
+  const r = proveedores.find(r=>r.id===id); if (!r) return;
+  provEditId = id;
+  document.getElementById("provNombre").value = r.proveedor || "";
+  document.getElementById("provFecha").value = r.fecha ? r.fecha.slice(0,16) : "";
+  document.getElementById("provDesc").value = r.descripcion || "";
+  document.getElementById("provFormH").textContent = "✏️ Editar Visita a Proveedor";
+  document.getElementById("formCard").classList.remove("show");
+  document.getElementById("provFormCard").classList.add("show");
+  document.getElementById("provFormCard").scrollIntoView({ behavior:"smooth", block:"start" });
+}
+
+let delProvId = null;
+function pedirDelProv(id) { delProvId = id; document.getElementById("modalDelProv").classList.add("show"); }
+async function confirmarEliminarProv() {
+  const { error } = await db.from("proveedores").delete().eq("id", delProvId);
+  if (error) toast("Error al eliminar","error"); else toast("🗑️ Registro eliminado");
+  cerrarModal("modalDelProv"); await cargarProveedores();
+}
+
+function renderProveedores() {
+  const q = (document.getElementById("busquedaProv")?.value||"").toLowerCase();
+  const lista = proveedores
+    .filter(r=>(r.proveedor||"").toLowerCase().includes(q)||(r.descripcion||"").toLowerCase().includes(q))
+    .sort((a,b)=>{let va=a[sortFP]||"",vb=b[sortFP]||"";return sortDP==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
+  const el = document.getElementById("tablaProveedores"); if (!el) return;
+  const sec = document.getElementById("seccionProveedores");
+  if (sec) sec.style.display = proveedores.length > 0 ? "block" : "none";
+  if (!lista.length) {
+    el.innerHTML = `<div class="empty"><div class="eicon">🏭</div><div class="etitle">Sin visitas registradas</div><div class="esub">${proveedores.length===0?"Toca '🏭 Proveedor' para registrar tu primera visita.":"Sin resultados."}</div></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="tcard"><div class="tscroll"><table>
+    <thead><tr>
+      <th onclick="sortProv('fecha')">Fecha${siP('fecha')}</th>
+      <th onclick="sortProv('proveedor')">Proveedor${siP('proveedor')}</th>
+      <th>Mercancía / Descripción</th>
+      <th>Acciones</th>
+    </tr></thead>
+    <tbody>${lista.map(r=>`<tr>
+      <td class="td-fecha">${r.fecha?mostrarFecha(r.fecha):"—"}</td>
+      <td class="td-cliente">${r.proveedor}</td>
+      <td style="font-size:13px;color:var(--muted);max-width:300px">${r.descripcion||"—"}</td>
+      <td><div class="act-btns">
+        <button class="btn-edit-row" onclick="editarProv(${r.id})">✏️</button>
+        <button class="btn-del-row"  onclick="pedirDelProv(${r.id})">🗑️</button>
+      </div></td>
+    </tr>`).join("")}</tbody>
+  </table></div>
+  <div class="tfooter"><span>${lista.length} visita(s) registrada(s)</span></div></div>`;
+}
+
+function sortProv(f){if(sortFP===f)sortDP=sortDP==="asc"?"desc":"asc";else{sortFP=f;sortDP="asc";}renderProveedores();}
+function siP(f){if(sortFP!==f)return'<span style="opacity:.25;font-size:10px"> ▲</span>';return`<span style="font-size:10px"> ${sortDP==="desc"?"▼":"▲"}</span>`;}
+
+// Autocomplete proveedores
+let acProvIdx=-1;
+function getProveedoresUnicos(){const mapa={};proveedores.forEach(r=>{if(r.proveedor)mapa[r.proveedor]=(mapa[r.proveedor]||0)+1;});return Object.entries(mapa).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));}
+function acProvFiltrar(){const q=document.getElementById("provNombre").value.trim().toLowerCase();const filtrados=getProveedoresUnicos().filter(p=>!q||p.nombre.toLowerCase().includes(q));const list=document.getElementById("acProvList");if(!filtrados.length){list.style.display="none";return;}acProvIdx=-1;list.innerHTML=filtrados.slice(0,6).map(p=>`<div class="autocomplete-item" onmousedown="acProvSeleccionar('${p.nombre.replace(/'/g,"\'")}')"><span class="ac-icon">🏭</span><span class="ac-name">${p.nombre}</span><span class="ac-count">${p.count} visita${p.count>1?"s":""}</span></div>`).join("");list.style.display="block";}
+function acProvSeleccionar(n){document.getElementById("provNombre").value=n;document.getElementById("acProvList").style.display="none";}
+function acProvCerrar(){document.getElementById("acProvList").style.display="none";}
+function acProvKeydown(e){const items=document.querySelectorAll("#acProvList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acProvIdx=Math.min(acProvIdx+1,items.length-1);items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));}else if(e.key==="ArrowUp"){e.preventDefault();acProvIdx=Math.max(acProvIdx-1,0);items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));}else if(e.key==="Enter"&&acProvIdx>=0){e.preventDefault();acProvSeleccionar(items[acProvIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acProvCerrar();}
 
 renderActivos();
 </script>
