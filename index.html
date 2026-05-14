@@ -869,11 +869,10 @@ function renderActivos() {
     <tbody>${lista.map(rowActivo).join("")}</tbody></table></div>
     <div class="tfooter"><span>Mostrando ${lista.length} de ${registros.length}</span>${total>0?`<span class="total">💰 $${total.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
-let expandedId = null;
-function toggleDetalle(id) {
-  if (expandedId === id) { expandedId = null; } else { expandedId = id; }
-  renderActivos();
-}
+let expandedId = null, expandedArchId = null, expandedRecId = null;
+function toggleDetalle(id)     { expandedId     = expandedId===id?null:id;     renderActivos(); }
+function toggleDetalleArch(id) { expandedArchId = expandedArchId===id?null:id; renderArchivo(); }
+function toggleDetalleRec(id)  { expandedRecId  = expandedRecId===id?null:id;  renderRec(); }
 function rowActivo(r) {
   const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Por definir</span>';
   const cc=r.estado!=="Completado"?'<span class="costo-dash">—</span>':`<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id});event.stopPropagation()">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
@@ -931,10 +930,19 @@ function renderRec() {
 }
 function rowRec(r) {
   const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Sin fecha</span>';
-  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
+  const isExp=expandedRecId===r.id;
+  const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalleRec(${r.id})">
+    <td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
     <td class="td-notas" title="${r.notas||""}">${r.notas||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td><div class="act-btns"><button class="btn-edit-row" onclick="editarRec(${r.id})">✏️</button><button class="btn-del-row" onclick="pedirDelRec(${r.id})">🗑️</button></div></td></tr>`;
+    <td><div class="act-btns">
+      <button class="btn-edit-row" onclick="editarRec(${r.id});event.stopPropagation()">✏️</button>
+      <button class="btn-del-row"  onclick="pedirDelRec(${r.id});event.stopPropagation()">🗑️</button>
+    </div></td></tr>`;
+  if (!isExp) return mainRow;
+  return mainRow+`<tr class="detail-row"><td colspan="5"><div class="detail-panel">
+    <div class="detail-section"><div class="detail-label">📝 Notas</div>${r.notas?`<div class="detail-text">${r.notas}</div>`:`<div class="detail-empty">Sin notas registradas</div>`}</div>
+  </div></td></tr>`;
 }
 
 // ══ RENDER ARCHIVO SERVICIOS ══
@@ -960,14 +968,23 @@ function renderArchivo() {
 }
 function rowArchivo(r) {
   const fd=r.fecha?mostrarFecha(r.fecha):"—";
-  let nF=0;try{nF=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
-  const ct=r.costo?`<span style="color:var(--green);font-weight:700">$${Number(r.costo).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
-  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
+  let nF=0,urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];nF=urls.length;}catch(e){}
+  const ct=r.costo?`<span style="color:var(--green);font-weight:700">${Number(r.costo).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
+  const isExp=expandedArchId===r.id;
+  const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalleArch(${r.id})">
+    <td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
     <td>${(r.tipo||"").split(", ").map(t=>`<span class="tag tag-tipo" style="margin:1px 2px;display:inline-block">${t.trim()}</span>`).join("")}</td>
     <td class="td-notas">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td>${ct}</td><td><button class="foto-chip" onclick="verFotos(${r.id},'archivos')">📷 ${nF}</button></td>
-    <td><button class="btn-unarch" onclick="pedirDesarchivar(${r.id})">↩️ Desarchivar</button></td></tr>`;
+    <td>${ct}</td>
+    <td><button class="foto-chip" onclick="verFotos(${r.id},'archivos');event.stopPropagation()">📷 ${nF}</button></td>
+    <td><button class="btn-unarch" onclick="pedirDesarchivar(${r.id});event.stopPropagation()">↩️ Desarchivar</button></td></tr>`;
+  if (!isExp) return mainRow;
+  const fotosHtml=urls.length?urls.map(u=>`<img class="detail-foto" src="${u}" onclick="window.open('${u}','_blank')"/>`).join(""):'<span class="detail-empty">Sin fotos</span>';
+  return mainRow+`<tr class="detail-row"><td colspan="8"><div class="detail-panel">
+    <div class="detail-section"><div class="detail-label">📝 Descripción / Notas</div>${r.descripcion?`<div class="detail-text">${r.descripcion}</div>`:`<div class="detail-empty">Sin descripción registrada</div>`}</div>
+    <div class="detail-section"><div class="detail-label">📷 Evidencia fotográfica</div><div class="detail-fotos">${fotosHtml}</div></div>
+  </div></td></tr>`;
 }
 
 // ══ RENDER ARCHIVO RECOLECCIONES ══
