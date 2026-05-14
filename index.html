@@ -9,16 +9,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     :root {
-      --navy:   #0a1628; --navy2: #102040; --navy3: #1a3560;
-      --blue:   #1e4d8c; --blue2: #2563a8;
-      --white:  #ffffff; --border: #1e3a6e; --text: #e8edf5; --muted: #7a9cc0;
-      --green:  #22c97a; --red: #e5484d; --amber: #f5a623; --purple: #7c6cfc;
+      --navy:#0a1628;--navy2:#102040;--navy3:#1a3560;
+      --blue:#1e4d8c;--blue2:#2563a8;
+      --white:#ffffff;--border:#1e3a6e;--text:#e8edf5;--muted:#7a9cc0;
+      --green:#22c97a;--red:#e5484d;--amber:#f5a623;--purple:#7c6cfc;
+      --teal:#0ea5c9;--teal2:#0284a8;
       --row-alt:#0d1e38;
     }
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:'Montserrat',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;}
 
-    /* STATUS */
     .status-bar{position:fixed;bottom:16px;right:16px;background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:11px;display:flex;align-items:center;gap:7px;z-index:500;}
     .status-dot{width:7px;height:7px;border-radius:50%;}
     .status-dot.green{background:var(--green);box-shadow:0 0 6px var(--green);}
@@ -26,7 +26,6 @@
     .status-dot.red{background:var(--red);}
     .status-label{color:var(--muted);}
 
-    /* HEADER */
     .header{background:linear-gradient(135deg,var(--navy2) 0%,var(--navy3) 100%);border-bottom:2px solid var(--border);padding:0 32px;box-shadow:0 4px 32px rgba(0,0,0,.45);}
     .header-inner{max-width:1200px;margin:0 auto;}
     .logo-bar{display:flex;align-items:center;gap:16px;padding:18px 0 14px;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -40,36 +39,37 @@
     .page-sub{font-size:11px;color:var(--muted);margin-top:3px;}
     .btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
-    /* NAV TABS */
     .nav-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-top:4px;}
     .nav-tab{padding:11px 20px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border:none;background:transparent;font-family:inherit;letter-spacing:.4px;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
     .nav-tab:hover{color:var(--white);}
     .nav-tab.active{color:var(--white);border-bottom-color:var(--blue2);}
     .nav-tab.active.arch{border-bottom-color:var(--amber);color:var(--amber);}
+    .nav-tab.active.rec{border-bottom-color:var(--teal);color:var(--teal);}
+    .nav-tab.active.rec-arch{border-bottom-color:var(--teal2);color:var(--teal);}
 
     .stats{display:flex;gap:8px;padding:14px 0 18px;flex-wrap:wrap;}
     .stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 18px;text-align:center;min-width:80px;}
     .stat-n{font-size:22px;font-weight:900;}
     .stat-l{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.4px;text-transform:uppercase;}
 
-    /* BUTTONS */
     .btn-prog{background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .18s;}
     .btn-prog:hover{border-color:var(--blue2);color:var(--white);background:rgba(37,99,168,.15);}
     .btn-new{background:var(--blue2);color:var(--white);border:none;border-radius:8px;padding:9px 16px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;box-shadow:0 2px 14px rgba(37,99,168,.45);transition:filter .15s;}
     .btn-new:hover{filter:brightness(1.15);}
+    .btn-new-teal{background:var(--teal);color:var(--white);border:none;border-radius:8px;padding:9px 16px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;box-shadow:0 2px 14px rgba(14,165,201,.35);transition:filter .15s;}
+    .btn-new-teal:hover{filter:brightness(1.15);}
     .btn-excel{background:rgba(34,201,122,.15);color:var(--green);border:1.5px solid rgba(34,201,122,.35);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
     .btn-excel:hover{background:rgba(34,201,122,.25);}
     .btn-archive{background:rgba(245,166,35,.12);color:var(--amber);border:1.5px solid rgba(245,166,35,.3);border-radius:8px;padding:9px 14px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
     .btn-archive:hover{background:rgba(245,166,35,.22);}
 
-    /* MAIN */
     .main{max-width:1200px;margin:0 auto;padding:26px 16px;}
-    .view{display:none;} .view.active{display:block;}
+    .view{display:none;}.view.active{display:block;}
 
-    /* FORM */
     .form-card{background:var(--navy2);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.4);padding:26px 28px;margin-bottom:22px;border-top:3px solid var(--blue2);display:none;}
     .form-card.show{display:block;animation:slideDown .22s ease;}
     .form-card.prog-mode{border-top-color:var(--purple);}
+    .form-card.rec-mode{border-top-color:var(--teal);}
     @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
     .tabs{display:flex;background:rgba(0,0,0,.3);border-radius:8px;padding:3px;width:fit-content;margin-bottom:20px;gap:2px;}
     .tab{padding:7px 15px;border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:12px;background:transparent;color:var(--muted);font-family:inherit;transition:all .15s;}
@@ -77,12 +77,13 @@
     .tab.on-p{background:var(--purple);color:white;}
     .form-h{font-size:14px;font-weight:800;color:var(--white);margin-bottom:18px;}
     .form-h.prog{color:var(--purple);}
+    .form-h.rec{color:var(--teal);}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
     .full{grid-column:1/-1;}
     .fgroup{display:flex;flex-direction:column;gap:5px;}
     .fgroup label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;}
     .fgroup input,.fgroup select,.fgroup textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:rgba(0,0,0,.3);font-family:inherit;outline:none;transition:border-color .15s;}
-    .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--blue2);background:rgba(0,0,0,.5);}
+    .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus{border-color:var(--blue2);}
     .fgroup select option{background:var(--navy2);color:var(--text);}
     .fgroup textarea{resize:vertical;}
     .check-row{display:flex;align-items:center;gap:7px;margin-top:6px;cursor:pointer;font-size:12px;color:var(--muted);}
@@ -131,9 +132,9 @@
     .btn-submit{background:var(--blue2);color:white;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:filter .15s;}
     .btn-submit:hover{filter:brightness(1.15);}
     .btn-submit.prog{background:var(--purple);}
+    .btn-submit.rec{background:var(--teal);}
     .btn-submit:disabled{opacity:.5;cursor:not-allowed;}
 
-    /* FILTROS */
     .filtros{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
     .filtros input{flex:1 1 180px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:rgba(0,0,0,.3);outline:none;}
     .filtros input:focus{border-color:var(--blue2);}
@@ -141,20 +142,21 @@
     .f-btns{display:flex;gap:6px;flex-wrap:wrap;}
     .f-btn{padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);font-weight:700;font-size:11px;cursor:pointer;background:transparent;color:var(--muted);font-family:inherit;transition:all .15s;}
     .f-btn.on{background:var(--blue);color:white;border-color:var(--blue);}
+    .f-btn.on.teal{background:var(--teal);border-color:var(--teal);}
 
-    /* ARCHIVO FILTROS */
     .arch-filtros{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
     .arch-filtros-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;}
     .meses-grid{display:flex;gap:8px;flex-wrap:wrap;}
     .mes-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);font-weight:700;font-size:12px;cursor:pointer;background:transparent;color:var(--muted);font-family:inherit;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px;}
     .mes-btn:hover{border-color:var(--amber);color:var(--amber);}
     .mes-btn.on{background:rgba(245,166,35,.15);color:var(--amber);border-color:var(--amber);}
+    .mes-btn.teal:hover{border-color:var(--teal);color:var(--teal);}
+    .mes-btn.teal.on{background:rgba(14,165,201,.15);color:var(--teal);border-color:var(--teal);}
     .mes-btn .mes-n{font-size:10px;color:inherit;opacity:.7;}
 
-    /* TABLE */
     .tcard{background:var(--navy2);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
     .tscroll{overflow-x:auto;}
-    table{width:100%;border-collapse:collapse;min-width:760px;}
+    table{width:100%;border-collapse:collapse;min-width:600px;}
     thead tr{background:rgba(0,0,0,.4);border-bottom:1.5px solid var(--border);}
     th{padding:12px 14px;text-align:left;font-size:10px;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;cursor:pointer;user-select:none;white-space:nowrap;}
     th:hover{color:var(--white);}
@@ -164,16 +166,16 @@
     td{padding:11px 14px;font-size:13px;vertical-align:middle;}
     .td-fecha{color:var(--muted);white-space:nowrap;font-size:11px;font-family:'DM Mono',monospace;}
     .td-cliente{font-weight:700;color:var(--white);}
-    .td-notas{color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .td-notas{color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .tag{display:inline-block;border-radius:5px;padding:3px 10px;font-size:11px;font-weight:700;}
     .tag-tipo{background:rgba(37,99,168,.25);color:#7eb8f5;border:1px solid rgba(37,99,168,.4);}
     .tag-indef{background:rgba(124,108,252,.2);color:#b5aeff;border:1px solid rgba(124,108,252,.3);}
     .badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;white-space:nowrap;}
     .dot{width:6px;height:6px;border-radius:50%;display:inline-block;}
-    .b-Completado{background:rgba(34,201,122,.15);color:#22c97a;border:1px solid rgba(34,201,122,.3);} .b-Completado .dot{background:#22c97a;}
-    .b-Pendiente{background:rgba(245,166,35,.15);color:#f5a623;border:1px solid rgba(245,166,35,.3);} .b-Pendiente .dot{background:#f5a623;}
-    .b-Cancelado{background:rgba(229,72,77,.15);color:#e5484d;border:1px solid rgba(229,72,77,.3);} .b-Cancelado .dot{background:#e5484d;}
-    .b-Programado{background:rgba(124,108,252,.15);color:#a89dfd;border:1px solid rgba(124,108,252,.3);} .b-Programado .dot{background:#a89dfd;}
+    .b-Completado{background:rgba(34,201,122,.15);color:#22c97a;border:1px solid rgba(34,201,122,.3);}.b-Completado .dot{background:#22c97a;}
+    .b-Pendiente{background:rgba(245,166,35,.15);color:#f5a623;border:1px solid rgba(245,166,35,.3);}.b-Pendiente .dot{background:#f5a623;}
+    .b-Cancelado{background:rgba(229,72,77,.15);color:#e5484d;border:1px solid rgba(229,72,77,.3);}.b-Cancelado .dot{background:#e5484d;}
+    .b-Programado{background:rgba(124,108,252,.15);color:#a89dfd;border:1px solid rgba(124,108,252,.3);}.b-Programado .dot{background:#a89dfd;}
     .costo-btn{border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:4px;font-family:inherit;transition:filter .1s;}
     .costo-btn:hover{filter:brightness(1.1);}
     .costo-vacio{border:1px dashed var(--border);background:transparent;color:var(--muted);}
@@ -195,22 +197,18 @@
     .tfooter{padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
     .total{font-weight:700;color:var(--green);}
 
-    /* ARCH HEADER */
     .arch-mes-header{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:12px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .arch-mes-header.teal{background:rgba(14,165,201,.08);border-color:rgba(14,165,201,.2);}
     .arch-mes-title{font-size:15px;font-weight:800;color:var(--amber);}
+    .arch-mes-title.teal{color:var(--teal);}
     .arch-mes-stats{font-size:12px;color:var(--muted);}
     .arch-actions{display:flex;gap:8px;}
 
-    /* EMPTY / LOADING */
     .empty{background:var(--navy2);border:1px solid var(--border);border-radius:14px;padding:64px 20px;text-align:center;color:var(--muted);}
     .empty .eicon{font-size:46px;margin-bottom:12px;}
     .empty .etitle{font-size:16px;font-weight:700;color:var(--text);}
     .empty .esub{font-size:13px;margin-top:5px;}
-    .loading{text-align:center;padding:50px;color:var(--muted);font-size:13px;}
-    .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue2);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px;}
-    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* MODALS */
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:200;}
     .overlay.show{display:flex;}
     .modal{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 34px;box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;max-width:360px;width:90%;}
@@ -221,7 +219,6 @@
     .btn-del-confirm{background:var(--red);color:white;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
     .btn-arch-confirm{background:var(--amber);color:#0a1628;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
 
-    /* BANNER aviso mes */
     .banner-mes{background:rgba(245,166,35,.12);border:1.5px solid rgba(245,166,35,.35);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
     .banner-mes .bicon{font-size:28px;}
     .banner-mes .btxt{flex:1;}
@@ -229,8 +226,6 @@
     .banner-mes .btxt span{font-size:12px;color:var(--muted);}
     .banner-close{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 6px;}
 
-
-    /* AUTOCOMPLETE */
     .autocomplete-wrap{position:relative;}
     .autocomplete-list{position:absolute;top:100%;left:0;right:0;background:var(--navy2);border:1.5px solid var(--blue2);border-top:none;border-radius:0 0 8px 8px;max-height:180px;overflow-y:auto;z-index:300;box-shadow:0 8px 24px rgba(0,0,0,.4);}
     .autocomplete-item{padding:9px 13px;font-size:13px;cursor:pointer;color:var(--text);transition:background .1s;display:flex;align-items:center;gap:8px;}
@@ -239,7 +234,6 @@
     .autocomplete-item .ac-name{flex:1;}
     .autocomplete-item .ac-count{font-size:10px;color:var(--muted);background:rgba(255,255,255,.06);border-radius:10px;padding:1px 7px;}
 
-    /* FOTO VIEWER */
     .foto-viewer{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:560px;width:95%;max-height:90vh;overflow-y:auto;}
     .foto-viewer h3{font-size:15px;font-weight:800;margin-bottom:16px;color:var(--white);}
     .foto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
@@ -247,39 +241,28 @@
     .foto-grid img:hover{transform:scale(1.03);}
     .no-fotos{color:var(--muted);font-size:13px;text-align:center;padding:20px;}
 
-    /* TOAST */
     .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy3);border:1px solid var(--border);border-radius:10px;padding:10px 20px;font-size:12px;font-weight:700;color:var(--text);opacity:0;transition:all .3s;z-index:600;white-space:nowrap;pointer-events:none;}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
     .toast.success{border-color:rgba(34,201,122,.4);color:var(--green);}
     .toast.error{border-color:rgba(229,72,77,.4);color:var(--red);}
 
+    /* SQL NOTICE */
+    .sql-notice{background:rgba(14,165,201,.08);border:1.5px solid rgba(14,165,201,.3);border-radius:12px;padding:14px 18px;margin-bottom:18px;font-size:12px;color:var(--teal);}
+    .sql-notice strong{display:block;margin-bottom:6px;font-size:13px;}
+    .sql-notice code{display:block;background:rgba(0,0,0,.3);border-radius:6px;padding:8px 12px;font-family:'DM Mono',monospace;font-size:11px;color:#a8e6f5;margin-top:8px;white-space:pre;}
+
     .footer{text-align:center;padding:24px 16px;color:var(--muted);font-size:11px;border-top:1px solid var(--border);margin-top:10px;}
 
-    @media print{
-      .header,.filtros,.form-card,.btn-row,.act-btns,.status-bar,.toast,.footer,.arch-filtros,.nav-tabs,.btn-archive,.btn-unarch,.print-header~.view{display:none!important;}
-      body{background:white;color:black;}
-      .tcard{border:1px solid #ccc;}
-      table{min-width:unset;}
-      th,td{color:black!important;border-color:#ccc!important;}
-      .print-header{display:block!important;}
-    }
-    .print-header{display:none;text-align:center;padding:16px 0 8px;}
-    .print-header h2{font-size:18px;font-weight:800;}
-    .print-header p{font-size:12px;color:#666;}
-
     @media(max-width:600px){
-      .grid2{grid-template-columns:1fr;} .full{grid-column:1;}
-      .header{padding:0 14px;} .main{padding:14px 10px;} .form-card{padding:16px 12px;}
+      .grid2{grid-template-columns:1fr;}.full{grid-column:1;}
+      .header{padding:0 14px;}.main{padding:14px 10px;}.form-card{padding:16px 12px;}
       .logo-text .brand,.logo-text .brand2{font-size:12px;letter-spacing:2px;}
-      .btn-row{gap:6px;} .btn-prog,.btn-excel,.btn-archive{padding:8px 10px;font-size:11px;} .btn-new{padding:8px 12px;font-size:11px;}
-      .stat{padding:8px 12px;min-width:60px;} .stat-n{font-size:18px;}
-      .nav-tab{padding:9px 12px;font-size:11px;}
+      .btn-row{gap:6px;}.nav-tab{padding:9px 10px;font-size:11px;}
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="logo-bar">
@@ -294,12 +277,12 @@
       <div class="logo-divider"></div>
       <span class="logo-title">Registro de Servicios</span>
     </div>
-
     <div class="header-row">
       <div>
-        <div class="page-title">📋 Control de Visitas y Servicios</div>
-        <div class="page-sub">Gestión de clientes y seguimiento operativo</div>
+        <div class="page-title" id="pageTitle">📋 Control de Visitas y Servicios</div>
+        <div class="page-sub" id="pageSub">Gestión de clientes y seguimiento operativo</div>
       </div>
+      <!-- Botones Activos -->
       <div class="btn-row" id="btnRowActivos">
         <div style="position:relative;display:inline-block" id="excelMenuWrap">
           <button class="btn-excel" onclick="toggleExcelMenu()">📊 Excel ▾</button>
@@ -309,17 +292,30 @@
           </div>
         </div>
         <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar mes</button>
-        <button class="btn-prog"    onclick="abrirForm('programado')">📅 Programar</button>
-        <button class="btn-new"     onclick="abrirForm('servicio')">＋ Nuevo</button>
+        <button class="btn-prog" onclick="abrirForm('programado')">📅 Programar</button>
+        <button class="btn-new" onclick="abrirForm('servicio')">＋ Nuevo</button>
       </div>
+      <!-- Botones Archivo Servicios -->
       <div class="btn-row" id="btnRowArchivos" style="display:none">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-        </div>
+      </div>
+      <!-- Botones Recolecciones -->
+      <div class="btn-row" id="btnRowRec" style="display:none">
+        <button class="btn-excel" onclick="exportarExcelRec()">📊 Excel</button>
+        <button class="btn-archive" onclick="pedirArchivarRec()" style="border-color:rgba(14,165,201,.4);color:var(--teal);background:rgba(14,165,201,.1)">📦 Archivar mes</button>
+        <button class="btn-new-teal" onclick="abrirFormRec()">＋ Nueva recolección</button>
+      </div>
+      <!-- Botones Archivo Recolecciones -->
+      <div class="btn-row" id="btnRowRecArch" style="display:none">
+        <button class="btn-excel" onclick="exportarExcelRecArch()">📊 Excel</button>
+      </div>
     </div>
 
     <div class="nav-tabs">
-      <button class="nav-tab active" id="navActivos" onclick="cambiarVista('activos')">⚡ Activos</button>
+      <button class="nav-tab active" id="navActivos"  onclick="cambiarVista('activos')">⚡ Activos</button>
       <button class="nav-tab arch"   id="navArchivos" onclick="cambiarVista('archivos')">📦 Archivo <span id="archBadge" style="display:none;background:rgba(245,166,35,.2);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--amber)"></span></button>
+      <button class="nav-tab rec"    id="navRec"      onclick="cambiarVista('recolecciones')">🚚 Recolecciones</button>
+      <button class="nav-tab rec-arch" id="navRecArch" onclick="cambiarVista('recarchivos')">🗂️ Archivo Rec. <span id="recArchBadge" style="display:none;background:rgba(14,165,201,.15);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--teal)"></span></button>
     </div>
 
     <div class="stats" id="statsBar">
@@ -329,16 +325,20 @@
       <div class="stat"><div class="stat-n" id="sPend"  style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
       <div class="stat"><div class="stat-n" id="sCanc"  style="color:#e5484d">0</div><div class="stat-l">Cancelados</div></div>
     </div>
+
+    <div class="stats" id="statsRec" style="display:none">
+      <div class="stat"><div class="stat-n" id="rTotal" style="color:var(--teal)">0</div><div class="stat-l">Total</div></div>
+      <div class="stat"><div class="stat-n" id="rComp"  style="color:#22c97a">0</div><div class="stat-l">Completadas</div></div>
+      <div class="stat"><div class="stat-n" id="rPend"  style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
+      <div class="stat"><div class="stat-n" id="rCanc"  style="color:#e5484d">0</div><div class="stat-l">Canceladas</div></div>
+    </div>
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
   <!-- ── VISTA ACTIVOS ── -->
   <div class="view active" id="vistaActivos">
-
-    <!-- Banner aviso cambio de mes -->
     <div class="banner-mes" id="bannerMes" style="display:none">
       <div class="bicon">📅</div>
       <div class="btxt">
@@ -346,10 +346,9 @@
         <span id="bannerTexto">Hay registros del mes anterior sin archivar.</span>
       </div>
       <button class="btn-archive" onclick="pedirArchivar()" style="white-space:nowrap">📦 Archivar ahora</button>
-      <button class="banner-close" onclick="cerrarBanner()" title="Cerrar">✕</button>
+      <button class="banner-close" onclick="cerrarBanner()">✕</button>
     </div>
 
-    <!-- Formulario -->
     <div class="form-card" id="formCard">
       <div class="tabs">
         <button class="tab" id="tabS" onclick="setModo('servicio')">⚡ Servicio realizado</button>
@@ -434,7 +433,6 @@
       </div>
     </div>
 
-    <!-- Filtros activos -->
     <div class="filtros">
       <input type="text" id="busqueda" placeholder="🔍 Buscar cliente, tipo, notas..." oninput="renderActivos()" />
       <div class="f-btns">
@@ -445,71 +443,128 @@
         <button class="f-btn" onclick="filtrar('Cancelado',this)">Cancelado</button>
       </div>
     </div>
-
-    <div class="print-header"><h2>Soluciones Integrales – Registro de Servicios</h2><p id="printFecha"></p></div>
     <div id="tablaActivos"></div>
   </div>
 
-  <!-- ── VISTA ARCHIVOS ── -->
+  <!-- ── VISTA ARCHIVO SERVICIOS ── -->
   <div class="view" id="vistaArchivos">
-
-    <!-- Selector de meses -->
     <div class="arch-filtros">
       <div class="arch-filtros-title">📅 Selecciona un mes archivado</div>
-      <div class="meses-grid" id="mesesGrid">
-        <div style="color:var(--muted);font-size:13px">Cargando meses...</div>
+      <div class="meses-grid" id="mesesGrid"><div style="color:var(--muted);font-size:13px">Cargando meses...</div></div>
+    </div>
+    <div id="tablaArchivo"></div>
+  </div>
+
+  <!-- ── VISTA RECOLECCIONES ── -->
+  <div class="view" id="vistaRec">
+    <div class="sql-notice" id="sqlNotice">
+      <strong>⚠️ Configuración requerida en Supabase</strong>
+      Ejecuta el siguiente SQL en el Editor SQL de Supabase para crear la tabla de recolecciones:
+      <code>CREATE TABLE IF NOT EXISTS recolecciones (
+  id BIGSERIAL PRIMARY KEY,
+  proveedor TEXT NOT NULL,
+  fecha TIMESTAMPTZ,
+  notas TEXT,
+  estado TEXT DEFAULT 'Pendiente',
+  archivado BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);</code>
+    </div>
+
+    <!-- Formulario recolección -->
+    <div class="form-card rec-mode" id="formCardRec" style="display:none">
+      <div class="form-h rec" id="formHRec">🚚 Nueva Recolección</div>
+      <div class="grid2">
+        <div class="fgroup">
+          <label>Proveedor *</label>
+          <div class="autocomplete-wrap">
+            <input type="text" id="inProveedor" placeholder="Nombre del proveedor" autocomplete="off"
+              oninput="acProvFiltrar()" onkeydown="acProvKeydown(event)" onfocus="acProvFiltrar()" onblur="setTimeout(acProvCerrar,180)" />
+            <div class="autocomplete-list" id="acProvList" style="display:none"></div>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label>Fecha *</label>
+          <input type="datetime-local" id="inRecFecha" />
+        </div>
+        <div class="fgroup">
+          <label>Estado</label>
+          <select id="inRecEstado">
+            <option>Pendiente</option><option>Completado</option><option>Cancelado</option>
+          </select>
+        </div>
+        <div class="fgroup full">
+          <label>Notas</label>
+          <textarea id="inRecNotas" rows="3" placeholder="Mercancía, detalles, observaciones..."></textarea>
+        </div>
+      </div>
+      <div class="form-footer">
+        <button class="btn-cancel" onclick="cerrarFormRec()">Cancelar</button>
+        <button class="btn-submit rec" id="btnSubmitRec" onclick="guardarRec()">✅ Registrar</button>
       </div>
     </div>
 
-    <div id="tablaArchivo"></div>
+    <div class="filtros">
+      <input type="text" id="busquedaRec" placeholder="🔍 Buscar proveedor, notas..." oninput="renderRec()" />
+      <div class="f-btns">
+        <button class="f-btn on teal" onclick="filtrarRec('Todos',this)">Todos</button>
+        <button class="f-btn" onclick="filtrarRec('Completado',this)">Completado</button>
+        <button class="f-btn" onclick="filtrarRec('Pendiente',this)">Pendiente</button>
+        <button class="f-btn" onclick="filtrarRec('Cancelado',this)">Cancelado</button>
+      </div>
+    </div>
+    <div id="tablaRec"></div>
+  </div>
+
+  <!-- ── VISTA ARCHIVO RECOLECCIONES ── -->
+  <div class="view" id="vistaRecArch">
+    <div class="arch-filtros">
+      <div class="arch-filtros-title">📅 Selecciona un mes archivado — Recolecciones</div>
+      <div class="meses-grid" id="mesesRecGrid"><div style="color:var(--muted);font-size:13px">Cargando...</div></div>
+    </div>
+    <div id="tablaRecArch"></div>
   </div>
 
 </div>
 
 <div class="footer">© 2025 Soluciones Integrales · Todos los derechos reservados</div>
 
-<!-- STATUS BAR -->
 <div class="status-bar">
   <span class="status-dot amber" id="statusDot"></span>
   <span class="status-label" id="statusLabel">Conectando...</span>
 </div>
 
-<!-- MODAL ELIMINAR -->
+<!-- MODALES SERVICIOS -->
 <div class="overlay" id="modalDel">
-  <div class="modal">
-    <div class="micon">⚠️</div>
-    <h3>¿Eliminar registro?</h3>
-    <p>Esta acción no se puede deshacer.</p>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="cerrarModal('modalDel')">Cancelar</button>
-      <button class="btn-del-confirm" onclick="confirmarEliminar()">Sí, eliminar</button>
-    </div>
+  <div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar registro?</h3><p>Esta acción no se puede deshacer.</p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDel')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminar()">Sí, eliminar</button></div>
   </div>
 </div>
-
-<!-- MODAL ARCHIVAR -->
 <div class="overlay" id="modalArch">
-  <div class="modal">
-    <div class="micon">📦</div>
-    <h3>Archivar servicios</h3>
-    <p id="modalArchTxt">Se archivarán todos los registros del mes anterior. Podrás consultarlos y desarchivarlos en cualquier momento.</p>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="cerrarModal('modalArch')">Cancelar</button>
-      <button class="btn-arch-confirm" onclick="confirmarArchivar()">📦 Archivar</button>
-    </div>
+  <div class="modal"><div class="micon">📦</div><h3>Archivar servicios</h3><p id="modalArchTxt"></p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivar()">📦 Archivar</button></div>
+  </div>
+</div>
+<div class="overlay" id="modalUnarch">
+  <div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar registro?</h3><p>El registro volverá a la vista de activos.</p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivar()">↩️ Desarchivar</button></div>
   </div>
 </div>
 
-<!-- MODAL DESARCHIVAR -->
-<div class="overlay" id="modalUnarch">
-  <div class="modal">
-    <div class="micon">↩️</div>
-    <h3>¿Desarchivar registro?</h3>
-    <p>El registro volverá a la vista de activos.</p>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="cerrarModal('modalUnarch')">Cancelar</button>
-      <button class="btn-arch-confirm" onclick="confirmarDesarchivar()">↩️ Desarchivar</button>
-    </div>
+<!-- MODALES RECOLECCIONES -->
+<div class="overlay" id="modalDelRec">
+  <div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar recolección?</h3><p>Esta acción no se puede deshacer.</p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDelRec')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminarRec()">Sí, eliminar</button></div>
+  </div>
+</div>
+<div class="overlay" id="modalArchRec">
+  <div class="modal"><div class="micon">📦</div><h3>Archivar recolecciones</h3><p id="modalArchRecTxt"></p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivarRec()">📦 Archivar</button></div>
+  </div>
+</div>
+<div class="overlay" id="modalUnarchRec">
+  <div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar recolección?</h3><p>Volverá a la vista de recolecciones activas.</p>
+    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivarRec()">↩️ Desarchivar</button></div>
   </div>
 </div>
 
@@ -524,31 +579,32 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════ CONFIG ══════════
 const SB_URL  = "https://hkngtxwjwvbfkxbvrlwn.supabase.co";
 const SB_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhrbmd0eHdqd3ZiZmt4YnZybHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjgzNzQsImV4cCI6MjA5MjkwNDM3NH0.rBIzZxz_e1Nz16tS-QhFx4nIbzyqt-EGKFuZu1sLsfs";
 const BUCKET  = "evidencias";
-
-// ══════════ STATE ══════════
-let db = null;
-let registros = [];        // activos (archivado = false / null)
-let archivados = [];       // archivado = true
-let editId = null, modo = "servicio", filtro = "Todos";
-let sortF = "created_at", sortD = "desc";
-let sortFA = "fecha", sortDA = "desc";
-let delId = null, unarchId = null;
-let vistaActual = "activos";
-let mesArchivo = null;     // mes seleccionado en vista archivos "2025-04"
-let fotosNuevas = [], fotosExistentes = [];
-let columnaArchivadoExiste = true; // se detecta en cargarDatos
-
 const MESES_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
-// ══════════ INIT ══════════
+let db = null;
+let registros=[], archivados=[];
+let recolecciones=[], recoleccionesArch=[];
+let editId=null, modo="servicio", filtro="Todos";
+let editRecId=null, filtroRec="Todos";
+let sortF="created_at", sortD="desc";
+let sortFA="fecha", sortDA="desc";
+let sortR="created_at", sortRD="desc";
+let sortRA="fecha", sortRAD="desc";
+let delId=null, unarchId=null;
+let delRecId=null, unarchRecId=null;
+let vistaActual="activos";
+let mesArchivo=null, mesRecArchivo=null;
+let fotosNuevas=[], fotosExistentes=[];
+let columnaArchivadoExiste=true;
+let tablaRecExiste=true;
+
+// ══ INIT ══
 window.addEventListener("load", async () => {
   setStatus("amber","Conectando...");
   try {
@@ -562,660 +618,468 @@ window.addEventListener("load", async () => {
     iniciarRealtime();
     revisarCambioDeMes();
   } catch(e) {
-    console.error("Init:", e);
+    console.error(e);
     setStatus("red","Error: "+(e.message||"Sin conexión"));
   }
 });
 
-// ══════════ CARGAR DATOS ══════════
 async function cargarDatos() {
   if (!db) return;
   setStatus("amber","Cargando...");
-
   const [resActivos, resArch] = await Promise.all([
-    db.from("servicios").select("*").eq("archivado", false).order("created_at",{ascending:false}),
-    db.from("servicios").select("*").eq("archivado", true).order("fecha",{ascending:false})
+    db.from("servicios").select("*").eq("archivado",false).order("created_at",{ascending:false}),
+    db.from("servicios").select("*").eq("archivado",true).order("fecha",{ascending:false})
   ]);
-
-  // Si la columna no existe aún, traemos todo como activos
-  if (resActivos.error?.code === "42703" || resActivos.error?.code === "PGRST116") {
-    const { data } = await db.from("servicios").select("*").order("created_at",{ascending:false});
-    registros = data || [];
-    archivados = [];
+  if (resActivos.error?.code==="42703"||resActivos.error?.code==="PGRST116") {
+    const {data}=await db.from("servicios").select("*").order("created_at",{ascending:false});
+    registros=data||[]; archivados=[];
   } else if (resActivos.error) {
-    console.error("Error cargando activos:", resActivos.error);
-    columnaArchivadoExiste = false;
-    const { data } = await db.from("servicios").select("*").order("created_at",{ascending:false});
-    registros = data || []; archivados = [];
+    const {data}=await db.from("servicios").select("*").order("created_at",{ascending:false});
+    registros=data||[]; archivados=[];
   } else {
-    registros  = resActivos.data || [];
-    archivados = resArch.data   || [];
+    registros=resActivos.data||[]; archivados=resArch.data||[];
   }
+  // Recolecciones
+  try {
+    const [rRec, rRecArch] = await Promise.all([
+      db.from("recolecciones").select("*").eq("archivado",false).order("created_at",{ascending:false}),
+      db.from("recolecciones").select("*").eq("archivado",true).order("fecha",{ascending:false})
+    ]);
+    if (rRec.error) { tablaRecExiste=false; recolecciones=[]; recoleccionesArch=[]; }
+    else { tablaRecExiste=true; recolecciones=rRec.data||[]; recoleccionesArch=rRecArch.data||[]; document.getElementById("sqlNotice").style.display="none"; }
+  } catch(e) { tablaRecExiste=false; }
 
   setStatus("green",`Conectado · ${registros.length} activos`);
-  renderActivos();
-  renderMeses();
+  renderActivos(); renderMeses(); renderRecStats();
+  renderRec(); renderMesesRec();
   if (mesArchivo) renderArchivo();
+  if (mesRecArchivo) renderRecArch();
 
-  // Badge archivos
-  const meses = getMesesUnicos();
-  const badge = document.getElementById("archBadge");
-  if (meses.length > 0) { badge.style.display="inline"; badge.textContent = meses.length; }
-  else badge.style.display="none";
+  // Badges
+  const mA=getMesesUnicos(), badge=document.getElementById("archBadge");
+  if (mA.length){badge.style.display="inline";badge.textContent=mA.length;}else badge.style.display="none";
+  const mR=getMesesRecUnicos(), rbadge=document.getElementById("recArchBadge");
+  if (mR.length){rbadge.style.display="inline";rbadge.textContent=mR.length;}else rbadge.style.display="none";
 }
 
-// ══════════ AVISO CAMBIO DE MES ══════════
+// ══ VISTA ══
+function cambiarVista(v) {
+  vistaActual=v;
+  const vistas=["vistaActivos","vistaArchivos","vistaRec","vistaRecArch"];
+  const navs=["navActivos","navArchivos","navRec","navRecArch"];
+  const mapa={"activos":0,"archivos":1,"recolecciones":2,"recarchivos":3};
+  vistas.forEach((id,i)=>document.getElementById(id).classList.toggle("active",i===mapa[v]));
+  navs.forEach((id,i)=>document.getElementById(id).classList.toggle("active",i===mapa[v]));
+  document.getElementById("btnRowActivos").style.display  = v==="activos"       ?"":"none";
+  document.getElementById("btnRowArchivos").style.display = v==="archivos"      ?"":"none";
+  document.getElementById("btnRowRec").style.display      = v==="recolecciones" ?"":"none";
+  document.getElementById("btnRowRecArch").style.display  = v==="recarchivos"   ?"":"none";
+  document.getElementById("statsBar").style.display       = (v==="activos"||v==="archivos")?"":"none";
+  document.getElementById("statsRec").style.display       = (v==="recolecciones"||v==="recarchivos")?"":"none";
+  if (v==="recolecciones"){
+    document.getElementById("pageTitle").textContent="🚚 Recolecciones de Mercancía";
+    document.getElementById("pageSub").textContent="Registro de recolecciones con proveedores";
+  } else if (v==="recarchivos") {
+    document.getElementById("pageTitle").textContent="🗂️ Archivo — Recolecciones";
+    document.getElementById("pageSub").textContent="Historial de recolecciones archivadas";
+  } else {
+    document.getElementById("pageTitle").textContent="📋 Control de Visitas y Servicios";
+    document.getElementById("pageSub").textContent="Gestión de clientes y seguimiento operativo";
+  }
+}
+
+// ══ AVISO CAMBIO MES ══
 function revisarCambioDeMes() {
-  const ahora = new Date();
-  const mesActual = `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const ultimoAviso = localStorage.getItem("si_ultimo_aviso_mes");
-
-  // Hay registros de meses anteriores sin archivar?
-  const hayViejos = registros.some(r => {
-    if (!r.fecha) return false;
-    const fm = r.fecha.slice(0,7);
-    return fm < mesActual;
-  });
-
-  if (hayViejos && ultimoAviso !== mesActual) {
-    const mesAnterior = new Date(ahora.getFullYear(), ahora.getMonth()-1, 1);
-    const nombreMes = MESES_ES[mesAnterior.getMonth()];
-    document.getElementById("bannerTitulo").textContent = `📅 Servicios de ${nombreMes} sin archivar`;
-    document.getElementById("bannerTexto").textContent  = `Tienes registros del mes anterior. Archívalos para mantener el historial organizado.`;
-    document.getElementById("bannerMes").style.display  = "flex";
+  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const hayViejos=registros.some(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
+  if (hayViejos&&localStorage.getItem("si_ultimo_aviso_mes")!==mesActual) {
+    const mA=new Date(ahora.getFullYear(),ahora.getMonth()-1,1);
+    document.getElementById("bannerTitulo").textContent=`📅 Servicios de ${MESES_ES[mA.getMonth()]} sin archivar`;
+    document.getElementById("bannerTexto").textContent=`Tienes registros del mes anterior pendientes de archivar.`;
+    document.getElementById("bannerMes").style.display="flex";
   }
 }
-
 function cerrarBanner() {
-  const ahora = new Date();
-  const mesActual = `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  localStorage.setItem("si_ultimo_aviso_mes", mesActual);
-  document.getElementById("bannerMes").style.display = "none";
+  const ahora=new Date(), m=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  localStorage.setItem("si_ultimo_aviso_mes",m);
+  document.getElementById("bannerMes").style.display="none";
 }
 
-// ══════════ ARCHIVAR ══════════
+// ══ ARCHIVAR SERVICIOS ══
 function pedirArchivar() {
-  const ahora = new Date();
-  const mesActual = `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const porArchivar = registros.filter(r => r.fecha && r.fecha.slice(0,7) < mesActual);
-  if (porArchivar.length === 0) {
-    toast("No hay registros de meses anteriores para archivar","error"); return;
-  }
-  const mesesUn = [...new Set(porArchivar.map(r => r.fecha.slice(0,7)))].sort();
-  const nombres = mesesUn.map(m => {
-    const [y,mo] = m.split("-");
-    return `${MESES_ES[parseInt(mo)-1]} ${y}`;
-  }).join(", ");
-  document.getElementById("modalArchTxt").textContent =
-    `Se archivarán ${porArchivar.length} registro(s) de: ${nombres}. Podrás consultarlos y desarchivarlos en cualquier momento.`;
+  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const por=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
+  if (!por.length){toast("No hay registros de meses anteriores","error");return;}
+  const nombres=[...new Set(por.map(r=>r.fecha.slice(0,7)))].sort().map(m=>{const[y,mo]=m.split("-");return`${MESES_ES[parseInt(mo)-1]} ${y}`;}).join(", ");
+  document.getElementById("modalArchTxt").textContent=`Se archivarán ${por.length} registro(s) de: ${nombres}.`;
   document.getElementById("modalArch").classList.add("show");
 }
-
 async function confirmarArchivar() {
   cerrarModal("modalArch");
-  const ahora = new Date();
-  const mesActual = `${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const ids = registros.filter(r => r.fecha && r.fecha.slice(0,7) < mesActual).map(r => r.id);
-  if (ids.length === 0) return;
-  const { error } = await db.from("servicios").update({ archivado: true }).in("id", ids);
-  if (error) { toast("Error al archivar","error"); return; }
-  toast(`📦 ${ids.length} registro(s) archivados`);
-  cerrarBanner();
-  await cargarDatos();
-  cambiarVista("archivos");
+  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const ids=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual).map(r=>r.id);
+  if (!ids.length) return;
+  const{error}=await db.from("servicios").update({archivado:true}).in("id",ids);
+  if (error){toast("Error al archivar","error");return;}
+  toast(`📦 ${ids.length} registro(s) archivados`); cerrarBanner();
+  await cargarDatos(); cambiarVista("archivos");
 }
-
-// ══════════ DESARCHIVAR ══════════
-function pedirDesarchivar(id) { unarchId = id; document.getElementById("modalUnarch").classList.add("show"); }
-
+function pedirDesarchivar(id){unarchId=id;document.getElementById("modalUnarch").classList.add("show");}
 async function confirmarDesarchivar() {
   cerrarModal("modalUnarch");
-  const { error } = await db.from("servicios").update({ archivado: false }).eq("id", unarchId);
-  if (error) { toast("Error al desarchivar","error"); return; }
-  toast("↩️ Registro devuelto a activos");
-  unarchId = null;
-  await cargarDatos();
+  const{error}=await db.from("servicios").update({archivado:false}).eq("id",unarchId);
+  if(error){toast("Error","error");return;}
+  toast("↩️ Devuelto a activos"); unarchId=null; await cargarDatos();
 }
 
-// ══════════ CRUD ══════════
+// ══ ARCHIVAR RECOLECCIONES ══
+function pedirArchivarRec() {
+  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const por=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
+  if (!por.length){toast("No hay recolecciones de meses anteriores","error");return;}
+  const nombres=[...new Set(por.map(r=>r.fecha.slice(0,7)))].sort().map(m=>{const[y,mo]=m.split("-");return`${MESES_ES[parseInt(mo)-1]} ${y}`;}).join(", ");
+  document.getElementById("modalArchRecTxt").textContent=`Se archivarán ${por.length} recolección(es) de: ${nombres}.`;
+  document.getElementById("modalArchRec").classList.add("show");
+}
+async function confirmarArchivarRec() {
+  cerrarModal("modalArchRec");
+  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const ids=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual).map(r=>r.id);
+  if (!ids.length) return;
+  const{error}=await db.from("recolecciones").update({archivado:true}).in("id",ids);
+  if(error){toast("Error al archivar","error");return;}
+  toast(`📦 ${ids.length} recolección(es) archivadas`);
+  await cargarDatos(); cambiarVista("recarchivos");
+}
+function pedirDesarchivarRec(id){unarchRecId=id;document.getElementById("modalUnarchRec").classList.add("show");}
+async function confirmarDesarchivarRec() {
+  cerrarModal("modalUnarchRec");
+  const{error}=await db.from("recolecciones").update({archivado:false}).eq("id",unarchRecId);
+  if(error){toast("Error","error");return;}
+  toast("↩️ Devuelta a recolecciones"); unarchRecId=null; await cargarDatos();
+}
+
+// ══ CRUD SERVICIOS ══
 async function guardar() {
-  const cliente = document.getElementById("inCliente").value.trim();
-  const tiposSeleccionados = [...document.querySelectorAll("#multiTipo .tipo-item.checked")].map(el=>el.dataset.val);
-  const tipo = tiposSeleccionados.join(", ");
-  const indef   = document.getElementById("chkIndef").checked;
-  const fechaRaw = document.getElementById("inFecha").value;
-  // Guardar como UTC literal para que no haya desfase de zona horaria
-  const fecha = indef ? null : (fechaRaw ? fechaRaw + ":00+00:00" : null);
-  if (!cliente || !tipo || (!indef && !fecha)) { alert("Por favor llena los campos obligatorios *"); return; }
-
-  const estado = modo==="programado" ? "Programado" : document.getElementById("inEstado").value;
-  const costo  = (modo==="servicio" && estado==="Completado") ? parseFloat(document.getElementById("inCosto").value)||null : null;
-  const descripcion = document.getElementById("inDesc").value;
-
-  const btn = document.getElementById("btnSubmit");
-  btn.disabled = true; btn.textContent = "Guardando...";
-
-  let urlsFotos = [...fotosExistentes];
-  if (fotosNuevas.length > 0) {
-    document.getElementById("fotoStatus").textContent = `Subiendo ${fotosNuevas.length} foto(s)...`;
-    for (const f of fotosNuevas) { const u = await subirFoto(f.file); if (u) urlsFotos.push(u); }
-    document.getElementById("fotoStatus").textContent = "";
-  }
-
-  // Intentar con archivado, si falla lo quitamos
-  const payload = { cliente, tipo, fecha, descripcion, estado, costo,
-    fotos: urlsFotos.length > 0 ? JSON.stringify(urlsFotos) : null };
-  // Solo incluir archivado si la columna ya existe (detectado en cargarDatos)
-  if (columnaArchivadoExiste) payload.archivado = false;
-
-  if (editId !== null) {
-    const { error } = await db.from("servicios").update(payload).eq("id", editId);
-    if (error) {
-      console.error("Update error:", error);
-      // Si falla por columna archivado, intentar sin ella
-      if (error.code === "42703") {
-        const {archivado, ...payloadSin} = payload;
-        const { error: e2 } = await db.from("servicios").update(payloadSin).eq("id", editId);
-        if (e2) { toast("Error al actualizar: "+e2.message,"error"); }
-        else { toast("✅ Registro actualizado"); }
-      } else { toast("Error: "+error.message,"error"); }
-    } else toast("✅ Registro actualizado");
-    editId = null;
+  const cliente=document.getElementById("inCliente").value.trim();
+  const tipos=[...document.querySelectorAll("#multiTipo .tipo-item.checked")].map(el=>el.dataset.val);
+  const tipo=tipos.join(", ");
+  const indef=document.getElementById("chkIndef").checked;
+  const fechaRaw=document.getElementById("inFecha").value;
+  const fecha=indef?null:(fechaRaw?fechaRaw+":00+00:00":null);
+  if (!cliente||!tipo||(!indef&&!fecha)){alert("Por favor llena los campos obligatorios *");return;}
+  const estado=modo==="programado"?"Programado":document.getElementById("inEstado").value;
+  const costo=(modo==="servicio"&&estado==="Completado")?parseFloat(document.getElementById("inCosto").value)||null:null;
+  const descripcion=document.getElementById("inDesc").value;
+  const btn=document.getElementById("btnSubmit"); btn.disabled=true; btn.textContent="Guardando...";
+  let urlsFotos=[...fotosExistentes];
+  if (fotosNuevas.length){document.getElementById("fotoStatus").textContent=`Subiendo ${fotosNuevas.length} foto(s)...`;for(const f of fotosNuevas){const u=await subirFoto(f.file);if(u)urlsFotos.push(u);}document.getElementById("fotoStatus").textContent="";}
+  const payload={cliente,tipo,fecha,descripcion,estado,costo,fotos:urlsFotos.length?JSON.stringify(urlsFotos):null};
+  if(columnaArchivadoExiste)payload.archivado=false;
+  if(editId!==null){
+    const{error}=await db.from("servicios").update(payload).eq("id",editId);
+    if(error&&error.code==="42703"){const{archivado,...p}=payload;await db.from("servicios").update(p).eq("id",editId);}
+    else if(error)toast("Error: "+error.message,"error"); else toast("✅ Registro actualizado");
+    editId=null;
   } else {
-    const { error } = await db.from("servicios").insert([payload]);
-    if (error) {
-      console.error("Insert error:", error);
-      if (error.code === "42703") {
-        // Columna archivado no existe, insertar sin ella
-        const {archivado, ...payloadSin} = payload;
-        const { error: e2 } = await db.from("servicios").insert([payloadSin]);
-        if (e2) { toast("Error al guardar: "+e2.message,"error"); }
-        else { toast("✅ Servicio registrado"); }
-      } else { toast("Error: "+error.message,"error"); }
-    } else toast("✅ Servicio registrado");
+    const{error}=await db.from("servicios").insert([payload]);
+    if(error&&error.code==="42703"){const{archivado,...p}=payload;await db.from("servicios").insert([p]);}
+    else if(error)toast("Error: "+error.message,"error"); else toast("✅ Servicio registrado");
   }
-  btn.disabled = false; cerrarForm(); await cargarDatos();
+  btn.disabled=false; cerrarForm(); await cargarDatos();
 }
-
-async function subirFoto(file) {
-  try {
-    const ext = file.name.split(".").pop();
-    const nombre = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await db.storage.from(BUCKET).upload(nombre, file, { contentType: file.type });
-    if (error) { console.warn(error); return null; }
-    const { data } = db.storage.from(BUCKET).getPublicUrl(nombre);
-    return data.publicUrl;
-  } catch(e) { console.warn(e); return null; }
-}
-
-async function saveCosto(id) {
-  const val = parseFloat(document.getElementById("ci-"+id)?.value)||null;
-  const { error } = await db.from("servicios").update({ costo: val }).eq("id", id);
-  if (error) toast("Error al guardar costo","error"); else { toast("💰 Costo actualizado"); await cargarDatos(); }
-}
-
 async function confirmarEliminar() {
-  const { error } = await db.from("servicios").delete().eq("id", delId);
-  if (error) toast("Error al eliminar","error"); else toast("🗑️ Registro eliminado");
+  const{error}=await db.from("servicios").delete().eq("id",delId);
+  if(error)toast("Error al eliminar","error"); else toast("🗑️ Registro eliminado");
   cerrarModal("modalDel"); await cargarDatos();
 }
-
-// ══════════ REALTIME ══════════
-function iniciarRealtime() {
-  db.channel("sv-rt").on("postgres_changes",{ event:"*", schema:"public", table:"servicios" }, async () => await cargarDatos()).subscribe();
+async function saveCosto(id) {
+  const val=parseFloat(document.getElementById("ci-"+id)?.value)||null;
+  const{error}=await db.from("servicios").update({costo:val}).eq("id",id);
+  if(error)toast("Error","error"); else{toast("💰 Costo actualizado");await cargarDatos();}
 }
 
-// ══════════ VISTAS ══════════
-function cambiarVista(v) {
-  vistaActual = v;
-  document.getElementById("vistaActivos").classList.toggle("active", v==="activos");
-  document.getElementById("vistaArchivos").classList.toggle("active", v==="archivos");
-  document.getElementById("navActivos").classList.toggle("active", v==="activos");
-  document.getElementById("navArchivos").classList.toggle("active", v==="archivos");
-  document.getElementById("btnRowActivos").style.display  = v==="activos"  ? "" : "none";
-  document.getElementById("btnRowArchivos").style.display = v==="archivos" ? "" : "none";
-}
-
-// ══════════ RENDER ACTIVOS ══════════
-
-// ══════════ TIPO DROPDOWN ══════════
-function toggleTipoMenu() {
-  const menu = document.getElementById("tipoMenu");
-  const trigger = document.getElementById("tipoTrigger");
-  const isOpen = menu.classList.contains("open");
-  menu.classList.toggle("open", !isOpen);
-  trigger.classList.toggle("open", !isOpen);
-  if (!isOpen) {
-    // Set data-val on items if not set
-    document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>{
-      if (!el.dataset.val) el.dataset.val = el.textContent.trim().replace("✓","").trim();
-    });
-  }
-}
-function toggleTipo(el, val) {
-  el.dataset.val = val;
-  el.classList.toggle("checked");
-  actualizarTipoTrigger();
-}
-function actualizarTipoTrigger() {
-  const seleccionados = [...document.querySelectorAll("#multiTipo .tipo-item.checked")].map(el=>el.dataset.val||el.textContent.trim());
-  const label = document.getElementById("tipoTriggerLabel");
-  const tags = document.getElementById("tipoTags");
-  if (seleccionados.length === 0) {
-    label.className = "placeholder";
-    label.textContent = "Seleccionar tipo(s)...";
-    tags.innerHTML = "";
+// ══ CRUD RECOLECCIONES ══
+async function guardarRec() {
+  const proveedor=document.getElementById("inProveedor").value.trim();
+  const fechaRaw=document.getElementById("inRecFecha").value;
+  const fecha=fechaRaw?fechaRaw+":00+00:00":null;
+  const estado=document.getElementById("inRecEstado").value;
+  const notas=document.getElementById("inRecNotas").value;
+  if (!proveedor||!fecha){alert("Por favor llena los campos obligatorios *");return;}
+  const btn=document.getElementById("btnSubmitRec"); btn.disabled=true; btn.textContent="Guardando...";
+  const payload={proveedor,fecha,notas,estado,archivado:false};
+  if(editRecId!==null){
+    const{error}=await db.from("recolecciones").update(payload).eq("id",editRecId);
+    if(error)toast("Error: "+error.message,"error"); else toast("✅ Recolección actualizada");
+    editRecId=null;
   } else {
-    label.className = "";
-    label.textContent = seleccionados.length === 1 ? seleccionados[0] : seleccionados.length + " tipos seleccionados";
-    tags.innerHTML = seleccionados.map(t=>`<span class="tipo-tag-pill">✓ ${t}</span>`).join("");
+    const{error}=await db.from("recolecciones").insert([payload]);
+    if(error)toast("Error: "+error.message,"error"); else toast("✅ Recolección registrada");
   }
+  btn.disabled=false; cerrarFormRec(); await cargarDatos();
 }
-function limpiarTipos() {
-  document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>el.classList.remove("checked"));
-  actualizarTipoTrigger();
+async function confirmarEliminarRec() {
+  const{error}=await db.from("recolecciones").delete().eq("id",delRecId);
+  if(error)toast("Error al eliminar","error"); else toast("🗑️ Recolección eliminada");
+  cerrarModal("modalDelRec"); await cargarDatos();
 }
-// Cerrar tipo dropdown al click fuera
-document.addEventListener("click", e=>{
-  const dd = document.getElementById("tipoDropdown");
-  if (dd && !dd.contains(e.target)) {
-    document.getElementById("tipoMenu").classList.remove("open");
-    document.getElementById("tipoTrigger").classList.remove("open");
-  }
-});
+function editarRec(id) {
+  const r=recolecciones.find(r=>r.id===id); if(!r) return;
+  editRecId=id;
+  document.getElementById("inProveedor").value=r.proveedor||"";
+  document.getElementById("inRecFecha").value=r.fecha?r.fecha.slice(0,16):"";
+  document.getElementById("inRecEstado").value=r.estado||"Pendiente";
+  document.getElementById("inRecNotas").value=r.notas||"";
+  const card=document.getElementById("formCardRec"); card.style.display="block";
+  document.getElementById("formHRec").textContent="✏️ Editar Recolección";
+  document.getElementById("btnSubmitRec").textContent="💾 Guardar Cambios";
+  card.scrollIntoView({behavior:"smooth",block:"start"});
+}
 
+// ══ RENDER SERVICIOS ══
+function mostrarFecha(s) {
+  if(!s) return null;
+  const[fecha,hora]=s.slice(0,16).split("T"),[y,mo,d]=fecha.split("-");
+  return `${parseInt(d)} ${["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][parseInt(mo)-1]} ${y}, ${hora}`;
+}
 function renderActivos() {
-  document.getElementById("sTotal").textContent = registros.length;
-  document.getElementById("sProg").textContent  = registros.filter(r=>r.estado==="Programado").length;
-  document.getElementById("sComp").textContent  = registros.filter(r=>r.estado==="Completado").length;
-  document.getElementById("sPend").textContent  = registros.filter(r=>r.estado==="Pendiente").length;
-  document.getElementById("sCanc").textContent  = registros.filter(r=>r.estado==="Cancelado").length;
-
-  const lista = getActivosFiltrados();
-  const el = document.getElementById("tablaActivos");
-  if (lista.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="eicon">📭</div><div class="etitle">No hay registros activos</div><div class="esub">${registros.length===0?"Agrega tu primer servicio.":"Sin resultados para tu búsqueda."}</div></div>`;
-    return;
-  }
-  const total = lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
-  el.innerHTML = `<div class="tcard"><div class="tscroll"><table>
-    <thead><tr>
-      <th onclick="ordenarA('fecha')">Fecha${si(sortF,sortD,'fecha')}</th>
-      <th onclick="ordenarA('cliente')">Cliente${si(sortF,sortD,'cliente')}</th>
-      <th onclick="ordenarA('tipo')">Tipo${si(sortF,sortD,'tipo')}</th>
-      <th>Notas</th>
-      <th onclick="ordenarA('estado')">Estado${si(sortF,sortD,'estado')}</th>
-      <th>Costo</th><th>Fotos</th><th>Acciones</th>
-    </tr></thead>
-    <tbody>${lista.map(r=>rowActivo(r)).join("")}</tbody>
-  </table></div>
-  <div class="tfooter">
-    <span>Mostrando ${lista.length} de ${registros.length} registro(s)</span>
-    ${total>0?`<span class="total">💰 Total cobrado: $${total.toLocaleString("es-MX")}</span>`:""}
-  </div></div>`;
+  document.getElementById("sTotal").textContent=registros.length;
+  document.getElementById("sProg").textContent=registros.filter(r=>r.estado==="Programado").length;
+  document.getElementById("sComp").textContent=registros.filter(r=>r.estado==="Completado").length;
+  document.getElementById("sPend").textContent=registros.filter(r=>r.estado==="Pendiente").length;
+  document.getElementById("sCanc").textContent=registros.filter(r=>r.estado==="Cancelado").length;
+  const lista=getActivosFiltrados(), el=document.getElementById("tablaActivos");
+  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">📭</div><div class="etitle">No hay registros activos</div><div class="esub">${registros.length===0?"Agrega tu primer servicio.":"Sin resultados."}</div></div>`;return;}
+  const total=lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
+  el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th onclick="ordenarA('fecha')">Fecha${si(sortF,sortD,'fecha')}</th><th onclick="ordenarA('cliente')">Cliente${si(sortF,sortD,'cliente')}</th><th>Tipo</th><th>Notas</th><th onclick="ordenarA('estado')">Estado${si(sortF,sortD,'estado')}</th><th>Costo</th><th>Fotos</th><th>Acciones</th></tr></thead>
+    <tbody>${lista.map(rowActivo).join("")}</tbody></table></div>
+    <div class="tfooter"><span>Mostrando ${lista.length} de ${registros.length}</span>${total>0?`<span class="total">💰 $${total.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
-
-
-// ══════════ HELPER FECHA ══════════
-function mostrarFecha(fechaStr) {
-  if (!fechaStr) return null;
-  // Tomar los primeros 16 caracteres "YYYY-MM-DDTHH:MM" directamente
-  const s = fechaStr.slice(0, 16);
-  const [fecha, hora] = s.split("T");
-  const [y, mo, d] = fecha.split("-");
-  const meses = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
-  return `${parseInt(d)} ${meses[parseInt(mo)-1]} ${y}, ${hora}`;
-}
-
 function rowActivo(r) {
-  const fechaStr = r.fecha ? mostrarFecha(r.fecha) : '<span class="tag tag-indef">Por definir</span>';
-  const costoCell = r.estado!=="Completado" ? '<span class="costo-dash">—</span>'
-    : `<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id})">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
-  let nFotos=0; try{nFotos=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
-  return `<tr>
-    <td class="td-fecha">${fechaStr}</td>
-    <td class="td-cliente">${r.cliente}</td>
+  const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Por definir</span>';
+  const cc=r.estado!=="Completado"?'<span class="costo-dash">—</span>':`<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id})">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
+  let nF=0;try{nF=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
+  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
     <td>${(r.tipo||"").split(", ").map(t=>`<span class="tag tag-tipo" style="margin:1px 2px;display:inline-block">${t.trim()}</span>`).join("")}</td>
     <td class="td-notas" title="${r.descripcion||""}">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td>${costoCell}</td>
-    <td><button class="foto-chip" onclick="verFotos(${r.id},'activos')">📷 ${nFotos}</button></td>
-    <td><div class="act-btns">
-      <button class="btn-edit-row" onclick="editar(${r.id})">✏️</button>
-      <button class="btn-del-row"  onclick="pedirDel(${r.id})">🗑️</button>
-    </div></td>
-  </tr>`;
+    <td>${cc}</td><td><button class="foto-chip" onclick="verFotos(${r.id},'activos')">📷 ${nF}</button></td>
+    <td><div class="act-btns"><button class="btn-edit-row" onclick="editar(${r.id})">✏️</button><button class="btn-del-row" onclick="pedirDel(${r.id})">🗑️</button></div></td></tr>`;
 }
 
-// ══════════ RENDER ARCHIVO ══════════
-function getMesesUnicos() {
-  return [...new Set(archivados.map(r => r.fecha ? r.fecha.slice(0,7) : null).filter(Boolean))].sort().reverse();
+// ══ RENDER RECOLECCIONES ══
+function renderRecStats() {
+  document.getElementById("rTotal").textContent=recolecciones.length;
+  document.getElementById("rComp").textContent=recolecciones.filter(r=>r.estado==="Completado").length;
+  document.getElementById("rPend").textContent=recolecciones.filter(r=>r.estado==="Pendiente").length;
+  document.getElementById("rCanc").textContent=recolecciones.filter(r=>r.estado==="Cancelado").length;
+}
+function renderRec() {
+  renderRecStats();
+  const q=document.getElementById("busquedaRec").value.toLowerCase();
+  const lista=recolecciones
+    .filter(r=>(filtroRec==="Todos"||r.estado===filtroRec)&&((r.proveedor||"").toLowerCase().includes(q)||(r.notas||"").toLowerCase().includes(q)))
+    .sort((a,b)=>{let va=a[sortR]||"",vb=b[sortR]||"";return sortRD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
+  const el=document.getElementById("tablaRec");
+  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">🚚</div><div class="etitle">No hay recolecciones activas</div><div class="esub">${recolecciones.length===0?"Registra tu primera recolección.":"Sin resultados."}</div></div>`;return;}
+  el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th onclick="ordenarR('fecha')">Fecha${si(sortR,sortRD,'fecha')}</th><th onclick="ordenarR('proveedor')">Proveedor${si(sortR,sortRD,'proveedor')}</th><th>Notas</th><th onclick="ordenarR('estado')">Estado${si(sortR,sortRD,'estado')}</th><th>Acciones</th></tr></thead>
+    <tbody>${lista.map(rowRec).join("")}</tbody></table></div>
+    <div class="tfooter"><span>Mostrando ${lista.length} de ${recolecciones.length}</span></div></div>`;
+}
+function rowRec(r) {
+  const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Sin fecha</span>';
+  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
+    <td class="td-notas" title="${r.notas||""}">${r.notas||'<span style="opacity:.25">—</span>'}</td>
+    <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
+    <td><div class="act-btns"><button class="btn-edit-row" onclick="editarRec(${r.id})">✏️</button><button class="btn-del-row" onclick="pedirDelRec(${r.id})">🗑️</button></div></td></tr>`;
 }
 
+// ══ RENDER ARCHIVO SERVICIOS ══
+function getMesesUnicos(){return[...new Set(archivados.map(r=>r.fecha?r.fecha.slice(0,7):null).filter(Boolean))].sort().reverse();}
 function renderMeses() {
-  const meses = getMesesUnicos();
-  const grid = document.getElementById("mesesGrid");
-  if (meses.length === 0) {
-    grid.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados aún.</div>`; return;
-  }
-  if (!mesArchivo) mesArchivo = meses[0];
-  grid.innerHTML = meses.map(m => {
-    const [y, mo] = m.split("-");
-    const n = archivados.filter(r => r.fecha && r.fecha.slice(0,7) === m).length;
-    return `<button class="mes-btn ${mesArchivo===m?"on":""}" onclick="seleccionarMes('${m}')">${MESES_ES[parseInt(mo)-1]} ${y}<span class="mes-n">${n} registro(s)</span></button>`;
-  }).join("");
+  const meses=getMesesUnicos(), grid=document.getElementById("mesesGrid");
+  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados aún.</div>`;return;}
+  if(!mesArchivo) mesArchivo=meses[0];
+  grid.innerHTML=meses.map(m=>{const[y,mo]=m.split("-"),n=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===m).length;return`<button class="mes-btn ${mesArchivo===m?"on":""}" onclick="seleccionarMes('${m}')">${MESES_ES[parseInt(mo)-1]} ${y}<span class="mes-n">${n} reg.</span></button>`;}).join("");
 }
-
-function seleccionarMes(m) {
-  mesArchivo = m;
-  renderMeses();
-  renderArchivo();
-}
-
+function seleccionarMes(m){mesArchivo=m;renderMeses();renderArchivo();}
 function renderArchivo() {
-  const el = document.getElementById("tablaArchivo");
-  if (!mesArchivo) { el.innerHTML=""; return; }
-
-  const lista = archivados
-    .filter(r => r.fecha && r.fecha.slice(0,7) === mesArchivo)
-    .sort((a,b) => {
-      let va=a[sortFA]||"", vb=b[sortFA]||"";
-      return sortDA==="asc"?(va>vb?1:-1):(va<vb?1:-1);
-    });
-
-  const [y, mo] = mesArchivo.split("-");
-  const nombreMes = `${MESES_ES[parseInt(mo)-1]} ${y}`;
-  const totalMes = lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
-
-  if (lista.length === 0) {
-    el.innerHTML = `<div class="empty"><div class="eicon">📭</div><div class="etitle">Sin registros en ${nombreMes}</div></div>`;
-    return;
-  }
-
-  el.innerHTML = `
-    <div class="arch-mes-header">
-      <div>
-        <div class="arch-mes-title">📦 ${nombreMes}</div>
-        <div class="arch-mes-stats">${lista.length} registro(s)${totalMes>0?" · Total: $"+totalMes.toLocaleString("es-MX"):""}</div>
-      </div>
-      <div class="arch-actions">
-        <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
-        </div>
-    </div>
-    <div class="tcard"><div class="tscroll"><table>
-      <thead><tr>
-        <th onclick="ordenarArch('fecha')">Fecha${si(sortFA,sortDA,'fecha')}</th>
-        <th onclick="ordenarArch('cliente')">Cliente${si(sortFA,sortDA,'cliente')}</th>
-        <th onclick="ordenarArch('tipo')">Tipo${si(sortFA,sortDA,'tipo')}</th>
-        <th>Notas</th>
-        <th onclick="ordenarArch('estado')">Estado${si(sortFA,sortDA,'estado')}</th>
-        <th>Costo</th><th>Fotos</th><th>Acción</th>
-      </tr></thead>
-      <tbody>${lista.map(r=>rowArchivo(r)).join("")}</tbody>
-    </table></div>
-    <div class="tfooter">
-      <span>${lista.length} registro(s) archivados en ${nombreMes}</span>
-      ${totalMes>0?`<span class="total">💰 $${totalMes.toLocaleString("es-MX")}</span>`:""}
-    </div></div>`;
+  const el=document.getElementById("tablaArchivo"); if(!mesArchivo){el.innerHTML="";return;}
+  const lista=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesArchivo).sort((a,b)=>{let va=a[sortFA]||"",vb=b[sortFA]||"";return sortDA==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
+  const[y,mo]=mesArchivo.split("-"),nombreMes=`${MESES_ES[parseInt(mo)-1]} ${y}`;
+  const totalMes=lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
+  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">📭</div><div class="etitle">Sin registros en ${nombreMes}</div></div>`;return;}
+  el.innerHTML=`<div class="arch-mes-header"><div><div class="arch-mes-title">📦 ${nombreMes}</div><div class="arch-mes-stats">${lista.length} registro(s)${totalMes>0?" · $"+totalMes.toLocaleString("es-MX"):""}</div></div><div class="arch-actions"><button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button></div></div>
+  <div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th onclick="ordenarArch('fecha')">Fecha${si(sortFA,sortDA,'fecha')}</th><th>Cliente</th><th>Tipo</th><th>Notas</th><th>Estado</th><th>Costo</th><th>Fotos</th><th>Acción</th></tr></thead>
+    <tbody>${lista.map(rowArchivo).join("")}</tbody></table></div>
+    <div class="tfooter"><span>${lista.length} registro(s) en ${nombreMes}</span>${totalMes>0?`<span class="total">💰 $${totalMes.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
-
 function rowArchivo(r) {
-  const fechaStr = r.fecha ? mostrarFecha(r.fecha) : "—";
-  let nFotos=0; try{nFotos=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
-  const costoTxt = r.costo ? `<span style="color:var(--green);font-weight:700">$${Number(r.costo).toLocaleString("es-MX")}</span>` : '<span class="costo-dash">—</span>';
-  return `<tr>
-    <td class="td-fecha">${fechaStr}</td>
-    <td class="td-cliente">${r.cliente}</td>
+  const fd=r.fecha?mostrarFecha(r.fecha):"—";
+  let nF=0;try{nF=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
+  const ct=r.costo?`<span style="color:var(--green);font-weight:700">$${Number(r.costo).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
+  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
     <td>${(r.tipo||"").split(", ").map(t=>`<span class="tag tag-tipo" style="margin:1px 2px;display:inline-block">${t.trim()}</span>`).join("")}</td>
-    <td class="td-notas" title="${r.descripcion||""}">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
+    <td class="td-notas">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td>${costoTxt}</td>
-    <td><button class="foto-chip" onclick="verFotos(${r.id},'archivos')">📷 ${nFotos}</button></td>
-    <td><button class="btn-unarch" onclick="pedirDesarchivar(${r.id})">↩️ Desarchivar</button></td>
-  </tr>`;
+    <td>${ct}</td><td><button class="foto-chip" onclick="verFotos(${r.id},'archivos')">📷 ${nF}</button></td>
+    <td><button class="btn-unarch" onclick="pedirDesarchivar(${r.id})">↩️ Desarchivar</button></td></tr>`;
 }
 
-// ══════════ EXPORT ══════════
+// ══ RENDER ARCHIVO RECOLECCIONES ══
+function getMesesRecUnicos(){return[...new Set(recoleccionesArch.map(r=>r.fecha?r.fecha.slice(0,7):null).filter(Boolean))].sort().reverse();}
+function renderMesesRec() {
+  const meses=getMesesRecUnicos(), grid=document.getElementById("mesesRecGrid");
+  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados aún.</div>`;return;}
+  if(!mesRecArchivo) mesRecArchivo=meses[0];
+  grid.innerHTML=meses.map(m=>{const[y,mo]=m.split("-"),n=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===m).length;return`<button class="mes-btn teal ${mesRecArchivo===m?"on":""}" onclick="seleccionarMesRec('${m}')">${MESES_ES[parseInt(mo)-1]} ${y}<span class="mes-n">${n} rec.</span></button>`;}).join("");
+}
+function seleccionarMesRec(m){mesRecArchivo=m;renderMesesRec();renderRecArch();}
+function renderRecArch() {
+  const el=document.getElementById("tablaRecArch"); if(!mesRecArchivo){el.innerHTML="";return;}
+  const lista=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesRecArchivo).sort((a,b)=>{let va=a[sortRA]||"",vb=b[sortRA]||"";return sortRAD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
+  const[y,mo]=mesRecArchivo.split("-"),nombreMes=`${MESES_ES[parseInt(mo)-1]} ${y}`;
+  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">📭</div><div class="etitle">Sin recolecciones en ${nombreMes}</div></div>`;return;}
+  el.innerHTML=`<div class="arch-mes-header teal"><div><div class="arch-mes-title teal">🚚 ${nombreMes}</div><div class="arch-mes-stats">${lista.length} recolección(es)</div></div><div class="arch-actions"><button class="btn-excel" onclick="exportarExcelRecArch()">📊 Excel</button></div></div>
+  <div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th>Fecha</th><th>Proveedor</th><th>Notas</th><th>Estado</th><th>Acción</th></tr></thead>
+    <tbody>${lista.map(rowRecArch).join("")}</tbody></table></div>
+    <div class="tfooter"><span>${lista.length} recolección(es) en ${nombreMes}</span></div></div>`;
+}
+function rowRecArch(r) {
+  const fd=r.fecha?mostrarFecha(r.fecha):"—";
+  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
+    <td class="td-notas">${r.notas||'<span style="opacity:.25">—</span>'}</td>
+    <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
+    <td><button class="btn-unarch" onclick="pedirDesarchivarRec(${r.id})">↩️ Desarchivar</button></td></tr>`;
+}
+
+// ══ EXCEL ══
 function toggleExcelMenu() {
-  const menuEl = document.getElementById("excelMenu");
-  const isOpen = menuEl.style.display !== "none";
-  if (!isOpen) {
-    const mesesActivos = [...new Set(registros.filter(r=>r.fecha).map(r=>r.fecha.slice(0,7)))].sort().reverse();
-    const archMeses = getMesesUnicos();
-    let html = "";
-    if (mesesActivos.length > 0) {
-      html += `<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px">ACTIVOS POR MES</div>`;
-      mesesActivos.forEach(mes => {
-        const [y,mo] = mes.split("-");
-        const n = registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;
-        html += `<button onclick="exportarExcelMes('activo','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;justify-content:space-between;align-items:center;" onmouseover="this.style.background='rgba(37,99,168,.2)'" onmouseout="this.style.background='transparent'"><span>${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;
-      });
-    }
-    if (archMeses.length > 0) {
-      html += `<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;border-top:1px solid var(--border);margin-top:4px">ARCHIVADOS</div>`;
-      archMeses.forEach(mes => {
-        const [y,mo] = mes.split("-");
-        const n = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;
-        html += `<button onclick="exportarExcelMes('archivado','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;" onmouseover="this.style.background='rgba(245,166,35,.15)'" onmouseout="this.style.background='transparent'"><span style="color:var(--amber)">📦 ${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;
-      });
-    }
-    document.getElementById("excelMesesMenu").innerHTML = html || `<div style="padding:10px 14px;font-size:12px;color:var(--muted)">Sin registros</div>`;
+  const menuEl=document.getElementById("excelMenu"), isOpen=menuEl.style.display!=="none";
+  if(!isOpen){
+    const mA=[...new Set(registros.filter(r=>r.fecha).map(r=>r.fecha.slice(0,7)))].sort().reverse();
+    const mArch=getMesesUnicos();
+    let html="";
+    if(mA.length){html+=`<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px">ACTIVOS POR MES</div>`;mA.forEach(mes=>{const[y,mo]=mes.split("-"),n=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;html+=`<button onclick="exportarExcelMes('activo','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;justify-content:space-between;" onmouseover="this.style.background='rgba(37,99,168,.2)'" onmouseout="this.style.background='transparent'"><span>${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;});}
+    if(mArch.length){html+=`<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;border-top:1px solid var(--border);margin-top:4px">ARCHIVADOS</div>`;mArch.forEach(mes=>{const[y,mo]=mes.split("-"),n=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;html+=`<button onclick="exportarExcelMes('archivado','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;" onmouseover="this.style.background='rgba(245,166,35,.15)'" onmouseout="this.style.background='transparent'"><span style="color:var(--amber)">📦 ${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;});}
+    document.getElementById("excelMesesMenu").innerHTML=html||`<div style="padding:10px 14px;font-size:12px;color:var(--muted)">Sin registros</div>`;
   }
-  menuEl.style.display = isOpen ? "none" : "block";
+  menuEl.style.display=isOpen?"none":"block";
 }
-// Cerrar menú excel al click fuera
-document.addEventListener("click", e => {
-  const wrap = document.getElementById("excelMenuWrap");
-  if (wrap && !wrap.contains(e.target)) document.getElementById("excelMenu").style.display="none";
-});
+document.addEventListener("click",e=>{const w=document.getElementById("excelMenuWrap");if(w&&!w.contains(e.target))document.getElementById("excelMenu").style.display="none";});
 
-function exportarExcelMes(fuente, mes) {
-  let lista, nombre;
-  if (fuente === "activo" && mes) {
-    lista = registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);
-    const [y,mo] = mes.split("-");
-    nombre = `Activos_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;
-  } else if (fuente === "activo") {
-    lista = getActivosFiltrados();
-    nombre = `Servicios_Activos_${new Date().toISOString().slice(0,10)}.xlsx`;
-  } else {
-    lista = archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);
-    const [y,mo] = mes.split("-");
-    nombre = `Archivado_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;
-  }
-  if (!lista.length) { toast("Sin registros para exportar","error"); return; }
-  _excelDesde(lista, nombre);
+function exportarExcelMes(fuente,mes) {
+  let lista,nombre;
+  if(fuente==="activo"&&mes){lista=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);const[y,mo]=mes.split("-");nombre=`Activos_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;}
+  else if(fuente==="activo"){lista=getActivosFiltrados();nombre=`Servicios_Activos_${new Date().toISOString().slice(0,10)}.xlsx`;}
+  else{lista=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);const[y,mo]=mes.split("-");nombre=`Archivado_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;}
+  if(!lista.length){toast("Sin registros","error");return;}
+  _excelServicios(lista,nombre);
 }
-function exportarExcelArchivo() {
-  if (!mesArchivo) return;
-  exportarExcelMes("archivado", mesArchivo);
+function exportarExcelArchivo(){if(mesArchivo)exportarExcelMes("archivado",mesArchivo);}
+function _excelServicios(lista,nombre){
+  const datos=lista.map(r=({"Fecha":r.fecha?mostrarFecha(r.fecha):"Por definir","Cliente":r.cliente,"Tipo":r.tipo,"Estado":r.estado,"Costo":r.costo||"","Descripción":r.descripcion||"","Fotos":r.fotos?JSON.parse(r.fotos).length+" foto(s)":"0"}));
+  const ws=XLSX.utils.json_to_sheet(datos); ws["!cols"]=[{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Servicios"); XLSX.writeFile(wb,nombre); toast("📊 Excel descargado");
 }
-function _excelDesde(lista, nombre) {
-  const datos = lista.map(r=>({
-    "Fecha": r.fecha ? mostrarFecha(r.fecha) : "Por definir",
-    "Cliente": r.cliente, "Tipo": r.tipo, "Estado": r.estado,
-    "Costo": r.costo||"", "Descripción": r.descripcion||"",
-    "Fotos": r.fotos ? JSON.parse(r.fotos).length+" foto(s)" : "0"
-  }));
-  const ws = XLSX.utils.json_to_sheet(datos);
-  ws["!cols"] = [{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Servicios");
-  XLSX.writeFile(wb, nombre);
-  toast("📊 Excel descargado");
+function exportarExcelRec(){
+  const lista=recolecciones; if(!lista.length){toast("Sin recolecciones","error");return;}
+  _excelRec(lista,`Recolecciones_Activas_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+function exportarExcelRecArch(){
+  if(!mesRecArchivo) return;
+  const lista=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesRecArchivo);
+  if(!lista.length){toast("Sin recolecciones","error");return;}
+  const[y,mo]=mesRecArchivo.split("-");
+  _excelRec(lista,`Recolecciones_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`);
+}
+function _excelRec(lista,nombre){
+  const datos=lista.map(r=>({"Fecha":r.fecha?mostrarFecha(r.fecha):"—","Proveedor":r.proveedor,"Estado":r.estado,"Notas":r.notas||""}));
+  const ws=XLSX.utils.json_to_sheet(datos); ws["!cols"]=[{wch:20},{wch:24},{wch:14},{wch:40}];
+  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Recolecciones"); XLSX.writeFile(wb,nombre); toast("📊 Excel descargado");
 }
 
-// ══════════ AUTOCOMPLETE CLIENTES ══════════
-let acIdx = -1;
-function getClientesUnicos() {
-  const todos = [...registros, ...archivados];
-  const mapa = {};
-  todos.forEach(r => {
-    if (r.cliente) mapa[r.cliente] = (mapa[r.cliente]||0) + 1;
-  });
-  return Object.entries(mapa).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));
-}
-function acFiltrar() {
-  const q = document.getElementById("inCliente").value.trim().toLowerCase();
-  const clientes = getClientesUnicos();
-  const filtrados = q ? clientes.filter(c=>c.nombre.toLowerCase().includes(q)) : clientes;
-  const list = document.getElementById("acList");
-  if (!filtrados.length) { list.style.display="none"; return; }
-  acIdx = -1;
-  list.innerHTML = filtrados.slice(0,8).map((c,i)=>
-    `<div class="autocomplete-item" data-idx="${i}" onmousedown="acSeleccionar('${c.nombre.replace(/'/g,"\'")}')">
-      <span class="ac-icon">👤</span>
-      <span class="ac-name">${c.nombre}</span>
-      <span class="ac-count">${c.count} servicio${c.count>1?"s":""}</span>
-    </div>`
-  ).join("");
-  list.style.display = "block";
-}
-function acSeleccionar(nombre) {
-  document.getElementById("inCliente").value = nombre;
-  document.getElementById("acList").style.display = "none";
-}
-function acCerrar() { document.getElementById("acList").style.display="none"; }
-function acKeydown(e) {
-  const items = document.querySelectorAll(".autocomplete-item");
-  if (!items.length) return;
-  if (e.key==="ArrowDown") { e.preventDefault(); acIdx=Math.min(acIdx+1,items.length-1); acHighlight(items); }
-  else if (e.key==="ArrowUp") { e.preventDefault(); acIdx=Math.max(acIdx-1,0); acHighlight(items); }
-  else if (e.key==="Enter" && acIdx>=0) { e.preventDefault(); acSeleccionar(items[acIdx].querySelector(".ac-name").textContent); }
-  else if (e.key==="Escape") acCerrar();
-}
-function acHighlight(items) {
-  items.forEach((el,i)=>el.classList.toggle("selected",i===acIdx));
-  if (acIdx>=0) items[acIdx].scrollIntoView({block:"nearest"});
-}
+// ══ AUTOCOMPLETE CLIENTES ══
+let acIdx=-1;
+function getClientesUnicos(){const todos=[...registros,...archivados],m={};todos.forEach(r=>{if(r.cliente)m[r.cliente]=(m[r.cliente]||0)+1;});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));}
+function acFiltrar(){const q=document.getElementById("inCliente").value.trim().toLowerCase(),f=q?getClientesUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getClientesUnicos(),list=document.getElementById("acList");if(!f.length){list.style.display="none";return;}acIdx=-1;list.innerHTML=f.slice(0,8).map((c,i)=>`<div class="autocomplete-item" data-idx="${i}" onmousedown="acSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">👤</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
+function acSeleccionar(n){document.getElementById("inCliente").value=n;document.getElementById("acList").style.display="none";}
+function acCerrar(){document.getElementById("acList").style.display="none";}
+function acKeydown(e){const items=document.querySelectorAll("#acList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acIdx=Math.min(acIdx+1,items.length-1);acHL(items);}else if(e.key==="ArrowUp"){e.preventDefault();acIdx=Math.max(acIdx-1,0);acHL(items);}else if(e.key==="Enter"&&acIdx>=0){e.preventDefault();acSeleccionar(items[acIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acCerrar();}
+function acHL(items){items.forEach((el,i)=>el.classList.toggle("selected",i===acIdx));if(acIdx>=0)items[acIdx].scrollIntoView({block:"nearest"});}
 
-// ══════════ FOTOS ══════════
-function previsualizarFotos(files) {
-  for (const f of files) {
-    if (f.size > 5*1024*1024) { toast("Foto demasiado grande (máx 5MB)","error"); continue; }
-    fotosNuevas.push({ file:f, previewUrl: URL.createObjectURL(f) });
-  }
-  renderFotosPreview();
-}
-function handleDrop(e) { e.preventDefault(); document.getElementById("fotoArea").classList.remove("drag"); previsualizarFotos(e.dataTransfer.files); }
-function renderFotosPreview() {
-  document.getElementById("fotosPreview").innerHTML = [
-    ...fotosExistentes.map((u,i)=>`<div class="foto-thumb"><img src="${u}"/><button class="foto-del" onclick="quitarFotoExistente(${i})">✕</button></div>`),
-    ...fotosNuevas.map((f,i)=>`<div class="foto-thumb"><img src="${f.previewUrl}"/><button class="foto-del" onclick="quitarFotoNueva(${i})">✕</button></div>`)
-  ].join("");
-}
-function quitarFotoExistente(i) { fotosExistentes.splice(i,1); renderFotosPreview(); }
-function quitarFotoNueva(i)     { fotosNuevas.splice(i,1);     renderFotosPreview(); }
-function verFotos(id, fuente) {
-  const pool = fuente==="archivos" ? archivados : registros;
-  const r = pool.find(r=>r.id===id); if (!r) return;
-  let urls=[]; try{ urls=r.fotos?JSON.parse(r.fotos):[]; }catch(e){}
-  document.getElementById("fotoViewerTitle").textContent = `📷 ${r.cliente} — ${r.tipo}`;
-  document.getElementById("fotoViewerGrid").innerHTML = urls.length===0
-    ? `<div class="no-fotos">Sin fotos de evidencia</div>`
-    : urls.map(u=>`<img src="${u}" onclick="window.open('${u}','_blank')" title="Abrir en nueva pestaña"/>`).join("");
-  document.getElementById("modalFotos").classList.add("show");
-}
-function cerrarFotos() { document.getElementById("modalFotos").classList.remove("show"); }
+// ══ AUTOCOMPLETE PROVEEDORES ══
+let acProvIdx=-1;
+function getProveedoresUnicos(){const todos=[...recolecciones,...recoleccionesArch],m={};todos.forEach(r=>{if(r.proveedor)m[r.proveedor]=(m[r.proveedor]||0)+1;});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));}
+function acProvFiltrar(){const q=document.getElementById("inProveedor").value.trim().toLowerCase(),f=q?getProveedoresUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getProveedoresUnicos(),list=document.getElementById("acProvList");if(!f.length){list.style.display="none";return;}acProvIdx=-1;list.innerHTML=f.slice(0,8).map((c,i)=>`<div class="autocomplete-item" data-idx="${i}" onmousedown="acProvSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">🏭</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
+function acProvSeleccionar(n){document.getElementById("inProveedor").value=n;document.getElementById("acProvList").style.display="none";}
+function acProvCerrar(){document.getElementById("acProvList").style.display="none";}
+function acProvKeydown(e){const items=document.querySelectorAll("#acProvList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acProvIdx=Math.min(acProvIdx+1,items.length-1);acProvHL(items);}else if(e.key==="ArrowUp"){e.preventDefault();acProvIdx=Math.max(acProvIdx-1,0);acProvHL(items);}else if(e.key==="Enter"&&acProvIdx>=0){e.preventDefault();acProvSeleccionar(items[acProvIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acProvCerrar();}
+function acProvHL(items){items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));if(acProvIdx>=0)items[acProvIdx].scrollIntoView({block:"nearest"});}
 
-// ══════════ REALTIME ══════════
-function iniciarRealtime() {
+// ══ FOTOS ══
+async function subirFoto(file){try{const ext=file.name.split(".").pop(),nombre=`${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const{error}=await db.storage.from(BUCKET).upload(nombre,file,{contentType:file.type});if(error){console.warn(error);return null;}const{data}=db.storage.from(BUCKET).getPublicUrl(nombre);return data.publicUrl;}catch(e){console.warn(e);return null;}}
+function previsualizarFotos(files){for(const f of files){if(f.size>5*1024*1024){toast("Foto demasiado grande","error");continue;}fotosNuevas.push({file:f,previewUrl:URL.createObjectURL(f)});}renderFotosPreview();}
+function handleDrop(e){e.preventDefault();document.getElementById("fotoArea").classList.remove("drag");previsualizarFotos(e.dataTransfer.files);}
+function renderFotosPreview(){document.getElementById("fotosPreview").innerHTML=[...fotosExistentes.map((u,i)=>`<div class="foto-thumb"><img src="${u}"/><button class="foto-del" onclick="quitarFotoExistente(${i})">✕</button></div>`),...fotosNuevas.map((f,i)=>`<div class="foto-thumb"><img src="${f.previewUrl}"/><button class="foto-del" onclick="quitarFotoNueva(${i})">✕</button></div>`)].join("");}
+function quitarFotoExistente(i){fotosExistentes.splice(i,1);renderFotosPreview();}
+function quitarFotoNueva(i){fotosNuevas.splice(i,1);renderFotosPreview();}
+function verFotos(id,fuente){const pool=fuente==="archivos"?archivados:registros,r=pool.find(r=>r.id===id);if(!r)return;let urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];}catch(e){}document.getElementById("fotoViewerTitle").textContent=`📷 ${r.cliente} — ${r.tipo}`;document.getElementById("fotoViewerGrid").innerHTML=urls.length===0?`<div class="no-fotos">Sin fotos</div>`:urls.map(u=>`<img src="${u}" onclick="window.open('${u}','_blank')"/>`).join("");document.getElementById("modalFotos").classList.add("show");}
+function cerrarFotos(){document.getElementById("modalFotos").classList.remove("show");}
+
+// ══ REALTIME ══
+function iniciarRealtime(){
   db.channel("sv-rt").on("postgres_changes",{event:"*",schema:"public",table:"servicios"},async()=>await cargarDatos()).subscribe();
+  try{db.channel("rec-rt").on("postgres_changes",{event:"*",schema:"public",table:"recolecciones"},async()=>await cargarDatos()).subscribe();}catch(e){}
 }
 
-// ══════════ STATUS / TOAST ══════════
-function setStatus(c,l) { document.getElementById("statusDot").className="status-dot "+c; document.getElementById("statusLabel").textContent=l; }
-let toastTimer;
-function toast(msg,type="success") {
-  const el=document.getElementById("toast"); el.textContent=msg; el.className="toast show "+type;
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.className="toast",2800);
-}
+// ══ TIPO DROPDOWN ══
+function toggleTipoMenu(){const menu=document.getElementById("tipoMenu"),trigger=document.getElementById("tipoTrigger"),isOpen=menu.classList.contains("open");menu.classList.toggle("open",!isOpen);trigger.classList.toggle("open",!isOpen);if(!isOpen)document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>{if(!el.dataset.val)el.dataset.val=el.textContent.trim();});}
+function toggleTipo(el,val){el.dataset.val=val;el.classList.toggle("checked");actualizarTipoTrigger();}
+function actualizarTipoTrigger(){const sel=[...document.querySelectorAll("#multiTipo .tipo-item.checked")].map(el=>el.dataset.val||el.textContent.trim()),label=document.getElementById("tipoTriggerLabel"),tags=document.getElementById("tipoTags");if(!sel.length){label.className="placeholder";label.textContent="Seleccionar tipo(s)...";tags.innerHTML="";}else{label.className="";label.textContent=sel.length===1?sel[0]:sel.length+" tipos seleccionados";tags.innerHTML=sel.map(t=>`<span class="tipo-tag-pill">✓ ${t}</span>`).join("");}}
+function limpiarTipos(){document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>el.classList.remove("checked"));actualizarTipoTrigger();}
+document.addEventListener("click",e=>{const dd=document.getElementById("tipoDropdown");if(dd&&!dd.contains(e.target)){document.getElementById("tipoMenu").classList.remove("open");document.getElementById("tipoTrigger").classList.remove("open");}});
 
-// ══════════ FORM ══════════
-function abrirForm(m) { editId=null; resetForm(); setModo(m); document.getElementById("formCard").classList.add("show"); document.getElementById("formCard").scrollIntoView({behavior:"smooth",block:"start"}); }
-function cerrarForm()  { document.getElementById("formCard").classList.remove("show"); editId=null; }
-function resetForm() {
-  document.getElementById("inFecha").value=new Date().toISOString().slice(0,16);
-  ["inCliente","inCosto","inDesc"].forEach(id=>document.getElementById(id).value="");
-  document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>el.classList.remove("checked"));
-  actualizarTipoTrigger();
-  document.getElementById("inEstado").value="Pendiente";
-  document.getElementById("chkIndef").checked=false; document.getElementById("inFecha").style.display="";
-  document.getElementById("inFotos").value=""; document.getElementById("fotoStatus").textContent="";
-  fotosNuevas=[]; fotosExistentes=[]; renderFotosPreview(); toggleCosto();
-}
-function setModo(m) {
-  modo=m;
-  const card=document.getElementById("formCard"), tabS=document.getElementById("tabS"), tabP=document.getElementById("tabP");
-  const formH=document.getElementById("formH"), btnSub=document.getElementById("btnSubmit");
-  const gEst=document.getElementById("grupoEstado"), lblF=document.getElementById("lblFecha");
-  tabS.className="tab"+(m==="servicio"?" on-s":""); tabP.className="tab"+(m==="programado"?" on-p":"");
-  if (m==="programado") {
-    card.classList.add("prog-mode"); formH.className="form-h prog";
-    formH.textContent=editId?"✏️ Editar Registro":"📅 Programar Servicio";
-    btnSub.className="btn-submit prog"; btnSub.textContent=editId?"💾 Guardar Cambios":"📅 Programar";
-    gEst.style.display="none"; document.getElementById("grupoCosto").style.display="none"; lblF.textContent="Fecha programada";
-  } else {
-    card.classList.remove("prog-mode"); formH.className="form-h";
-    formH.textContent=editId?"✏️ Editar Registro":"➕ Registrar Servicio";
-    btnSub.className="btn-submit"; btnSub.textContent=editId?"💾 Guardar Cambios":"✅ Registrar";
-    gEst.style.display=""; lblF.textContent="Fecha y Hora *"; toggleCosto();
-  }
-}
-function toggleIndef() { document.getElementById("inFecha").style.display=document.getElementById("chkIndef").checked?"none":""; }
-function toggleCosto() { document.getElementById("grupoCosto").style.display=(modo==="servicio"&&document.getElementById("inEstado").value==="Completado")?"":"none"; }
-function editar(id) {
-  const r=registros.find(r=>r.id===id); if(!r) return;
-  editId=id;
-  document.getElementById("inFecha").value=r.fecha?r.fecha.slice(0,16):new Date().toISOString().slice(0,16).replace('T',' ').slice(0,16).replace(' ','T');
-  document.getElementById("inCliente").value=r.cliente||"";
-  // Check matching tipo checkboxes
-  const tiposEdit = (r.tipo||"").split(", ").map(t=>t.trim());
-  document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>{
-    const val = el.textContent.trim();
-    el.dataset.val = val;
-    el.classList.toggle("checked", tiposEdit.includes(val));
-  });
-  actualizarTipoTrigger();
-  document.getElementById("inEstado").value=r.estado||"Pendiente"; document.getElementById("inCosto").value=r.costo||"";
-  document.getElementById("inDesc").value=r.descripcion||""; document.getElementById("chkIndef").checked=!r.fecha;
-  document.getElementById("inFecha").style.display=r.fecha?"":"none";
-  fotosNuevas=[]; try{fotosExistentes=r.fotos?JSON.parse(r.fotos):[];}catch(e){fotosExistentes=[];}
-  renderFotosPreview(); setModo(r.estado==="Programado"?"programado":"servicio");
-  document.getElementById("formCard").classList.add("show");
-  document.getElementById("formCard").scrollIntoView({behavior:"smooth",block:"start"});
-}
-function editCosto(id) {
-  const r=registros.find(r=>r.id===id); if(!r) return;
-  document.getElementById("costo-"+id).innerHTML=`<div class="costo-edit-wrap"><span style="font-size:12px;color:#7a9cc0">$</span><input type="number" id="ci-${id}" value="${r.costo||""}" min="0" step="0.01" onkeydown="ciKey(event,${id})"/><button class="costo-ok" onclick="saveCosto(${id})">✓</button><button class="costo-no" onclick="renderActivos()">✕</button></div>`;
-  document.getElementById("ci-"+id)?.focus();
-}
+// ══ FORM SERVICIOS ══
+function abrirForm(m){editId=null;resetForm();setModo(m);document.getElementById("formCard").classList.add("show");document.getElementById("formCard").scrollIntoView({behavior:"smooth",block:"start"});}
+function cerrarForm(){document.getElementById("formCard").classList.remove("show");editId=null;}
+function resetForm(){document.getElementById("inFecha").value=new Date().toISOString().slice(0,16);["inCliente","inCosto","inDesc"].forEach(id=>document.getElementById(id).value="");document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>el.classList.remove("checked"));actualizarTipoTrigger();document.getElementById("inEstado").value="Pendiente";document.getElementById("chkIndef").checked=false;document.getElementById("inFecha").style.display="";document.getElementById("inFotos").value="";document.getElementById("fotoStatus").textContent="";fotosNuevas=[];fotosExistentes=[];renderFotosPreview();toggleCosto();}
+function setModo(m){modo=m;const card=document.getElementById("formCard"),tabS=document.getElementById("tabS"),tabP=document.getElementById("tabP"),formH=document.getElementById("formH"),btnSub=document.getElementById("btnSubmit"),gEst=document.getElementById("grupoEstado"),lblF=document.getElementById("lblFecha");tabS.className="tab"+(m==="servicio"?" on-s":"");tabP.className="tab"+(m==="programado"?" on-p":"");if(m==="programado"){card.classList.add("prog-mode");formH.className="form-h prog";formH.textContent=editId?"✏️ Editar Registro":"📅 Programar Servicio";btnSub.className="btn-submit prog";btnSub.textContent=editId?"💾 Guardar Cambios":"📅 Programar";gEst.style.display="none";document.getElementById("grupoCosto").style.display="none";lblF.textContent="Fecha programada";}else{card.classList.remove("prog-mode");formH.className="form-h";formH.textContent=editId?"✏️ Editar Registro":"➕ Registrar Servicio";btnSub.className="btn-submit";btnSub.textContent=editId?"💾 Guardar Cambios":"✅ Registrar";gEst.style.display="";lblF.textContent="Fecha y Hora *";toggleCosto();}}
+function toggleIndef(){document.getElementById("inFecha").style.display=document.getElementById("chkIndef").checked?"none":"";}
+function toggleCosto(){document.getElementById("grupoCosto").style.display=(modo==="servicio"&&document.getElementById("inEstado").value==="Completado")?"":"none";}
+function editar(id){const r=registros.find(r=>r.id===id);if(!r)return;editId=id;document.getElementById("inFecha").value=r.fecha?r.fecha.slice(0,16):new Date().toISOString().slice(0,16);document.getElementById("inCliente").value=r.cliente||"";const te=(r.tipo||"").split(", ").map(t=>t.trim());document.querySelectorAll("#multiTipo .tipo-item").forEach(el=>{const val=el.textContent.trim();el.dataset.val=val;el.classList.toggle("checked",te.includes(val));});actualizarTipoTrigger();document.getElementById("inEstado").value=r.estado||"Pendiente";document.getElementById("inCosto").value=r.costo||"";document.getElementById("inDesc").value=r.descripcion||"";document.getElementById("chkIndef").checked=!r.fecha;document.getElementById("inFecha").style.display=r.fecha?"":"none";fotosNuevas=[];try{fotosExistentes=r.fotos?JSON.parse(r.fotos):[];}catch(e){fotosExistentes=[];}renderFotosPreview();setModo(r.estado==="Programado"?"programado":"servicio");document.getElementById("formCard").classList.add("show");document.getElementById("formCard").scrollIntoView({behavior:"smooth",block:"start"});}
+function editCosto(id){const r=registros.find(r=>r.id===id);if(!r)return;document.getElementById("costo-"+id).innerHTML=`<div class="costo-edit-wrap"><span style="font-size:12px;color:#7a9cc0">$</span><input type="number" id="ci-${id}" value="${r.costo||""}" min="0" step="0.01" onkeydown="ciKey(event,${id})"/><button class="costo-ok" onclick="saveCosto(${id})">✓</button><button class="costo-no" onclick="renderActivos()">✕</button></div>`;document.getElementById("ci-"+id)?.focus();}
 function ciKey(e,id){if(e.key==="Enter")saveCosto(id);if(e.key==="Escape")renderActivos();}
+
+// ══ FORM RECOLECCIONES ══
+function abrirFormRec(){editRecId=null;document.getElementById("inProveedor").value="";document.getElementById("inRecFecha").value=new Date().toISOString().slice(0,16);document.getElementById("inRecEstado").value="Pendiente";document.getElementById("inRecNotas").value="";document.getElementById("formHRec").textContent="🚚 Nueva Recolección";document.getElementById("btnSubmitRec").textContent="✅ Registrar";const card=document.getElementById("formCardRec");card.style.display="block";card.scrollIntoView({behavior:"smooth",block:"start"});}
+function cerrarFormRec(){document.getElementById("formCardRec").style.display="none";editRecId=null;}
+
+// ══ FILTROS ══
+function filtrar(val,btn){filtro=val;document.querySelectorAll(".f-btns .f-btn").forEach(b=>b.classList.remove("on"));btn.classList.add("on");renderActivos();}
+function filtrarRec(val,btn){filtroRec=val;const btns=document.querySelectorAll("#vistaRec .f-btn");btns.forEach(b=>b.classList.remove("on","teal"));btn.classList.add("on","teal");renderRec();}
+function ordenarA(f){if(sortF===f)sortD=sortD==="asc"?"desc":"asc";else{sortF=f;sortD="asc";}renderActivos();}
+function ordenarArch(f){if(sortFA===f)sortDA=sortDA==="asc"?"desc":"asc";else{sortFA=f;sortDA="asc";}renderArchivo();}
+function ordenarR(f){if(sortR===f)sortRD=sortRD==="asc"?"desc":"asc";else{sortR=f;sortRD="asc";}renderRec();}
+function getActivosFiltrados(){const q=document.getElementById("busqueda").value.toLowerCase();return registros.filter(r=>(filtro==="Todos"||r.estado===filtro)&&((r.cliente||"").toLowerCase().includes(q)||(r.tipo||"").toLowerCase().includes(q)||(r.descripcion||"").toLowerCase().includes(q))).sort((a,b)=>{let va=a[sortF]||"",vb=b[sortF]||"";return sortD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});}
+function si(sf,sd,f){if(sf!==f)return'<span style="opacity:.25;font-size:10px"> ▲</span>';return`<span style="font-size:10px"> ${sd==="desc"?"▼":"▲"}</span>`;}
+
+// ══ MODALES ══
 function pedirDel(id){delId=id;document.getElementById("modalDel").classList.add("show");}
+function pedirDelRec(id){delRecId=id;document.getElementById("modalDelRec").classList.add("show");}
 function cerrarModal(id){document.getElementById(id).classList.remove("show");}
 
-// ══════════ FILTROS ══════════
-function filtrar(val,btn) { filtro=val; document.querySelectorAll(".f-btn").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); renderActivos(); }
-function ordenarA(f)    { if(sortF===f)sortD=sortD==="asc"?"desc":"asc";else{sortF=f;sortD="asc";}  renderActivos(); }
-function ordenarArch(f) { if(sortFA===f)sortDA=sortDA==="asc"?"desc":"asc";else{sortFA=f;sortDA="asc";} renderArchivo(); }
-function getActivosFiltrados() {
-  const q=document.getElementById("busqueda").value.toLowerCase();
-  return registros
-    .filter(r=>(filtro==="Todos"||r.estado===filtro)&&((r.cliente||"").toLowerCase().includes(q)||(r.tipo||"").toLowerCase().includes(q)||(r.descripcion||"").toLowerCase().includes(q)))
-    .sort((a,b)=>{let va=a[sortF]||"",vb=b[sortF]||"";return sortD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
-}
-function si(sf,sd,f) {
-  if(sf!==f) return '<span style="opacity:.25;font-size:10px"> ▲</span>';
-  return `<span style="font-size:10px"> ${sd==="desc"?"▼":"▲"}</span>`;
-}
+// ══ STATUS / TOAST ══
+function setStatus(c,l){document.getElementById("statusDot").className="status-dot "+c;document.getElementById("statusLabel").textContent=l;}
+let toastTimer;
+function toast(msg,type="success"){const el=document.getElementById("toast");el.textContent=msg;el.className="toast show "+type;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.className="toast",2800);}
 
 renderActivos();
 </script>
-
-<!-- SQL PARA MIGRAR (ejecutar en Supabase SQL Editor si es primera vez) -->
-<!--
-ALTER TABLE servicios ADD COLUMN IF NOT EXISTS archivado BOOLEAN DEFAULT false;
-UPDATE servicios SET archivado = false WHERE archivado IS NULL;
--->
 </body>
 </html>
