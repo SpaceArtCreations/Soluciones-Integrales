@@ -187,6 +187,18 @@
     .costo-no{background:transparent;border:1px solid var(--border);border-radius:5px;padding:3px 7px;cursor:pointer;font-size:12px;color:var(--muted);}
     .foto-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,168,.15);border:1px solid rgba(37,99,168,.3);border-radius:6px;padding:3px 8px;font-size:11px;color:#7eb8f5;cursor:pointer;transition:background .1s;}
     .foto-chip:hover{background:rgba(37,99,168,.3);}
+    /* DETALLE ROW */
+    .detail-row td{padding:0!important;border-bottom:1px solid rgba(30,58,110,.4);}
+    .detail-panel{padding:14px 18px;background:rgba(10,22,40,.6);display:flex;gap:20px;flex-wrap:wrap;animation:slideDown .18s ease;}
+    .detail-section{flex:1;min-width:180px;}
+    .detail-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;}
+    .detail-text{font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap;}
+    .detail-empty{font-size:12px;color:var(--border);font-style:italic;}
+    .detail-fotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+    .detail-foto{width:64px;height:64px;border-radius:7px;object-fit:cover;border:1.5px solid var(--border);cursor:pointer;transition:transform .15s;}
+    .detail-foto:hover{transform:scale(1.06);}
+    tbody tr.row-main{cursor:pointer;}
+    tbody tr.row-main.expanded{background:rgba(37,99,168,.1)!important;}
     .act-btns{display:flex;gap:6px;}
     .btn-edit-row{background:rgba(37,99,168,.15);border:1px solid rgba(37,99,168,.3);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:13px;transition:background .1s;}
     .btn-edit-row:hover{background:rgba(37,99,168,.35);}
@@ -857,16 +869,44 @@ function renderActivos() {
     <tbody>${lista.map(rowActivo).join("")}</tbody></table></div>
     <div class="tfooter"><span>Mostrando ${lista.length} de ${registros.length}</span>${total>0?`<span class="total">💰 $${total.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
+let expandedId = null;
+function toggleDetalle(id) {
+  if (expandedId === id) { expandedId = null; } else { expandedId = id; }
+  renderActivos();
+}
 function rowActivo(r) {
   const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Por definir</span>';
-  const cc=r.estado!=="Completado"?'<span class="costo-dash">—</span>':`<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id})">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
-  let nF=0;try{nF=r.fotos?JSON.parse(r.fotos).length:0;}catch(e){}
-  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
+  const cc=r.estado!=="Completado"?'<span class="costo-dash">—</span>':`<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id});event.stopPropagation()">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
+  let nF=0, urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];nF=urls.length;}catch(e){}
+  const isExp = expandedId === r.id;
+  const mainRow = `<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalle(${r.id})">
+    <td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
     <td>${(r.tipo||"").split(", ").map(t=>`<span class="tag tag-tipo" style="margin:1px 2px;display:inline-block">${t.trim()}</span>`).join("")}</td>
     <td class="td-notas" title="${r.descripcion||""}">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td>${cc}</td><td><button class="foto-chip" onclick="verFotos(${r.id},'activos')">📷 ${nF}</button></td>
-    <td><div class="act-btns"><button class="btn-edit-row" onclick="editar(${r.id})">✏️</button><button class="btn-del-row" onclick="pedirDel(${r.id})">🗑️</button></div></td></tr>`;
+    <td>${cc}</td>
+    <td><button class="foto-chip" onclick="verFotos(${r.id},'activos');event.stopPropagation()">📷 ${nF}</button></td>
+    <td><div class="act-btns">
+      <button class="btn-edit-row" onclick="editar(${r.id});event.stopPropagation()">✏️</button>
+      <button class="btn-del-row"  onclick="pedirDel(${r.id});event.stopPropagation()">🗑️</button>
+    </div></td></tr>`;
+  if (!isExp) return mainRow;
+  const fotosHtml = urls.length
+    ? urls.map(u=>`<img class="detail-foto" src="${u}" onclick="window.open('${u}','_blank')" title="Ver foto"/>`).join("")
+    : '<span class="detail-empty">Sin fotos</span>';
+  const detailRow = `<tr class="detail-row"><td colspan="8">
+    <div class="detail-panel">
+      <div class="detail-section">
+        <div class="detail-label">📝 Descripción / Notas</div>
+        ${r.descripcion?`<div class="detail-text">${r.descripcion}</div>`:`<div class="detail-empty">Sin descripción registrada</div>`}
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">📷 Evidencia fotográfica</div>
+        <div class="detail-fotos">${fotosHtml}</div>
+      </div>
+    </div>
+  </td></tr>`;
+  return mainRow + detailRow;
 }
 
 // ══ RENDER RECOLECCIONES ══
