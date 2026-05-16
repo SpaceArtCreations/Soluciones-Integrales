@@ -14,6 +14,7 @@
       --white:#ffffff;--border:#1e3a6e;--text:#e8edf5;--muted:#7a9cc0;
       --green:#22c97a;--red:#e5484d;--amber:#f5a623;--purple:#7c6cfc;
       --teal:#0ea5c9;--teal2:#0284a8;
+      --gold:#f0b429;--gold2:#d97706;
       --row-alt:#0d1e38;
     }
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -39,13 +40,14 @@
     .page-sub{font-size:11px;color:var(--muted);margin-top:3px;}
     .btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
 
-    .nav-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-top:4px;}
-    .nav-tab{padding:11px 20px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border:none;background:transparent;font-family:inherit;letter-spacing:.4px;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+    .nav-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-top:4px;flex-wrap:wrap;}
+    .nav-tab{padding:11px 18px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border:none;background:transparent;font-family:inherit;letter-spacing:.4px;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
     .nav-tab:hover{color:var(--white);}
     .nav-tab.active{color:var(--white);border-bottom-color:var(--blue2);}
     .nav-tab.active.arch{border-bottom-color:var(--amber);color:var(--amber);}
     .nav-tab.active.rec{border-bottom-color:var(--teal);color:var(--teal);}
     .nav-tab.active.rec-arch{border-bottom-color:var(--teal2);color:var(--teal);}
+    .nav-tab.active.fact{border-bottom-color:var(--gold);color:var(--gold);}
 
     .stats{display:flex;gap:8px;padding:14px 0 18px;flex-wrap:wrap;}
     .stat{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 18px;text-align:center;min-width:80px;}
@@ -92,7 +94,6 @@
     .prefix-wrap .prefix{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:700;pointer-events:none;}
     .prefix-wrap input{padding-left:24px;}
 
-    /* TIPO DROPDOWN */
     .tipo-dropdown{position:relative;}
     .tipo-trigger{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);background:rgba(0,0,0,.3);font-family:inherit;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:border-color .15s;outline:none;}
     .tipo-trigger:hover,.tipo-trigger.open{border-color:var(--blue2);background:rgba(0,0,0,.5);}
@@ -143,6 +144,7 @@
     .f-btn{padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);font-weight:700;font-size:11px;cursor:pointer;background:transparent;color:var(--muted);font-family:inherit;transition:all .15s;}
     .f-btn.on{background:var(--blue);color:white;border-color:var(--blue);}
     .f-btn.on.teal{background:var(--teal);border-color:var(--teal);}
+    .f-btn.on.gold{background:var(--gold2);border-color:var(--gold2);color:white;}
 
     .arch-filtros{background:var(--navy2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
     .arch-filtros-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;}
@@ -187,6 +189,38 @@
     .costo-no{background:transparent;border:1px solid var(--border);border-radius:5px;padding:3px 7px;cursor:pointer;font-size:12px;color:var(--muted);}
     .foto-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(37,99,168,.15);border:1px solid rgba(37,99,168,.3);border-radius:6px;padding:3px 8px;font-size:11px;color:#7eb8f5;cursor:pointer;transition:background .1s;}
     .foto-chip:hover{background:rgba(37,99,168,.3);}
+    .act-btns{display:flex;gap:6px;flex-wrap:wrap;}
+    .btn-edit-row{background:rgba(37,99,168,.15);border:1px solid rgba(37,99,168,.3);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:13px;transition:background .1s;}
+    .btn-edit-row:hover{background:rgba(37,99,168,.35);}
+    .btn-del-row{background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.2);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:13px;transition:background .1s;}
+    .btn-del-row:hover{background:rgba(229,72,77,.25);}
+    .btn-unarch{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:12px;color:var(--amber);font-family:inherit;font-weight:700;transition:background .1s;white-space:nowrap;}
+    .btn-unarch:hover{background:rgba(245,166,35,.2);}
+
+    /* BOTÓN FACTURAR */
+    .btn-facturar{background:rgba(240,180,41,.15);border:1px solid rgba(240,180,41,.4);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:11px;color:var(--gold);font-family:inherit;font-weight:700;transition:all .15s;white-space:nowrap;}
+    .btn-facturar:hover{background:rgba(240,180,41,.28);}
+    .btn-facturar.ya{background:rgba(34,201,122,.1);border-color:rgba(34,201,122,.3);color:var(--green);}
+
+    .tfooter{padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .total{font-weight:700;color:var(--green);}
+
+    .arch-mes-header{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:12px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+    .arch-mes-header.teal{background:rgba(14,165,201,.08);border-color:rgba(14,165,201,.2);}
+    .arch-mes-title{font-size:15px;font-weight:800;color:var(--amber);}
+    .arch-mes-title.teal{color:var(--teal);}
+    .arch-mes-stats{font-size:12px;color:var(--muted);}
+    .arch-actions{display:flex;gap:8px;}
+
+    /* FACTURAS */
+    .fact-header{background:linear-gradient(135deg,rgba(240,180,41,.1),rgba(217,119,6,.08));border:1.5px solid rgba(240,180,41,.25);border-radius:14px;padding:20px 24px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+    .fact-header-title{font-size:16px;font-weight:800;color:var(--gold);}
+    .fact-header-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+    .fact-stats{display:flex;gap:12px;flex-wrap:wrap;}
+    .fact-stat{text-align:center;}
+    .fact-stat-n{font-size:20px;font-weight:900;}
+    .fact-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+
     /* DETALLE ROW */
     .detail-row td{padding:0!important;border-bottom:1px solid rgba(30,58,110,.4);}
     .detail-panel{padding:14px 18px;background:rgba(10,22,40,.6);display:flex;gap:20px;flex-wrap:wrap;animation:slideDown .18s ease;}
@@ -199,22 +233,6 @@
     .detail-foto:hover{transform:scale(1.06);}
     tbody tr.row-main{cursor:pointer;}
     tbody tr.row-main.expanded{background:rgba(37,99,168,.1)!important;}
-    .act-btns{display:flex;gap:6px;}
-    .btn-edit-row{background:rgba(37,99,168,.15);border:1px solid rgba(37,99,168,.3);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:13px;transition:background .1s;}
-    .btn-edit-row:hover{background:rgba(37,99,168,.35);}
-    .btn-del-row{background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.2);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:13px;transition:background .1s;}
-    .btn-del-row:hover{background:rgba(229,72,77,.25);}
-    .btn-unarch{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);border-radius:6px;padding:5px 8px;cursor:pointer;font-size:12px;color:var(--amber);font-family:inherit;font-weight:700;transition:background .1s;white-space:nowrap;}
-    .btn-unarch:hover{background:rgba(245,166,35,.2);}
-    .tfooter{padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-    .total{font-weight:700;color:var(--green);}
-
-    .arch-mes-header{background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:12px 18px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-    .arch-mes-header.teal{background:rgba(14,165,201,.08);border-color:rgba(14,165,201,.2);}
-    .arch-mes-title{font-size:15px;font-weight:800;color:var(--amber);}
-    .arch-mes-title.teal{color:var(--teal);}
-    .arch-mes-stats{font-size:12px;color:var(--muted);}
-    .arch-actions{display:flex;gap:8px;}
 
     .empty{background:var(--navy2);border:1px solid var(--border);border-radius:14px;padding:64px 20px;text-align:center;color:var(--muted);}
     .empty .eicon{font-size:46px;margin-bottom:12px;}
@@ -223,13 +241,24 @@
 
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:200;}
     .overlay.show{display:flex;}
-    .modal{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 34px;box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;max-width:360px;width:90%;}
+    .modal{background:var(--navy2);border:1px solid var(--border);border-radius:16px;padding:32px 34px;box-shadow:0 24px 60px rgba(0,0,0,.5);text-align:center;max-width:380px;width:90%;}
     .modal .micon{font-size:38px;margin-bottom:12px;}
     .modal h3{font-size:17px;font-weight:800;margin-bottom:7px;color:var(--white);}
     .modal p{color:var(--muted);font-size:13px;margin-bottom:22px;line-height:1.5;}
     .modal-btns{display:flex;gap:10px;justify-content:center;}
     .btn-del-confirm{background:var(--red);color:white;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
     .btn-arch-confirm{background:var(--amber);color:#0a1628;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
+    .btn-gold-confirm{background:var(--gold);color:#0a1628;border:none;border-radius:8px;padding:9px 20px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
+
+    /* Modal factura */
+    .modal-fact{text-align:left;max-width:420px;}
+    .modal-fact h3{text-align:center;color:var(--gold);}
+    .modal-fact .micon{display:block;text-align:center;}
+    .fact-preview{background:rgba(240,180,41,.07);border:1.5px solid rgba(240,180,41,.2);border-radius:10px;padding:14px 16px;margin:14px 0;display:flex;flex-direction:column;gap:8px;}
+    .fact-preview-row{display:flex;justify-content:space-between;font-size:13px;}
+    .fact-preview-row .lbl{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;}
+    .fact-preview-row .val{color:var(--text);font-weight:700;}
+    .fact-monto-edit{width:100%;padding:8px 12px;border:1.5px solid var(--gold);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text);background:rgba(0,0,0,.3);outline:none;margin-top:4px;}
 
     .banner-mes{background:rgba(245,166,35,.12);border:1.5px solid rgba(245,166,35,.35);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
     .banner-mes .bicon{font-size:28px;}
@@ -258,7 +287,6 @@
     .toast.success{border-color:rgba(34,201,122,.4);color:var(--green);}
     .toast.error{border-color:rgba(229,72,77,.4);color:var(--red);}
 
-    /* SQL NOTICE */
     .sql-notice{background:rgba(14,165,201,.08);border:1.5px solid rgba(14,165,201,.3);border-radius:12px;padding:14px 18px;margin-bottom:18px;font-size:12px;color:var(--teal);}
     .sql-notice strong{display:block;margin-bottom:6px;font-size:13px;}
     .sql-notice code{display:block;background:rgba(0,0,0,.3);border-radius:6px;padding:8px 12px;font-family:'DM Mono',monospace;font-size:11px;color:#a8e6f5;margin-top:8px;white-space:pre;}
@@ -292,9 +320,8 @@
     <div class="header-row">
       <div>
         <div class="page-title" id="pageTitle">📋 Control de Visitas y Servicios</div>
-        <div class="page-sub" id="pageSub">Gestión de clientes y seguimiento operativo</div>
+        <div class="page-sub"  id="pageSub">Gestión de clientes y seguimiento operativo</div>
       </div>
-      <!-- Botones Activos -->
       <div class="btn-row" id="btnRowActivos">
         <div style="position:relative;display:inline-block" id="excelMenuWrap">
           <button class="btn-excel" onclick="toggleExcelMenu()">📊 Excel ▾</button>
@@ -304,30 +331,31 @@
           </div>
         </div>
         <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar mes</button>
-        <button class="btn-prog" onclick="abrirForm('programado')">📅 Programar</button>
-        <button class="btn-new" onclick="abrirForm('servicio')">＋ Nuevo</button>
+        <button class="btn-prog"    onclick="abrirForm('programado')">📅 Programar</button>
+        <button class="btn-new"     onclick="abrirForm('servicio')">＋ Nuevo</button>
       </div>
-      <!-- Botones Archivo Servicios -->
       <div class="btn-row" id="btnRowArchivos" style="display:none">
         <button class="btn-excel" onclick="exportarExcelArchivo()">📊 Excel</button>
       </div>
-      <!-- Botones Recolecciones -->
       <div class="btn-row" id="btnRowRec" style="display:none">
         <button class="btn-excel" onclick="exportarExcelRec()">📊 Excel</button>
-        <button class="btn-archive" onclick="pedirArchivarRec()" style="border-color:rgba(14,165,201,.4);color:var(--teal);background:rgba(14,165,201,.1)">📦 Archivar mes</button>
+        <button class="btn-archive" style="border-color:rgba(14,165,201,.4);color:var(--teal);background:rgba(14,165,201,.1)" onclick="pedirArchivarRec()">📦 Archivar mes</button>
         <button class="btn-new-teal" onclick="abrirFormRec()">＋ Nueva recolección</button>
       </div>
-      <!-- Botones Archivo Recolecciones -->
       <div class="btn-row" id="btnRowRecArch" style="display:none">
         <button class="btn-excel" onclick="exportarExcelRecArch()">📊 Excel</button>
+      </div>
+      <div class="btn-row" id="btnRowFact" style="display:none">
+        <button class="btn-excel" onclick="exportarExcelFact()">📊 Excel</button>
       </div>
     </div>
 
     <div class="nav-tabs">
-      <button class="nav-tab active" id="navActivos"  onclick="cambiarVista('activos')">⚡ Activos</button>
-      <button class="nav-tab arch"   id="navArchivos" onclick="cambiarVista('archivos')">📦 Archivo <span id="archBadge" style="display:none;background:rgba(245,166,35,.2);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--amber)"></span></button>
-      <button class="nav-tab rec"    id="navRec"      onclick="cambiarVista('recolecciones')">🚚 Recolecciones</button>
+      <button class="nav-tab active" id="navActivos"   onclick="cambiarVista('activos')">⚡ Activos</button>
+      <button class="nav-tab arch"   id="navArchivos"  onclick="cambiarVista('archivos')">📦 Archivo <span id="archBadge" style="display:none;background:rgba(245,166,35,.2);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--amber)"></span></button>
+      <button class="nav-tab rec"    id="navRec"       onclick="cambiarVista('recolecciones')">🚚 Recolecciones</button>
       <button class="nav-tab rec-arch" id="navRecArch" onclick="cambiarVista('recarchivos')">🗂️ Archivo Rec. <span id="recArchBadge" style="display:none;background:rgba(14,165,201,.15);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--teal)"></span></button>
+      <button class="nav-tab fact"   id="navFact"      onclick="cambiarVista('facturas')">🧾 Por Facturar <span id="factBadge" style="display:none;background:rgba(240,180,41,.2);border-radius:10px;padding:1px 7px;font-size:10px;margin-left:4px;color:var(--gold)"></span></button>
     </div>
 
     <div class="stats" id="statsBar">
@@ -337,30 +365,31 @@
       <div class="stat"><div class="stat-n" id="sPend"  style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
       <div class="stat"><div class="stat-n" id="sCanc"  style="color:#e5484d">0</div><div class="stat-l">Cancelados</div></div>
     </div>
-
     <div class="stats" id="statsRec" style="display:none">
       <div class="stat"><div class="stat-n" id="rTotal" style="color:var(--teal)">0</div><div class="stat-l">Total</div></div>
       <div class="stat"><div class="stat-n" id="rComp"  style="color:#22c97a">0</div><div class="stat-l">Completadas</div></div>
       <div class="stat"><div class="stat-n" id="rPend"  style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
       <div class="stat"><div class="stat-n" id="rCanc"  style="color:#e5484d">0</div><div class="stat-l">Canceladas</div></div>
     </div>
+    <div class="stats" id="statsFact" style="display:none">
+      <div class="stat"><div class="stat-n" id="fTotal"  style="color:var(--gold)">0</div><div class="stat-l">Total</div></div>
+      <div class="stat"><div class="stat-n" id="fPend"   style="color:#f5a623">0</div><div class="stat-l">Pendientes</div></div>
+      <div class="stat"><div class="stat-n" id="fComp"   style="color:#22c97a">0</div><div class="stat-l">Facturadas</div></div>
+      <div class="stat"><div class="stat-n" id="fMonto"  style="color:var(--gold);font-size:16px">$0</div><div class="stat-l">Monto pend.</div></div>
+    </div>
   </div>
 </div>
 
 <div class="main">
 
-  <!-- ── VISTA ACTIVOS ── -->
+  <!-- ── ACTIVOS ── -->
   <div class="view active" id="vistaActivos">
     <div class="banner-mes" id="bannerMes" style="display:none">
       <div class="bicon">📅</div>
-      <div class="btxt">
-        <strong id="bannerTitulo">¡Nuevo mes!</strong>
-        <span id="bannerTexto">Hay registros del mes anterior sin archivar.</span>
-      </div>
-      <button class="btn-archive" onclick="pedirArchivar()" style="white-space:nowrap">📦 Archivar ahora</button>
+      <div class="btxt"><strong id="bannerTitulo">¡Nuevo mes!</strong><span id="bannerTexto"></span></div>
+      <button class="btn-archive" onclick="pedirArchivar()">📦 Archivar ahora</button>
       <button class="banner-close" onclick="cerrarBanner()">✕</button>
     </div>
-
     <div class="form-card" id="formCard">
       <div class="tabs">
         <button class="tab" id="tabS" onclick="setModo('servicio')">⚡ Servicio realizado</button>
@@ -429,8 +458,7 @@
           <label>📷 Evidencia fotográfica</label>
           <div class="foto-area" id="fotoArea" onclick="document.getElementById('inFotos').click()"
             ondragover="event.preventDefault();this.classList.add('drag')"
-            ondragleave="this.classList.remove('drag')"
-            ondrop="handleDrop(event)">
+            ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
             <input type="file" id="inFotos" accept="image/*" multiple onchange="previsualizarFotos(this.files)" />
             <div class="foto-icon">📸</div>
             <div class="foto-label">Toca para seleccionar fotos o arrastra aquí<br><strong>JPG, PNG, WEBP · Máx 5MB c/u</strong></div>
@@ -444,7 +472,6 @@
         <button class="btn-submit" id="btnSubmit" onclick="guardar()">✅ Registrar</button>
       </div>
     </div>
-
     <div class="filtros">
       <input type="text" id="busqueda" placeholder="🔍 Buscar cliente, tipo, notas..." oninput="renderActivos()" />
       <div class="f-btns">
@@ -458,20 +485,20 @@
     <div id="tablaActivos"></div>
   </div>
 
-  <!-- ── VISTA ARCHIVO SERVICIOS ── -->
+  <!-- ── ARCHIVO SERVICIOS ── -->
   <div class="view" id="vistaArchivos">
     <div class="arch-filtros">
       <div class="arch-filtros-title">📅 Selecciona un mes archivado</div>
-      <div class="meses-grid" id="mesesGrid"><div style="color:var(--muted);font-size:13px">Cargando meses...</div></div>
+      <div class="meses-grid" id="mesesGrid"><div style="color:var(--muted);font-size:13px">Cargando...</div></div>
     </div>
     <div id="tablaArchivo"></div>
   </div>
 
-  <!-- ── VISTA RECOLECCIONES ── -->
+  <!-- ── RECOLECCIONES ── -->
   <div class="view" id="vistaRec">
     <div class="sql-notice" id="sqlNotice">
       <strong>⚠️ Configuración requerida en Supabase</strong>
-      Ejecuta el siguiente SQL en el Editor SQL de Supabase para crear la tabla de recolecciones:
+      Ejecuta el siguiente SQL en el Editor SQL de Supabase:
       <code>CREATE TABLE IF NOT EXISTS recolecciones (
   id BIGSERIAL PRIMARY KEY,
   proveedor TEXT NOT NULL,
@@ -482,8 +509,6 @@
   created_at TIMESTAMPTZ DEFAULT NOW()
 );</code>
     </div>
-
-    <!-- Formulario recolección -->
     <div class="form-card rec-mode" id="formCardRec" style="display:none">
       <div class="form-h rec" id="formHRec">🚚 Nueva Recolección</div>
       <div class="grid2">
@@ -515,7 +540,6 @@
         <button class="btn-submit rec" id="btnSubmitRec" onclick="guardarRec()">✅ Registrar</button>
       </div>
     </div>
-
     <div class="filtros">
       <input type="text" id="busquedaRec" placeholder="🔍 Buscar proveedor, notas..." oninput="renderRec()" />
       <div class="f-btns">
@@ -528,7 +552,7 @@
     <div id="tablaRec"></div>
   </div>
 
-  <!-- ── VISTA ARCHIVO RECOLECCIONES ── -->
+  <!-- ── ARCHIVO RECOLECCIONES ── -->
   <div class="view" id="vistaRecArch">
     <div class="arch-filtros">
       <div class="arch-filtros-title">📅 Selecciona un mes archivado — Recolecciones</div>
@@ -537,48 +561,59 @@
     <div id="tablaRecArch"></div>
   </div>
 
+  <!-- ── FACTURAS ── -->
+  <div class="view" id="vistaFact">
+    <div class="fact-header">
+      <div>
+        <div class="fact-header-title">🧾 Recordatorios de Facturación</div>
+        <div class="fact-header-sub">Servicios completados pendientes de facturar al cliente</div>
+      </div>
+    </div>
+    <div class="filtros">
+      <input type="text" id="busquedaFact" placeholder="🔍 Buscar cliente..." oninput="renderFact()" />
+      <div class="f-btns">
+        <button class="f-btn on gold" onclick="filtrarFact('Todos',this)">Todos</button>
+        <button class="f-btn" onclick="filtrarFact('Pendiente',this)">Pendiente</button>
+        <button class="f-btn" onclick="filtrarFact('Facturado',this)">Facturado</button>
+      </div>
+    </div>
+    <div id="tablaFact"></div>
+  </div>
+
 </div>
 
 <div class="footer">© 2025 Soluciones Integrales · Todos los derechos reservados</div>
-
-<div class="status-bar">
-  <span class="status-dot amber" id="statusDot"></span>
-  <span class="status-label" id="statusLabel">Conectando...</span>
-</div>
+<div class="status-bar"><span class="status-dot amber" id="statusDot"></span><span class="status-label" id="statusLabel">Conectando...</span></div>
 
 <!-- MODALES SERVICIOS -->
-<div class="overlay" id="modalDel">
-  <div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar registro?</h3><p>Esta acción no se puede deshacer.</p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDel')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminar()">Sí, eliminar</button></div>
-  </div>
-</div>
-<div class="overlay" id="modalArch">
-  <div class="modal"><div class="micon">📦</div><h3>Archivar servicios</h3><p id="modalArchTxt"></p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivar()">📦 Archivar</button></div>
-  </div>
-</div>
-<div class="overlay" id="modalUnarch">
-  <div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar registro?</h3><p>El registro volverá a la vista de activos.</p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivar()">↩️ Desarchivar</button></div>
+<div class="overlay" id="modalDel"><div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar registro?</h3><p>Esta acción no se puede deshacer.</p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDel')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminar()">Sí, eliminar</button></div></div></div>
+<div class="overlay" id="modalArch"><div class="modal"><div class="micon">📦</div><h3>Archivar servicios</h3><p id="modalArchTxt"></p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivar()">📦 Archivar</button></div></div></div>
+<div class="overlay" id="modalUnarch"><div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar registro?</h3><p>El registro volverá a la vista de activos.</p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarch')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivar()">↩️ Desarchivar</button></div></div></div>
+
+<!-- MODALES RECOLECCIONES -->
+<div class="overlay" id="modalDelRec"><div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar recolección?</h3><p>Esta acción no se puede deshacer.</p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDelRec')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminarRec()">Sí, eliminar</button></div></div></div>
+<div class="overlay" id="modalArchRec"><div class="modal"><div class="micon">📦</div><h3>Archivar recolecciones</h3><p id="modalArchRecTxt"></p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivarRec()">📦 Archivar</button></div></div></div>
+<div class="overlay" id="modalUnarchRec"><div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar recolección?</h3><p>Volverá a la vista de recolecciones activas.</p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivarRec()">↩️ Desarchivar</button></div></div></div>
+
+<!-- MODAL FACTURAR -->
+<div class="overlay" id="modalFacturar">
+  <div class="modal modal-fact">
+    <div class="micon">🧾</div>
+    <h3>Agregar a Facturación</h3>
+    <div class="fact-preview" id="factPreview"></div>
+    <div class="fgroup" style="margin-bottom:16px">
+      <label>Monto a facturar ($)</label>
+      <input type="number" class="fact-monto-edit" id="factMonto" placeholder="0.00" min="0" step="0.01"/>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarModal('modalFacturar')">Cancelar</button>
+      <button class="btn-gold-confirm" onclick="confirmarFacturar()">🧾 Agregar</button>
+    </div>
   </div>
 </div>
 
-<!-- MODALES RECOLECCIONES -->
-<div class="overlay" id="modalDelRec">
-  <div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar recolección?</h3><p>Esta acción no se puede deshacer.</p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDelRec')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminarRec()">Sí, eliminar</button></div>
-  </div>
-</div>
-<div class="overlay" id="modalArchRec">
-  <div class="modal"><div class="micon">📦</div><h3>Archivar recolecciones</h3><p id="modalArchRecTxt"></p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalArchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarArchivarRec()">📦 Archivar</button></div>
-  </div>
-</div>
-<div class="overlay" id="modalUnarchRec">
-  <div class="modal"><div class="micon">↩️</div><h3>¿Desarchivar recolección?</h3><p>Volverá a la vista de recolecciones activas.</p>
-    <div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalUnarchRec')">Cancelar</button><button class="btn-arch-confirm" onclick="confirmarDesarchivarRec()">↩️ Desarchivar</button></div>
-  </div>
-</div>
+<!-- MODAL ELIMINAR FACTURA -->
+<div class="overlay" id="modalDelFact"><div class="modal"><div class="micon">⚠️</div><h3>¿Eliminar recordatorio?</h3><p>Se eliminará de la lista de facturación.</p><div class="modal-btns"><button class="btn-cancel" onclick="cerrarModal('modalDelFact')">Cancelar</button><button class="btn-del-confirm" onclick="confirmarEliminarFact()">Sí, eliminar</button></div></div></div>
 
 <!-- MODAL FOTOS -->
 <div class="overlay" id="modalFotos" onclick="if(event.target===this)cerrarFotos()">
@@ -594,368 +629,392 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const SB_URL  = "https://hkngtxwjwvbfkxbvrlwn.supabase.co";
-const SB_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhrbmd0eHdqd3ZiZmt4YnZybHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjgzNzQsImV4cCI6MjA5MjkwNDM3NH0.rBIzZxz_e1Nz16tS-QhFx4nIbzyqt-EGKFuZu1sLsfs";
-const BUCKET  = "evidencias";
-const MESES_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const SB_URL="https://hkngtxwjwvbfkxbvrlwn.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhrbmd0eHdqd3ZiZmt4YnZybHduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMjgzNzQsImV4cCI6MjA5MjkwNDM3NH0.rBIzZxz_e1Nz16tS-QhFx4nIbzyqt-EGKFuZu1sLsfs";
+const BUCKET="evidencias";
+const MESES_ES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
-let db = null;
-let registros=[], archivados=[];
-let recolecciones=[], recoleccionesArch=[];
-let editId=null, modo="servicio", filtro="Todos";
-let editRecId=null, filtroRec="Todos";
-let sortF="created_at", sortD="desc";
-let sortFA="fecha", sortDA="desc";
-let sortR="created_at", sortRD="desc";
-let sortRA="fecha", sortRAD="desc";
-let delId=null, unarchId=null;
-let delRecId=null, unarchRecId=null;
-let vistaActual="activos";
-let mesArchivo=null, mesRecArchivo=null;
-let fotosNuevas=[], fotosExistentes=[];
-let columnaArchivadoExiste=true;
-let tablaRecExiste=true;
+let db=null;
+let registros=[],archivados=[];
+let recolecciones=[],recoleccionesArch=[];
+let facturas=[];
+let editId=null,modo="servicio",filtro="Todos";
+let editRecId=null,filtroRec="Todos",filtroFact="Todos";
+let sortF="created_at",sortD="desc",sortFA="fecha",sortDA="desc";
+let sortR="created_at",sortRD="desc",sortRA="fecha",sortRAD="desc";
+let delId=null,unarchId=null,delRecId=null,unarchRecId=null;
+let delFactId=null,factServId=null;
+let vistaActual="activos",mesArchivo=null,mesRecArchivo=null;
+let fotosNuevas=[],fotosExistentes=[];
+let expandedId=null,expandedArchId=null,expandedRecId=null;
 
 // ══ INIT ══
-window.addEventListener("load", async () => {
+window.addEventListener("load",async()=>{
   setStatus("amber","Conectando...");
-  try {
-    const lib = window.supabase || window.Supabase;
-    if (!lib?.createClient) throw new Error("Librería no cargada");
-    db = lib.createClient(SB_URL, SB_KEY);
-    const { error } = await db.from("servicios").select("id").limit(1);
-    if (error) throw error;
+  try{
+    const lib=window.supabase||window.Supabase;
+    if(!lib?.createClient) throw new Error("Librería no cargada");
+    db=lib.createClient(SB_URL,SB_KEY);
+    const{error}=await db.from("servicios").select("id").limit(1);
+    if(error) throw error;
     setStatus("green","Conectado");
     await cargarDatos();
     iniciarRealtime();
     revisarCambioDeMes();
-  } catch(e) {
-    console.error(e);
-    setStatus("red","Error: "+(e.message||"Sin conexión"));
-  }
+  }catch(e){console.error(e);setStatus("red","Error: "+(e.message||"Sin conexión"));}
 });
 
-async function cargarDatos() {
-  if (!db) return;
+async function cargarDatos(){
+  if(!db) return;
   setStatus("amber","Cargando...");
-  const [resActivos, resArch] = await Promise.all([
+  const[rA,rArch]=await Promise.all([
     db.from("servicios").select("*").eq("archivado",false).order("created_at",{ascending:false}),
     db.from("servicios").select("*").eq("archivado",true).order("fecha",{ascending:false})
   ]);
-  if (resActivos.error?.code==="42703"||resActivos.error?.code==="PGRST116") {
-    const {data}=await db.from("servicios").select("*").order("created_at",{ascending:false});
-    registros=data||[]; archivados=[];
-  } else if (resActivos.error) {
-    const {data}=await db.from("servicios").select("*").order("created_at",{ascending:false});
-    registros=data||[]; archivados=[];
-  } else {
-    registros=resActivos.data||[]; archivados=resArch.data||[];
-  }
+  registros=(rA.error?[]:rA.data)||[];
+  archivados=(rArch.error?[]:rArch.data)||[];
+
   // Recolecciones
-  try {
-    const [rRec, rRecArch] = await Promise.all([
+  try{
+    const[rR,rRA]=await Promise.all([
       db.from("recolecciones").select("*").eq("archivado",false).order("created_at",{ascending:false}),
       db.from("recolecciones").select("*").eq("archivado",true).order("fecha",{ascending:false})
     ]);
-    if (rRec.error) { tablaRecExiste=false; recolecciones=[]; recoleccionesArch=[]; }
-    else { tablaRecExiste=true; recolecciones=rRec.data||[]; recoleccionesArch=rRecArch.data||[]; document.getElementById("sqlNotice").style.display="none"; }
-  } catch(e) { tablaRecExiste=false; }
+    if(!rR.error){recolecciones=rR.data||[];recoleccionesArch=rRA.data||[];document.getElementById("sqlNotice").style.display="none";}
+    else{recolecciones=[];recoleccionesArch=[];}
+  }catch(e){recolecciones=[];recoleccionesArch=[];}
+
+  // Facturas (guardadas en localStorage)
+  facturas=JSON.parse(localStorage.getItem("si_facturas")||"[]");
 
   setStatus("green",`Conectado · ${registros.length} activos`);
-  renderActivos(); renderMeses(); renderRecStats();
-  renderRec(); renderMesesRec();
-  if (mesArchivo) renderArchivo();
-  if (mesRecArchivo) renderRecArch();
+  renderActivos();renderMeses();renderRecStats();renderRec();renderMesesRec();renderFact();
+  if(mesArchivo) renderArchivo();
+  if(mesRecArchivo) renderRecArch();
 
-  // Badges
-  const mA=getMesesUnicos(), badge=document.getElementById("archBadge");
-  if (mA.length){badge.style.display="inline";badge.textContent=mA.length;}else badge.style.display="none";
-  const mR=getMesesRecUnicos(), rbadge=document.getElementById("recArchBadge");
-  if (mR.length){rbadge.style.display="inline";rbadge.textContent=mR.length;}else rbadge.style.display="none";
+  const mA=getMesesUnicos(),badge=document.getElementById("archBadge");
+  badge.style.display=mA.length?"inline":"none"; if(mA.length) badge.textContent=mA.length;
+  const mR=getMesesRecUnicos(),rb=document.getElementById("recArchBadge");
+  rb.style.display=mR.length?"inline":"none"; if(mR.length) rb.textContent=mR.length;
+  actualizarFactBadge();
+}
+
+// ══ FACTURAS (localStorage) ══
+function guardarFacturasLS(){ localStorage.setItem("si_facturas",JSON.stringify(facturas)); }
+
+function pedirFacturar(id){
+  const r=registros.find(r=>r.id===id)||archivados.find(r=>r.id===id); if(!r) return;
+  factServId=id;
+  document.getElementById("factPreview").innerHTML=`
+    <div class="fact-preview-row"><span class="lbl">Cliente</span><span class="val">${r.cliente}</span></div>
+    <div class="fact-preview-row"><span class="lbl">Fecha</span><span class="val">${r.fecha?mostrarFecha(r.fecha):"—"}</span></div>
+    <div class="fact-preview-row"><span class="lbl">Tipo</span><span class="val">${r.tipo||"—"}</span></div>`;
+  document.getElementById("factMonto").value=r.costo||"";
+  document.getElementById("modalFacturar").classList.add("show");
+}
+
+function confirmarFacturar(){
+  const r=registros.find(r=>r.id===factServId)||archivados.find(r=>r.id===factServId); if(!r) return;
+  const monto=parseFloat(document.getElementById("factMonto").value)||null;
+  // Evitar duplicados del mismo servicio
+  const yaExiste=facturas.find(f=>f.servicio_id===factServId);
+  if(yaExiste){ toast("Este servicio ya está en facturación","error"); cerrarModal("modalFacturar"); return; }
+  facturas.push({
+    id: Date.now(),
+    servicio_id: factServId,
+    cliente: r.cliente,
+    fecha: r.fecha,
+    tipo: r.tipo,
+    monto: monto,
+    estado: "Pendiente",
+    created_at: new Date().toISOString()
+  });
+  guardarFacturasLS();
+  toast("🧾 Agregado a facturación");
+  cerrarModal("modalFacturar");
+  actualizarFactBadge();
+  renderActivos();
+  renderFact();
+}
+
+function marcarFacturado(id){
+  const f=facturas.find(f=>f.id===id); if(!f) return;
+  f.estado="Facturado";
+  guardarFacturasLS(); renderFact(); actualizarFactBadge(); toast("✅ Marcado como facturado");
+}
+function marcarPendienteFact(id){
+  const f=facturas.find(f=>f.id===id); if(!f) return;
+  f.estado="Pendiente";
+  guardarFacturasLS(); renderFact(); actualizarFactBadge(); toast("↩️ Marcado como pendiente");
+}
+function pedirDelFact(id){ delFactId=id; document.getElementById("modalDelFact").classList.add("show"); }
+function confirmarEliminarFact(){
+  facturas=facturas.filter(f=>f.id!==delFactId);
+  guardarFacturasLS(); cerrarModal("modalDelFact"); renderFact(); renderActivos(); actualizarFactBadge(); toast("🗑️ Eliminado de facturación");
+}
+function actualizarFactBadge(){
+  const pend=facturas.filter(f=>f.estado==="Pendiente").length;
+  const badge=document.getElementById("factBadge");
+  badge.style.display=pend?"inline":"none"; if(pend) badge.textContent=pend;
+}
+
+function renderFact(){
+  const fPend=facturas.filter(f=>f.estado==="Pendiente");
+  const fComp=facturas.filter(f=>f.estado==="Facturado");
+  const montoPend=fPend.reduce((s,f)=>s+(f.monto||0),0);
+  document.getElementById("fTotal").textContent=facturas.length;
+  document.getElementById("fPend").textContent=fPend.length;
+  document.getElementById("fComp").textContent=fComp.length;
+  document.getElementById("fMonto").textContent="$"+montoPend.toLocaleString("es-MX");
+
+  const q=document.getElementById("busquedaFact").value.toLowerCase();
+  const lista=facturas.filter(f=>(filtroFact==="Todos"||f.estado===filtroFact)&&(f.cliente||"").toLowerCase().includes(q))
+    .sort((a,b)=>b.created_at.localeCompare(a.created_at));
+
+  const el=document.getElementById("tablaFact");
+  if(!lista.length){
+    el.innerHTML=`<div class="empty"><div class="eicon">🧾</div><div class="etitle">Sin recordatorios de facturación</div><div class="esub">${facturas.length===0?"Cuando completes un servicio, podrás agregarlo aquí.":"Sin resultados para tu búsqueda."}</div></div>`;return;
+  }
+  const totalPend=lista.filter(f=>f.estado==="Pendiente").reduce((s,f)=>s+(f.monto||0),0);
+  el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th>Fecha Servicio</th><th>Cliente</th><th>Tipo</th><th>Monto</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>${lista.map(rowFact).join("")}</tbody></table></div>
+    <div class="tfooter"><span>${lista.length} recordatorio(s)</span>${totalPend>0?`<span class="total">💰 Pendiente: $${totalPend.toLocaleString("es-MX")}</span>`:""}</div></div>`;
+}
+function rowFact(f){
+  const fd=f.fecha?mostrarFecha(f.fecha):"—";
+  const monto=f.monto?`<span style="color:var(--gold);font-weight:700">$${Number(f.monto).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
+  const acciones=f.estado==="Pendiente"
+    ?`<button class="btn-edit-row" style="font-size:11px;padding:5px 10px;color:var(--green)" onclick="marcarFacturado(${f.id})">✅ Facturado</button>`
+    :`<button class="btn-edit-row" style="font-size:11px;padding:5px 10px;color:var(--amber)" onclick="marcarPendienteFact(${f.id})">↩️ Pendiente</button>`;
+  return `<tr>
+    <td class="td-fecha">${fd}</td>
+    <td class="td-cliente">${f.cliente}</td>
+    <td><span class="tag tag-tipo">${(f.tipo||"").split(", ")[0]}</span></td>
+    <td>${monto}</td>
+    <td><span class="badge b-${f.estado==="Facturado"?"Completado":"Pendiente"}"><span class="dot"></span>${f.estado}</span></td>
+    <td><div class="act-btns">${acciones}<button class="btn-del-row" onclick="pedirDelFact(${f.id})">🗑️</button></div></td></tr>`;
 }
 
 // ══ VISTA ══
-function cambiarVista(v) {
+function cambiarVista(v){
   vistaActual=v;
-  const vistas=["vistaActivos","vistaArchivos","vistaRec","vistaRecArch"];
-  const navs=["navActivos","navArchivos","navRec","navRecArch"];
-  const mapa={"activos":0,"archivos":1,"recolecciones":2,"recarchivos":3};
+  const vistas=["vistaActivos","vistaArchivos","vistaRec","vistaRecArch","vistaFact"];
+  const navs=["navActivos","navArchivos","navRec","navRecArch","navFact"];
+  const mapa={"activos":0,"archivos":1,"recolecciones":2,"recarchivos":3,"facturas":4};
   vistas.forEach((id,i)=>document.getElementById(id).classList.toggle("active",i===mapa[v]));
   navs.forEach((id,i)=>document.getElementById(id).classList.toggle("active",i===mapa[v]));
-  document.getElementById("btnRowActivos").style.display  = v==="activos"       ?"":"none";
-  document.getElementById("btnRowArchivos").style.display = v==="archivos"      ?"":"none";
-  document.getElementById("btnRowRec").style.display      = v==="recolecciones" ?"":"none";
-  document.getElementById("btnRowRecArch").style.display  = v==="recarchivos"   ?"":"none";
-  document.getElementById("statsBar").style.display       = (v==="activos"||v==="archivos")?"":"none";
-  document.getElementById("statsRec").style.display       = (v==="recolecciones"||v==="recarchivos")?"":"none";
-  if (v==="recolecciones"){
-    document.getElementById("pageTitle").textContent="🚚 Recolecciones de Mercancía";
-    document.getElementById("pageSub").textContent="Registro de recolecciones con proveedores";
-  } else if (v==="recarchivos") {
-    document.getElementById("pageTitle").textContent="🗂️ Archivo — Recolecciones";
-    document.getElementById("pageSub").textContent="Historial de recolecciones archivadas";
-  } else {
-    document.getElementById("pageTitle").textContent="📋 Control de Visitas y Servicios";
-    document.getElementById("pageSub").textContent="Gestión de clientes y seguimiento operativo";
-  }
+  ["btnRowActivos","btnRowArchivos","btnRowRec","btnRowRecArch","btnRowFact"].forEach((id,i)=>
+    document.getElementById(id).style.display=i===mapa[v]?"":"none");
+  ["statsBar","statsRec","statsFact"].forEach(id=>document.getElementById(id).style.display="none");
+  if(v==="activos"||v==="archivos") document.getElementById("statsBar").style.display="";
+  else if(v==="recolecciones"||v==="recarchivos") document.getElementById("statsRec").style.display="";
+  else if(v==="facturas") document.getElementById("statsFact").style.display="";
+  const titulos={"activos":["📋 Control de Visitas y Servicios","Gestión de clientes y seguimiento operativo"],"archivos":["📦 Archivo de Servicios","Historial de servicios archivados"],"recolecciones":["🚚 Recolecciones de Mercancía","Registro de recolecciones con proveedores"],"recarchivos":["🗂️ Archivo — Recolecciones","Historial de recolecciones archivadas"],"facturas":["🧾 Por Facturar","Recordatorios de servicios completados pendientes de facturar"]};
+  document.getElementById("pageTitle").textContent=titulos[v][0];
+  document.getElementById("pageSub").textContent=titulos[v][1];
 }
 
-// ══ AVISO CAMBIO MES ══
-function revisarCambioDeMes() {
-  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+// ══ AVISO MES ══
+function revisarCambioDeMes(){
+  const ahora=new Date(),mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
   const hayViejos=registros.some(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
-  if (hayViejos&&localStorage.getItem("si_ultimo_aviso_mes")!==mesActual) {
+  if(hayViejos&&localStorage.getItem("si_ultimo_aviso_mes")!==mesActual){
     const mA=new Date(ahora.getFullYear(),ahora.getMonth()-1,1);
     document.getElementById("bannerTitulo").textContent=`📅 Servicios de ${MESES_ES[mA.getMonth()]} sin archivar`;
     document.getElementById("bannerTexto").textContent=`Tienes registros del mes anterior pendientes de archivar.`;
     document.getElementById("bannerMes").style.display="flex";
   }
 }
-function cerrarBanner() {
-  const ahora=new Date(), m=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  localStorage.setItem("si_ultimo_aviso_mes",m);
-  document.getElementById("bannerMes").style.display="none";
-}
+function cerrarBanner(){const ahora=new Date(),m=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;localStorage.setItem("si_ultimo_aviso_mes",m);document.getElementById("bannerMes").style.display="none";}
 
 // ══ ARCHIVAR SERVICIOS ══
-function pedirArchivar() {
-  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const por=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
-  if (!por.length){toast("No hay registros de meses anteriores","error");return;}
+function pedirArchivar(){
+  const ahora=new Date(),mc=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const por=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mc);
+  if(!por.length){toast("No hay registros de meses anteriores","error");return;}
   const nombres=[...new Set(por.map(r=>r.fecha.slice(0,7)))].sort().map(m=>{const[y,mo]=m.split("-");return`${MESES_ES[parseInt(mo)-1]} ${y}`;}).join(", ");
   document.getElementById("modalArchTxt").textContent=`Se archivarán ${por.length} registro(s) de: ${nombres}.`;
   document.getElementById("modalArch").classList.add("show");
 }
-async function confirmarArchivar() {
+async function confirmarArchivar(){
   cerrarModal("modalArch");
-  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const ids=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual).map(r=>r.id);
-  if (!ids.length) return;
+  const ahora=new Date(),mc=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const ids=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)<mc).map(r=>r.id);
+  if(!ids.length) return;
   const{error}=await db.from("servicios").update({archivado:true}).in("id",ids);
-  if (error){toast("Error al archivar","error");return;}
-  toast(`📦 ${ids.length} registro(s) archivados`); cerrarBanner();
-  await cargarDatos(); cambiarVista("archivos");
+  if(error){toast("Error al archivar","error");return;}
+  toast(`📦 ${ids.length} registro(s) archivados`);cerrarBanner();
+  await cargarDatos();cambiarVista("archivos");
 }
 function pedirDesarchivar(id){unarchId=id;document.getElementById("modalUnarch").classList.add("show");}
-async function confirmarDesarchivar() {
+async function confirmarDesarchivar(){
   cerrarModal("modalUnarch");
   const{error}=await db.from("servicios").update({archivado:false}).eq("id",unarchId);
   if(error){toast("Error","error");return;}
-  toast("↩️ Devuelto a activos"); unarchId=null; await cargarDatos();
+  toast("↩️ Devuelto a activos");unarchId=null;await cargarDatos();
 }
 
 // ══ ARCHIVAR RECOLECCIONES ══
-function pedirArchivarRec() {
-  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const por=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual);
-  if (!por.length){toast("No hay recolecciones de meses anteriores","error");return;}
+function pedirArchivarRec(){
+  const ahora=new Date(),mc=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const por=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mc);
+  if(!por.length){toast("No hay recolecciones de meses anteriores","error");return;}
   const nombres=[...new Set(por.map(r=>r.fecha.slice(0,7)))].sort().map(m=>{const[y,mo]=m.split("-");return`${MESES_ES[parseInt(mo)-1]} ${y}`;}).join(", ");
   document.getElementById("modalArchRecTxt").textContent=`Se archivarán ${por.length} recolección(es) de: ${nombres}.`;
   document.getElementById("modalArchRec").classList.add("show");
 }
-async function confirmarArchivarRec() {
+async function confirmarArchivarRec(){
   cerrarModal("modalArchRec");
-  const ahora=new Date(), mesActual=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
-  const ids=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mesActual).map(r=>r.id);
-  if (!ids.length) return;
+  const ahora=new Date(),mc=`${ahora.getFullYear()}-${String(ahora.getMonth()+1).padStart(2,"0")}`;
+  const ids=recolecciones.filter(r=>r.fecha&&r.fecha.slice(0,7)<mc).map(r=>r.id);
+  if(!ids.length) return;
   const{error}=await db.from("recolecciones").update({archivado:true}).in("id",ids);
   if(error){toast("Error al archivar","error");return;}
   toast(`📦 ${ids.length} recolección(es) archivadas`);
-  await cargarDatos(); cambiarVista("recarchivos");
+  await cargarDatos();cambiarVista("recarchivos");
 }
 function pedirDesarchivarRec(id){unarchRecId=id;document.getElementById("modalUnarchRec").classList.add("show");}
-async function confirmarDesarchivarRec() {
+async function confirmarDesarchivarRec(){
   cerrarModal("modalUnarchRec");
   const{error}=await db.from("recolecciones").update({archivado:false}).eq("id",unarchRecId);
   if(error){toast("Error","error");return;}
-  toast("↩️ Devuelta a recolecciones"); unarchRecId=null; await cargarDatos();
+  toast("↩️ Devuelta a recolecciones");unarchRecId=null;await cargarDatos();
 }
 
 // ══ CRUD SERVICIOS ══
-async function guardar() {
+async function guardar(){
   const cliente=document.getElementById("inCliente").value.trim();
   const tipos=[...document.querySelectorAll("#multiTipo .tipo-item.checked")].map(el=>el.dataset.val);
   const tipo=tipos.join(", ");
   const indef=document.getElementById("chkIndef").checked;
   const fechaRaw=document.getElementById("inFecha").value;
   const fecha=indef?null:(fechaRaw?fechaRaw+":00+00:00":null);
-  if (!cliente||!tipo||(!indef&&!fecha)){alert("Por favor llena los campos obligatorios *");return;}
+  if(!cliente||!tipo||(!indef&&!fecha)){alert("Por favor llena los campos obligatorios *");return;}
   const estado=modo==="programado"?"Programado":document.getElementById("inEstado").value;
   const costo=(modo==="servicio"&&estado==="Completado")?parseFloat(document.getElementById("inCosto").value)||null:null;
   const descripcion=document.getElementById("inDesc").value;
-  const btn=document.getElementById("btnSubmit"); btn.disabled=true; btn.textContent="Guardando...";
+  const btn=document.getElementById("btnSubmit");btn.disabled=true;btn.textContent="Guardando...";
   let urlsFotos=[...fotosExistentes];
-  if (fotosNuevas.length){document.getElementById("fotoStatus").textContent=`Subiendo ${fotosNuevas.length} foto(s)...`;for(const f of fotosNuevas){const u=await subirFoto(f.file);if(u)urlsFotos.push(u);}document.getElementById("fotoStatus").textContent="";}
-  const payload={cliente,tipo,fecha,descripcion,estado,costo,fotos:urlsFotos.length?JSON.stringify(urlsFotos):null};
-  if(columnaArchivadoExiste)payload.archivado=false;
+  if(fotosNuevas.length){document.getElementById("fotoStatus").textContent=`Subiendo ${fotosNuevas.length} foto(s)...`;for(const f of fotosNuevas){const u=await subirFoto(f.file);if(u)urlsFotos.push(u);}document.getElementById("fotoStatus").textContent="";}
+  const payload={cliente,tipo,fecha,descripcion,estado,costo,archivado:false,fotos:urlsFotos.length?JSON.stringify(urlsFotos):null};
   if(editId!==null){
     const{error}=await db.from("servicios").update(payload).eq("id",editId);
-    if(error&&error.code==="42703"){const{archivado,...p}=payload;await db.from("servicios").update(p).eq("id",editId);}
-    else if(error)toast("Error: "+error.message,"error"); else toast("✅ Registro actualizado");
+    if(error)toast("Error: "+error.message,"error"); else toast("✅ Registro actualizado");
     editId=null;
-  } else {
+  }else{
     const{error}=await db.from("servicios").insert([payload]);
-    if(error&&error.code==="42703"){const{archivado,...p}=payload;await db.from("servicios").insert([p]);}
-    else if(error)toast("Error: "+error.message,"error"); else toast("✅ Servicio registrado");
+    if(error)toast("Error: "+error.message,"error"); else toast("✅ Servicio registrado");
   }
-  btn.disabled=false; cerrarForm(); await cargarDatos();
+  btn.disabled=false;cerrarForm();await cargarDatos();
 }
-async function confirmarEliminar() {
+async function confirmarEliminar(){
   const{error}=await db.from("servicios").delete().eq("id",delId);
-  if(error)toast("Error al eliminar","error"); else toast("🗑️ Registro eliminado");
-  cerrarModal("modalDel"); await cargarDatos();
+  if(error)toast("Error","error"); else toast("🗑️ Eliminado");
+  cerrarModal("modalDel");await cargarDatos();
 }
-async function saveCosto(id) {
+async function saveCosto(id){
   const val=parseFloat(document.getElementById("ci-"+id)?.value)||null;
   const{error}=await db.from("servicios").update({costo:val}).eq("id",id);
   if(error)toast("Error","error"); else{toast("💰 Costo actualizado");await cargarDatos();}
 }
 
 // ══ CRUD RECOLECCIONES ══
-async function guardarRec() {
+async function guardarRec(){
   const proveedor=document.getElementById("inProveedor").value.trim();
   const fechaRaw=document.getElementById("inRecFecha").value;
   const fecha=fechaRaw?fechaRaw+":00+00:00":null;
   const estado=document.getElementById("inRecEstado").value;
   const notas=document.getElementById("inRecNotas").value;
-  if (!proveedor||!fecha){alert("Por favor llena los campos obligatorios *");return;}
-  const btn=document.getElementById("btnSubmitRec"); btn.disabled=true; btn.textContent="Guardando...";
+  if(!proveedor||!fecha){alert("Por favor llena los campos obligatorios *");return;}
+  const btn=document.getElementById("btnSubmitRec");btn.disabled=true;btn.textContent="Guardando...";
   const payload={proveedor,fecha,notas,estado,archivado:false};
   if(editRecId!==null){
     const{error}=await db.from("recolecciones").update(payload).eq("id",editRecId);
     if(error)toast("Error: "+error.message,"error"); else toast("✅ Recolección actualizada");
     editRecId=null;
-  } else {
+  }else{
     const{error}=await db.from("recolecciones").insert([payload]);
     if(error)toast("Error: "+error.message,"error"); else toast("✅ Recolección registrada");
   }
-  btn.disabled=false; cerrarFormRec(); await cargarDatos();
+  btn.disabled=false;cerrarFormRec();await cargarDatos();
 }
-async function confirmarEliminarRec() {
+async function confirmarEliminarRec(){
   const{error}=await db.from("recolecciones").delete().eq("id",delRecId);
-  if(error)toast("Error al eliminar","error"); else toast("🗑️ Recolección eliminada");
-  cerrarModal("modalDelRec"); await cargarDatos();
+  if(error)toast("Error","error"); else toast("🗑️ Eliminado");
+  cerrarModal("modalDelRec");await cargarDatos();
 }
-function editarRec(id) {
-  const r=recolecciones.find(r=>r.id===id); if(!r) return;
+function editarRec(id){
+  const r=recolecciones.find(r=>r.id===id);if(!r) return;
   editRecId=id;
   document.getElementById("inProveedor").value=r.proveedor||"";
   document.getElementById("inRecFecha").value=r.fecha?r.fecha.slice(0,16):"";
   document.getElementById("inRecEstado").value=r.estado||"Pendiente";
   document.getElementById("inRecNotas").value=r.notas||"";
-  const card=document.getElementById("formCardRec"); card.style.display="block";
   document.getElementById("formHRec").textContent="✏️ Editar Recolección";
   document.getElementById("btnSubmitRec").textContent="💾 Guardar Cambios";
+  const card=document.getElementById("formCardRec");card.style.display="block";
   card.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-// ══ RENDER SERVICIOS ══
-function mostrarFecha(s) {
-  if(!s) return null;
-  const[fecha,hora]=s.slice(0,16).split("T"),[y,mo,d]=fecha.split("-");
-  return `${parseInt(d)} ${["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][parseInt(mo)-1]} ${y}, ${hora}`;
-}
-function renderActivos() {
+// ══ RENDER ACTIVOS ══
+function mostrarFecha(s){if(!s) return null;const[fecha,hora]=s.slice(0,16).split("T"),[y,mo,d]=fecha.split("-");return`${parseInt(d)} ${["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][parseInt(mo)-1]} ${y}, ${hora}`;}
+
+function renderActivos(){
   document.getElementById("sTotal").textContent=registros.length;
   document.getElementById("sProg").textContent=registros.filter(r=>r.estado==="Programado").length;
   document.getElementById("sComp").textContent=registros.filter(r=>r.estado==="Completado").length;
   document.getElementById("sPend").textContent=registros.filter(r=>r.estado==="Pendiente").length;
   document.getElementById("sCanc").textContent=registros.filter(r=>r.estado==="Cancelado").length;
-  const lista=getActivosFiltrados(), el=document.getElementById("tablaActivos");
+  const lista=getActivosFiltrados(),el=document.getElementById("tablaActivos");
   if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">📭</div><div class="etitle">No hay registros activos</div><div class="esub">${registros.length===0?"Agrega tu primer servicio.":"Sin resultados."}</div></div>`;return;}
   const total=lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
   el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
-    <thead><tr><th onclick="ordenarA('fecha')">Fecha${si(sortF,sortD,'fecha')}</th><th onclick="ordenarA('cliente')">Cliente${si(sortF,sortD,'cliente')}</th><th>Tipo</th><th>Notas</th><th onclick="ordenarA('estado')">Estado${si(sortF,sortD,'estado')}</th><th>Costo</th><th>Fotos</th><th>Acciones</th></tr></thead>
+    <thead><tr><th onclick="ordenarA('fecha')">Fecha${si(sortF,sortD,'fecha')}</th><th onclick="ordenarA('cliente')">Cliente${si(sortF,sortD,'cliente')}</th><th>Tipo</th><th>Notas</th><th>Estado</th><th>Costo</th><th>Fotos</th><th>Acciones</th></tr></thead>
     <tbody>${lista.map(rowActivo).join("")}</tbody></table></div>
     <div class="tfooter"><span>Mostrando ${lista.length} de ${registros.length}</span>${total>0?`<span class="total">💰 $${total.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
-let expandedId = null, expandedArchId = null, expandedRecId = null;
-function toggleDetalle(id)     { expandedId     = expandedId===id?null:id;     renderActivos(); }
-function toggleDetalleArch(id) { expandedArchId = expandedArchId===id?null:id; renderArchivo(); }
-function toggleDetalleRec(id)  { expandedRecId  = expandedRecId===id?null:id;  renderRec(); }
-function rowActivo(r) {
+
+function rowActivo(r){
   const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Por definir</span>';
   const cc=r.estado!=="Completado"?'<span class="costo-dash">—</span>':`<div id="costo-${r.id}"><button class="costo-btn ${r.costo?"costo-lleno":"costo-vacio"}" onclick="editCosto(${r.id});event.stopPropagation()">${r.costo?"$"+Number(r.costo).toLocaleString("es-MX"):"＋ Agregar"} <span style="font-size:10px;opacity:.5">✏️</span></button></div>`;
-  let nF=0, urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];nF=urls.length;}catch(e){}
-  const isExp = expandedId === r.id;
-  const mainRow = `<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalle(${r.id})">
+  let nF=0,urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];nF=urls.length;}catch(e){}
+  const isExp=expandedId===r.id;
+  const yaEnFact=facturas.some(f=>f.servicio_id===r.id);
+  const btnFact=r.estado==="Completado"
+    ?`<button class="btn-facturar ${yaEnFact?"ya":""}" onclick="pedirFacturar(${r.id});event.stopPropagation()">${yaEnFact?"✅ En facturación":"🧾 Facturar"}</button>`
+    :"";
+  const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalle(${r.id})">
     <td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
     <td>${(r.tipo||"").split(", ").map(t=>`<span class="tag tag-tipo" style="margin:1px 2px;display:inline-block">${t.trim()}</span>`).join("")}</td>
-    <td class="td-notas" title="${r.descripcion||""}">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
+    <td class="td-notas">${r.descripcion||'<span style="opacity:.25">—</span>'}</td>
     <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
     <td>${cc}</td>
     <td><button class="foto-chip" onclick="verFotos(${r.id},'activos');event.stopPropagation()">📷 ${nF}</button></td>
     <td><div class="act-btns">
+      ${btnFact}
       <button class="btn-edit-row" onclick="editar(${r.id});event.stopPropagation()">✏️</button>
       <button class="btn-del-row"  onclick="pedirDel(${r.id});event.stopPropagation()">🗑️</button>
     </div></td></tr>`;
-  if (!isExp) return mainRow;
-  const fotosHtml = urls.length
-    ? urls.map(u=>`<img class="detail-foto" src="${u}" onclick="window.open('${u}','_blank')" title="Ver foto"/>`).join("")
-    : '<span class="detail-empty">Sin fotos</span>';
-  const detailRow = `<tr class="detail-row"><td colspan="8">
-    <div class="detail-panel">
-      <div class="detail-section">
-        <div class="detail-label">📝 Descripción / Notas</div>
-        ${r.descripcion?`<div class="detail-text">${r.descripcion}</div>`:`<div class="detail-empty">Sin descripción registrada</div>`}
-      </div>
-      <div class="detail-section">
-        <div class="detail-label">📷 Evidencia fotográfica</div>
-        <div class="detail-fotos">${fotosHtml}</div>
-      </div>
-    </div>
-  </td></tr>`;
-  return mainRow + detailRow;
-}
-
-// ══ RENDER RECOLECCIONES ══
-function renderRecStats() {
-  document.getElementById("rTotal").textContent=recolecciones.length;
-  document.getElementById("rComp").textContent=recolecciones.filter(r=>r.estado==="Completado").length;
-  document.getElementById("rPend").textContent=recolecciones.filter(r=>r.estado==="Pendiente").length;
-  document.getElementById("rCanc").textContent=recolecciones.filter(r=>r.estado==="Cancelado").length;
-}
-function renderRec() {
-  renderRecStats();
-  const q=document.getElementById("busquedaRec").value.toLowerCase();
-  const lista=recolecciones
-    .filter(r=>(filtroRec==="Todos"||r.estado===filtroRec)&&((r.proveedor||"").toLowerCase().includes(q)||(r.notas||"").toLowerCase().includes(q)))
-    .sort((a,b)=>{let va=a[sortR]||"",vb=b[sortR]||"";return sortRD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
-  const el=document.getElementById("tablaRec");
-  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">🚚</div><div class="etitle">No hay recolecciones activas</div><div class="esub">${recolecciones.length===0?"Registra tu primera recolección.":"Sin resultados."}</div></div>`;return;}
-  el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
-    <thead><tr><th onclick="ordenarR('fecha')">Fecha${si(sortR,sortRD,'fecha')}</th><th onclick="ordenarR('proveedor')">Proveedor${si(sortR,sortRD,'proveedor')}</th><th>Notas</th><th onclick="ordenarR('estado')">Estado${si(sortR,sortRD,'estado')}</th><th>Acciones</th></tr></thead>
-    <tbody>${lista.map(rowRec).join("")}</tbody></table></div>
-    <div class="tfooter"><span>Mostrando ${lista.length} de ${recolecciones.length}</span></div></div>`;
-}
-function rowRec(r) {
-  const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Sin fecha</span>';
-  const isExp=expandedRecId===r.id;
-  const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalleRec(${r.id})">
-    <td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
-    <td class="td-notas" title="${r.notas||""}">${r.notas||'<span style="opacity:.25">—</span>'}</td>
-    <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td><div class="act-btns">
-      <button class="btn-edit-row" onclick="editarRec(${r.id});event.stopPropagation()">✏️</button>
-      <button class="btn-del-row"  onclick="pedirDelRec(${r.id});event.stopPropagation()">🗑️</button>
-    </div></td></tr>`;
-  if (!isExp) return mainRow;
-  return mainRow+`<tr class="detail-row"><td colspan="5"><div class="detail-panel">
-    <div class="detail-section"><div class="detail-label">📝 Notas</div>${r.notas?`<div class="detail-text">${r.notas}</div>`:`<div class="detail-empty">Sin notas registradas</div>`}</div>
+  if(!isExp) return mainRow;
+  const fotosHtml=urls.length?urls.map(u=>`<img class="detail-foto" src="${u}" onclick="window.open('${u}','_blank')"/>`).join(""):'<span class="detail-empty">Sin fotos</span>';
+  return mainRow+`<tr class="detail-row"><td colspan="8"><div class="detail-panel">
+    <div class="detail-section"><div class="detail-label">📝 Descripción / Notas</div>${r.descripcion?`<div class="detail-text">${r.descripcion}</div>`:`<div class="detail-empty">Sin descripción registrada</div>`}</div>
+    <div class="detail-section"><div class="detail-label">📷 Evidencia fotográfica</div><div class="detail-fotos">${fotosHtml}</div></div>
   </div></td></tr>`;
 }
 
 // ══ RENDER ARCHIVO SERVICIOS ══
 function getMesesUnicos(){return[...new Set(archivados.map(r=>r.fecha?r.fecha.slice(0,7):null).filter(Boolean))].sort().reverse();}
-function renderMeses() {
-  const meses=getMesesUnicos(), grid=document.getElementById("mesesGrid");
-  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados aún.</div>`;return;}
+function renderMeses(){
+  const meses=getMesesUnicos(),grid=document.getElementById("mesesGrid");
+  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados.</div>`;return;}
   if(!mesArchivo) mesArchivo=meses[0];
   grid.innerHTML=meses.map(m=>{const[y,mo]=m.split("-"),n=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===m).length;return`<button class="mes-btn ${mesArchivo===m?"on":""}" onclick="seleccionarMes('${m}')">${MESES_ES[parseInt(mo)-1]} ${y}<span class="mes-n">${n} reg.</span></button>`;}).join("");
 }
 function seleccionarMes(m){mesArchivo=m;renderMeses();renderArchivo();}
-function renderArchivo() {
-  const el=document.getElementById("tablaArchivo"); if(!mesArchivo){el.innerHTML="";return;}
+function renderArchivo(){
+  const el=document.getElementById("tablaArchivo");if(!mesArchivo){el.innerHTML="";return;}
   const lista=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesArchivo).sort((a,b)=>{let va=a[sortFA]||"",vb=b[sortFA]||"";return sortDA==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
   const[y,mo]=mesArchivo.split("-"),nombreMes=`${MESES_ES[parseInt(mo)-1]} ${y}`;
   const totalMes=lista.filter(r=>r.costo&&r.estado==="Completado").reduce((s,r)=>s+Number(r.costo),0);
@@ -964,12 +1023,12 @@ function renderArchivo() {
   <div class="tcard"><div class="tscroll"><table>
     <thead><tr><th onclick="ordenarArch('fecha')">Fecha${si(sortFA,sortDA,'fecha')}</th><th>Cliente</th><th>Tipo</th><th>Notas</th><th>Estado</th><th>Costo</th><th>Fotos</th><th>Acción</th></tr></thead>
     <tbody>${lista.map(rowArchivo).join("")}</tbody></table></div>
-    <div class="tfooter"><span>${lista.length} registro(s) en ${nombreMes}</span>${totalMes>0?`<span class="total">💰 $${totalMes.toLocaleString("es-MX")}</span>`:""}</div></div>`;
+    <div class="tfooter"><span>${lista.length} en ${nombreMes}</span>${totalMes>0?`<span class="total">💰 $${totalMes.toLocaleString("es-MX")}</span>`:""}</div></div>`;
 }
-function rowArchivo(r) {
+function rowArchivo(r){
   const fd=r.fecha?mostrarFecha(r.fecha):"—";
   let nF=0,urls=[];try{urls=r.fotos?JSON.parse(r.fotos):[];nF=urls.length;}catch(e){}
-  const ct=r.costo?`<span style="color:var(--green);font-weight:700">${Number(r.costo).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
+  const ct=r.costo?`<span style="color:var(--green);font-weight:700">$${Number(r.costo).toLocaleString("es-MX")}</span>`:'<span class="costo-dash">—</span>';
   const isExp=expandedArchId===r.id;
   const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalleArch(${r.id})">
     <td class="td-fecha">${fd}</td><td class="td-cliente">${r.cliente}</td>
@@ -979,7 +1038,7 @@ function rowArchivo(r) {
     <td>${ct}</td>
     <td><button class="foto-chip" onclick="verFotos(${r.id},'archivos');event.stopPropagation()">📷 ${nF}</button></td>
     <td><button class="btn-unarch" onclick="pedirDesarchivar(${r.id});event.stopPropagation()">↩️ Desarchivar</button></td></tr>`;
-  if (!isExp) return mainRow;
+  if(!isExp) return mainRow;
   const fotosHtml=urls.length?urls.map(u=>`<img class="detail-foto" src="${u}" onclick="window.open('${u}','_blank')"/>`).join(""):'<span class="detail-empty">Sin fotos</span>';
   return mainRow+`<tr class="detail-row"><td colspan="8"><div class="detail-panel">
     <div class="detail-section"><div class="detail-label">📝 Descripción / Notas</div>${r.descripcion?`<div class="detail-text">${r.descripcion}</div>`:`<div class="detail-empty">Sin descripción registrada</div>`}</div>
@@ -987,17 +1046,44 @@ function rowArchivo(r) {
   </div></td></tr>`;
 }
 
+// ══ RENDER RECOLECCIONES ══
+function renderRecStats(){document.getElementById("rTotal").textContent=recolecciones.length;document.getElementById("rComp").textContent=recolecciones.filter(r=>r.estado==="Completado").length;document.getElementById("rPend").textContent=recolecciones.filter(r=>r.estado==="Pendiente").length;document.getElementById("rCanc").textContent=recolecciones.filter(r=>r.estado==="Cancelado").length;}
+function renderRec(){
+  renderRecStats();
+  const q=document.getElementById("busquedaRec").value.toLowerCase();
+  const lista=recolecciones.filter(r=>(filtroRec==="Todos"||r.estado===filtroRec)&&((r.proveedor||"").toLowerCase().includes(q)||(r.notas||"").toLowerCase().includes(q))).sort((a,b)=>{let va=a[sortR]||"",vb=b[sortR]||"";return sortRD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
+  const el=document.getElementById("tablaRec");
+  if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">🚚</div><div class="etitle">No hay recolecciones activas</div><div class="esub">${recolecciones.length===0?"Registra tu primera recolección.":"Sin resultados."}</div></div>`;return;}
+  el.innerHTML=`<div class="tcard"><div class="tscroll"><table>
+    <thead><tr><th onclick="ordenarR('fecha')">Fecha${si(sortR,sortRD,'fecha')}</th><th>Proveedor</th><th>Notas</th><th>Estado</th><th>Acciones</th></tr></thead>
+    <tbody>${lista.map(rowRec).join("")}</tbody></table></div>
+    <div class="tfooter"><span>Mostrando ${lista.length} de ${recolecciones.length}</span></div></div>`;
+}
+function rowRec(r){
+  const fd=r.fecha?mostrarFecha(r.fecha):'<span class="tag tag-indef">Sin fecha</span>';
+  const isExp=expandedRecId===r.id;
+  const mainRow=`<tr class="row-main${isExp?" expanded":""}" onclick="toggleDetalleRec(${r.id})">
+    <td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
+    <td class="td-notas">${r.notas||'<span style="opacity:.25">—</span>'}</td>
+    <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
+    <td><div class="act-btns"><button class="btn-edit-row" onclick="editarRec(${r.id});event.stopPropagation()">✏️</button><button class="btn-del-row" onclick="pedirDelRec(${r.id});event.stopPropagation()">🗑️</button></div></td></tr>`;
+  if(!isExp) return mainRow;
+  return mainRow+`<tr class="detail-row"><td colspan="5"><div class="detail-panel">
+    <div class="detail-section"><div class="detail-label">📝 Notas</div>${r.notas?`<div class="detail-text">${r.notas}</div>`:`<div class="detail-empty">Sin notas registradas</div>`}</div>
+  </div></td></tr>`;
+}
+
 // ══ RENDER ARCHIVO RECOLECCIONES ══
 function getMesesRecUnicos(){return[...new Set(recoleccionesArch.map(r=>r.fecha?r.fecha.slice(0,7):null).filter(Boolean))].sort().reverse();}
-function renderMesesRec() {
-  const meses=getMesesRecUnicos(), grid=document.getElementById("mesesRecGrid");
-  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados aún.</div>`;return;}
+function renderMesesRec(){
+  const meses=getMesesRecUnicos(),grid=document.getElementById("mesesRecGrid");
+  if(!meses.length){grid.innerHTML=`<div style="color:var(--muted);font-size:13px;padding:8px 0">No hay meses archivados.</div>`;return;}
   if(!mesRecArchivo) mesRecArchivo=meses[0];
   grid.innerHTML=meses.map(m=>{const[y,mo]=m.split("-"),n=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===m).length;return`<button class="mes-btn teal ${mesRecArchivo===m?"on":""}" onclick="seleccionarMesRec('${m}')">${MESES_ES[parseInt(mo)-1]} ${y}<span class="mes-n">${n} rec.</span></button>`;}).join("");
 }
 function seleccionarMesRec(m){mesRecArchivo=m;renderMesesRec();renderRecArch();}
-function renderRecArch() {
-  const el=document.getElementById("tablaRecArch"); if(!mesRecArchivo){el.innerHTML="";return;}
+function renderRecArch(){
+  const el=document.getElementById("tablaRecArch");if(!mesRecArchivo){el.innerHTML="";return;}
   const lista=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesRecArchivo).sort((a,b)=>{let va=a[sortRA]||"",vb=b[sortRA]||"";return sortRAD==="asc"?(va>vb?1:-1):(va<vb?1:-1);});
   const[y,mo]=mesRecArchivo.split("-"),nombreMes=`${MESES_ES[parseInt(mo)-1]} ${y}`;
   if(!lista.length){el.innerHTML=`<div class="empty"><div class="eicon">📭</div><div class="etitle">Sin recolecciones en ${nombreMes}</div></div>`;return;}
@@ -1005,79 +1091,71 @@ function renderRecArch() {
   <div class="tcard"><div class="tscroll"><table>
     <thead><tr><th>Fecha</th><th>Proveedor</th><th>Notas</th><th>Estado</th><th>Acción</th></tr></thead>
     <tbody>${lista.map(rowRecArch).join("")}</tbody></table></div>
-    <div class="tfooter"><span>${lista.length} recolección(es) en ${nombreMes}</span></div></div>`;
+    <div class="tfooter"><span>${lista.length} en ${nombreMes}</span></div></div>`;
 }
-function rowRecArch(r) {
+function rowRecArch(r){
   const fd=r.fecha?mostrarFecha(r.fecha):"—";
-  return `<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td>
-    <td class="td-notas">${r.notas||'<span style="opacity:.25">—</span>'}</td>
-    <td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td>
-    <td><button class="btn-unarch" onclick="pedirDesarchivarRec(${r.id})">↩️ Desarchivar</button></td></tr>`;
+  return`<tr><td class="td-fecha">${fd}</td><td class="td-cliente">${r.proveedor}</td><td class="td-notas">${r.notas||'<span style="opacity:.25">—</span>'}</td><td><span class="badge b-${r.estado}"><span class="dot"></span>${r.estado}</span></td><td><button class="btn-unarch" onclick="pedirDesarchivarRec(${r.id})">↩️ Desarchivar</button></td></tr>`;
 }
 
+// ══ EXPAND DETALLE ══
+function toggleDetalle(id){expandedId=expandedId===id?null:id;renderActivos();}
+function toggleDetalleArch(id){expandedArchId=expandedArchId===id?null:id;renderArchivo();}
+function toggleDetalleRec(id){expandedRecId=expandedRecId===id?null:id;renderRec();}
+
 // ══ EXCEL ══
-function toggleExcelMenu() {
-  const menuEl=document.getElementById("excelMenu"), isOpen=menuEl.style.display!=="none";
+function toggleExcelMenu(){
+  const menuEl=document.getElementById("excelMenu"),isOpen=menuEl.style.display!=="none";
   if(!isOpen){
     const mA=[...new Set(registros.filter(r=>r.fecha).map(r=>r.fecha.slice(0,7)))].sort().reverse();
-    const mArch=getMesesUnicos();
-    let html="";
+    const mArch=getMesesUnicos();let html="";
     if(mA.length){html+=`<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px">ACTIVOS POR MES</div>`;mA.forEach(mes=>{const[y,mo]=mes.split("-"),n=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;html+=`<button onclick="exportarExcelMes('activo','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;justify-content:space-between;" onmouseover="this.style.background='rgba(37,99,168,.2)'" onmouseout="this.style.background='transparent'"><span>${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;});}
-    if(mArch.length){html+=`<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.6px;border-top:1px solid var(--border);margin-top:4px">ARCHIVADOS</div>`;mArch.forEach(mes=>{const[y,mo]=mes.split("-"),n=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;html+=`<button onclick="exportarExcelMes('archivado','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;" onmouseover="this.style.background='rgba(245,166,35,.15)'" onmouseout="this.style.background='transparent'"><span style="color:var(--amber)">📦 ${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;});}
+    if(mArch.length){html+=`<div style="padding:6px 14px 4px;font-size:10px;font-weight:700;color:var(--muted);border-top:1px solid var(--border);margin-top:4px">ARCHIVADOS</div>`;mArch.forEach(mes=>{const[y,mo]=mes.split("-"),n=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes).length;html+=`<button onclick="exportarExcelMes('archivado','${mes}');toggleExcelMenu()" style="display:flex;width:100%;text-align:left;padding:8px 14px;background:transparent;border:none;color:var(--text);font-size:12px;font-family:inherit;cursor:pointer;" onmouseover="this.style.background='rgba(245,166,35,.15)'" onmouseout="this.style.background='transparent'"><span style="color:var(--amber)">📦 ${MESES_ES[parseInt(mo)-1]} ${y}</span><span style="font-size:10px;color:var(--muted)">${n}</span></button>`;});}
     document.getElementById("excelMesesMenu").innerHTML=html||`<div style="padding:10px 14px;font-size:12px;color:var(--muted)">Sin registros</div>`;
   }
   menuEl.style.display=isOpen?"none":"block";
 }
 document.addEventListener("click",e=>{const w=document.getElementById("excelMenuWrap");if(w&&!w.contains(e.target))document.getElementById("excelMenu").style.display="none";});
 
-function exportarExcelMes(fuente,mes) {
+function exportarExcelMes(fuente,mes){
   let lista,nombre;
   if(fuente==="activo"&&mes){lista=registros.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);const[y,mo]=mes.split("-");nombre=`Activos_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;}
-  else if(fuente==="activo"){lista=getActivosFiltrados();nombre=`Servicios_Activos_${new Date().toISOString().slice(0,10)}.xlsx`;}
+  else if(fuente==="activo"){lista=getActivosFiltrados();nombre=`Servicios_${new Date().toISOString().slice(0,10)}.xlsx`;}
   else{lista=archivados.filter(r=>r.fecha&&r.fecha.slice(0,7)===mes);const[y,mo]=mes.split("-");nombre=`Archivado_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`;}
   if(!lista.length){toast("Sin registros","error");return;}
   _excelServicios(lista,nombre);
 }
 function exportarExcelArchivo(){if(mesArchivo)exportarExcelMes("archivado",mesArchivo);}
 function _excelServicios(lista,nombre){
-  const datos=lista.map(r=({"Fecha":r.fecha?mostrarFecha(r.fecha):"Por definir","Cliente":r.cliente,"Tipo":r.tipo,"Estado":r.estado,"Costo":r.costo||"","Descripción":r.descripcion||"","Fotos":r.fotos?JSON.parse(r.fotos).length+" foto(s)":"0"}));
-  const ws=XLSX.utils.json_to_sheet(datos); ws["!cols"]=[{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
-  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Servicios"); XLSX.writeFile(wb,nombre); toast("📊 Excel descargado");
+  const datos=lista.map(r=>({"Fecha":r.fecha?mostrarFecha(r.fecha):"Por definir","Cliente":r.cliente,"Tipo":r.tipo,"Estado":r.estado,"Costo":r.costo||"","Descripción":r.descripcion||"","Fotos":r.fotos?JSON.parse(r.fotos).length+" foto(s)":"0"}));
+  const ws=XLSX.utils.json_to_sheet(datos);ws["!cols"]=[{wch:20},{wch:22},{wch:20},{wch:14},{wch:12},{wch:35},{wch:10}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Servicios");XLSX.writeFile(wb,nombre);toast("📊 Excel descargado");
 }
-function exportarExcelRec(){
-  const lista=recolecciones; if(!lista.length){toast("Sin recolecciones","error");return;}
-  _excelRec(lista,`Recolecciones_Activas_${new Date().toISOString().slice(0,10)}.xlsx`);
-}
-function exportarExcelRecArch(){
-  if(!mesRecArchivo) return;
-  const lista=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesRecArchivo);
-  if(!lista.length){toast("Sin recolecciones","error");return;}
-  const[y,mo]=mesRecArchivo.split("-");
-  _excelRec(lista,`Recolecciones_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`);
-}
-function _excelRec(lista,nombre){
-  const datos=lista.map(r=>({"Fecha":r.fecha?mostrarFecha(r.fecha):"—","Proveedor":r.proveedor,"Estado":r.estado,"Notas":r.notas||""}));
-  const ws=XLSX.utils.json_to_sheet(datos); ws["!cols"]=[{wch:20},{wch:24},{wch:14},{wch:40}];
-  const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Recolecciones"); XLSX.writeFile(wb,nombre); toast("📊 Excel descargado");
+function exportarExcelRec(){if(!recolecciones.length){toast("Sin recolecciones","error");return;}_excelRec(recolecciones,`Recolecciones_${new Date().toISOString().slice(0,10)}.xlsx`);}
+function exportarExcelRecArch(){if(!mesRecArchivo) return;const lista=recoleccionesArch.filter(r=>r.fecha&&r.fecha.slice(0,7)===mesRecArchivo);const[y,mo]=mesRecArchivo.split("-");_excelRec(lista,`Recolecciones_${MESES_ES[parseInt(mo)-1]}_${y}.xlsx`);}
+function _excelRec(lista,nombre){const datos=lista.map(r=>({"Fecha":r.fecha?mostrarFecha(r.fecha):"—","Proveedor":r.proveedor,"Estado":r.estado,"Notas":r.notas||""}));const ws=XLSX.utils.json_to_sheet(datos);ws["!cols"]=[{wch:20},{wch:24},{wch:14},{wch:40}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Recolecciones");XLSX.writeFile(wb,nombre);toast("📊 Excel descargado");}
+function exportarExcelFact(){
+  if(!facturas.length){toast("Sin facturas","error");return;}
+  const datos=facturas.map(f=>({"Cliente":f.cliente,"Fecha Servicio":f.fecha?mostrarFecha(f.fecha):"—","Tipo":f.tipo||"","Monto":f.monto||"","Estado":f.estado}));
+  const ws=XLSX.utils.json_to_sheet(datos);ws["!cols"]=[{wch:22},{wch:20},{wch:22},{wch:12},{wch:14}];
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Facturas");XLSX.writeFile(wb,`Facturacion_${new Date().toISOString().slice(0,10)}.xlsx`);toast("📊 Excel descargado");
 }
 
 // ══ AUTOCOMPLETE CLIENTES ══
 let acIdx=-1;
 function getClientesUnicos(){const todos=[...registros,...archivados],m={};todos.forEach(r=>{if(r.cliente)m[r.cliente]=(m[r.cliente]||0)+1;});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));}
-function acFiltrar(){const q=document.getElementById("inCliente").value.trim().toLowerCase(),f=q?getClientesUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getClientesUnicos(),list=document.getElementById("acList");if(!f.length){list.style.display="none";return;}acIdx=-1;list.innerHTML=f.slice(0,8).map((c,i)=>`<div class="autocomplete-item" data-idx="${i}" onmousedown="acSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">👤</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
+function acFiltrar(){const q=document.getElementById("inCliente").value.trim().toLowerCase(),f=q?getClientesUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getClientesUnicos(),list=document.getElementById("acList");if(!f.length){list.style.display="none";return;}acIdx=-1;list.innerHTML=f.slice(0,8).map((c,i)=>`<div class="autocomplete-item" onmousedown="acSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">👤</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
 function acSeleccionar(n){document.getElementById("inCliente").value=n;document.getElementById("acList").style.display="none";}
 function acCerrar(){document.getElementById("acList").style.display="none";}
-function acKeydown(e){const items=document.querySelectorAll("#acList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acIdx=Math.min(acIdx+1,items.length-1);acHL(items);}else if(e.key==="ArrowUp"){e.preventDefault();acIdx=Math.max(acIdx-1,0);acHL(items);}else if(e.key==="Enter"&&acIdx>=0){e.preventDefault();acSeleccionar(items[acIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acCerrar();}
-function acHL(items){items.forEach((el,i)=>el.classList.toggle("selected",i===acIdx));if(acIdx>=0)items[acIdx].scrollIntoView({block:"nearest"});}
+function acKeydown(e){const items=document.querySelectorAll("#acList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acIdx=Math.min(acIdx+1,items.length-1);}else if(e.key==="ArrowUp"){e.preventDefault();acIdx=Math.max(acIdx-1,0);}else if(e.key==="Enter"&&acIdx>=0){e.preventDefault();acSeleccionar(items[acIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acCerrar();items.forEach((el,i)=>el.classList.toggle("selected",i===acIdx));}
 
 // ══ AUTOCOMPLETE PROVEEDORES ══
 let acProvIdx=-1;
 function getProveedoresUnicos(){const todos=[...recolecciones,...recoleccionesArch],m={};todos.forEach(r=>{if(r.proveedor)m[r.proveedor]=(m[r.proveedor]||0)+1;});return Object.entries(m).sort((a,b)=>b[1]-a[1]).map(([n,c])=>({nombre:n,count:c}));}
-function acProvFiltrar(){const q=document.getElementById("inProveedor").value.trim().toLowerCase(),f=q?getProveedoresUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getProveedoresUnicos(),list=document.getElementById("acProvList");if(!f.length){list.style.display="none";return;}acProvIdx=-1;list.innerHTML=f.slice(0,8).map((c,i)=>`<div class="autocomplete-item" data-idx="${i}" onmousedown="acProvSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">🏭</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
+function acProvFiltrar(){const q=document.getElementById("inProveedor").value.trim().toLowerCase(),f=q?getProveedoresUnicos().filter(c=>c.nombre.toLowerCase().includes(q)):getProveedoresUnicos(),list=document.getElementById("acProvList");if(!f.length){list.style.display="none";return;}acProvIdx=-1;list.innerHTML=f.slice(0,8).map(c=>`<div class="autocomplete-item" onmousedown="acProvSeleccionar('${c.nombre.replace(/'/g,"\\'")}')"><span class="ac-icon">🏭</span><span class="ac-name">${c.nombre}</span><span class="ac-count">${c.count}</span></div>`).join("");list.style.display="block";}
 function acProvSeleccionar(n){document.getElementById("inProveedor").value=n;document.getElementById("acProvList").style.display="none";}
 function acProvCerrar(){document.getElementById("acProvList").style.display="none";}
-function acProvKeydown(e){const items=document.querySelectorAll("#acProvList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acProvIdx=Math.min(acProvIdx+1,items.length-1);acProvHL(items);}else if(e.key==="ArrowUp"){e.preventDefault();acProvIdx=Math.max(acProvIdx-1,0);acProvHL(items);}else if(e.key==="Enter"&&acProvIdx>=0){e.preventDefault();acProvSeleccionar(items[acProvIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acProvCerrar();}
-function acProvHL(items){items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));if(acProvIdx>=0)items[acProvIdx].scrollIntoView({block:"nearest"});}
+function acProvKeydown(e){const items=document.querySelectorAll("#acProvList .autocomplete-item");if(!items.length)return;if(e.key==="ArrowDown"){e.preventDefault();acProvIdx=Math.min(acProvIdx+1,items.length-1);}else if(e.key==="ArrowUp"){e.preventDefault();acProvIdx=Math.max(acProvIdx-1,0);}else if(e.key==="Enter"&&acProvIdx>=0){e.preventDefault();acProvSeleccionar(items[acProvIdx].querySelector(".ac-name").textContent);}else if(e.key==="Escape")acProvCerrar();items.forEach((el,i)=>el.classList.toggle("selected",i===acProvIdx));}
 
 // ══ FOTOS ══
 async function subirFoto(file){try{const ext=file.name.split(".").pop(),nombre=`${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const{error}=await db.storage.from(BUCKET).upload(nombre,file,{contentType:file.type});if(error){console.warn(error);return null;}const{data}=db.storage.from(BUCKET).getPublicUrl(nombre);return data.publicUrl;}catch(e){console.warn(e);return null;}}
@@ -1118,8 +1196,9 @@ function abrirFormRec(){editRecId=null;document.getElementById("inProveedor").va
 function cerrarFormRec(){document.getElementById("formCardRec").style.display="none";editRecId=null;}
 
 // ══ FILTROS ══
-function filtrar(val,btn){filtro=val;document.querySelectorAll(".f-btns .f-btn").forEach(b=>b.classList.remove("on"));btn.classList.add("on");renderActivos();}
-function filtrarRec(val,btn){filtroRec=val;const btns=document.querySelectorAll("#vistaRec .f-btn");btns.forEach(b=>b.classList.remove("on","teal"));btn.classList.add("on","teal");renderRec();}
+function filtrar(val,btn){filtro=val;document.querySelectorAll("#vistaActivos .f-btn").forEach(b=>b.classList.remove("on"));btn.classList.add("on");renderActivos();}
+function filtrarRec(val,btn){filtroRec=val;document.querySelectorAll("#vistaRec .f-btn").forEach(b=>b.classList.remove("on","teal"));btn.classList.add("on","teal");renderRec();}
+function filtrarFact(val,btn){filtroFact=val;document.querySelectorAll("#vistaFact .f-btn").forEach(b=>b.classList.remove("on","gold"));btn.classList.add("on","gold");renderFact();}
 function ordenarA(f){if(sortF===f)sortD=sortD==="asc"?"desc":"asc";else{sortF=f;sortD="asc";}renderActivos();}
 function ordenarArch(f){if(sortFA===f)sortDA=sortDA==="asc"?"desc":"asc";else{sortFA=f;sortDA="asc";}renderArchivo();}
 function ordenarR(f){if(sortR===f)sortRD=sortRD==="asc"?"desc":"asc";else{sortR=f;sortRD="asc";}renderRec();}
